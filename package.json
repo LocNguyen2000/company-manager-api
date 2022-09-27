@@ -1,0 +1,30 @@
+{
+  "name": "hn22_fr_nodejs_03_g2",
+  "version": "1.0.0",
+  "description": "To make it easy for you to get started with GitLab, here's a list of recommended next steps.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/LocNguyen2000/HN22_FR_NodeJS_03_G2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/LocNguyen2000/HN22_FR_NodeJS_03_G2/issues"
+  },
+  "homepage": "https://gitlab.com/LocNguyen2000/HN22_FR_NodeJS_03_G2#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "mongoose": "^6.6.2",
+    "nodemon": "^2.0.20",
+    "sequelize": "^6.23.2",
+    "swagger-ui-express": "^4.5.0",
+    "winston": "^3.8.2"
+  }
+}
