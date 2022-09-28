@@ -55,7 +55,7 @@ const Employee = sequelize.define('Employee', {
             len: [1, 11],
         },
     },
-}, {
+},{
     tableName: 'employees'
 })
 
