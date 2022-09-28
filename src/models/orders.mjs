@@ -13,15 +13,12 @@ const Order = sequelize.define(
     },
     orderDate: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
     },
     requiredDate: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
     },
     shipperedDate: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
     },
     status: {
       type: DataTypes.STRING[15],
