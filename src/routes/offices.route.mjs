@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { addOffice } from '../controllers/offices.controller.mjs';
+// import { addOffice } from '../controllers/offices.controller.mjs';
 
 const router = Router()
 
-router.post('/', addOffice)
+// router.post('/', addOffice)
 
 export default router;
