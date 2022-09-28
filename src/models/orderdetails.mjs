@@ -36,9 +36,13 @@ const Orderdetail = sequelize.define(
         min: 0,
       },
     },
+    delete: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    }
   },
   {
-    tableName: "orderDetails",
+    tableName: "orderdetails",
   }
 );
 export default Orderdetail;
