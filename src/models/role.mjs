@@ -10,17 +10,17 @@ const Role = sequelize.define(
       autoIncrement: true,
     },
     role: {
-      type: DataTypes.STRING[50],
+      type: DataTypes.ENUM['President','Manager','Leader', 'Staff', 'Customer'],
       allowNull: false,
       unique: true,
       validate: {
         len: [2, 50],
+        
       },
     },
   },
   {
     tableName: "role",
-    timestamps: false,
   }
 );
 

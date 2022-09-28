@@ -57,7 +57,6 @@ const Product = sequelize.define("Product", {
   },
 },{
     tableName: 'products',
-    timestamps: false,
 });
 
 Product.belongsTo(ProductLine);

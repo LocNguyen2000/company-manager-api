@@ -70,7 +70,7 @@ const Office = sequelize.define(
   },
   {
     tableName: "offices",
-    timestamps: false,
+
   }
 );
 export default Office;
