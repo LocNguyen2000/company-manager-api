@@ -33,7 +33,7 @@ const Payment = sequelize.define(
   },
   {
     tableName: "payments",
-    timestamps: false,
+
   }
 );
 export default Payment;

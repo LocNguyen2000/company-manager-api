@@ -53,7 +53,7 @@ const Employee = sequelize.define('Employee', {
     },
 },{
     tableName: 'employees',
-    timestamps: false,
+
 })
 
 

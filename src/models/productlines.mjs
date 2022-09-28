@@ -17,7 +17,7 @@ const ProductLine = sequelize.define('ProductLine', {
     },
 }, {
     tableName: 'productlines',
-    timestamps: false,
+
 })
 
 export default ProductLine;

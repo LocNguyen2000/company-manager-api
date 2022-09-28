@@ -94,7 +94,6 @@ const Customer = sequelize.define("Customer", {
   creditLimit: { type: DataTypes.FLOAT(10, 2), allowNull: true },
 },{
     tableName: 'customers',
-    timestamps: false,
 });
 
 export default Customer
