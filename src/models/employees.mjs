@@ -1,11 +1,15 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.mjs";
+import Customer from "./customers.mjs";
 
-const Employees = sequelize.define('employees', {
+const Employee = sequelize.define('Employee', {
     employeeNumber: {
-        type: DataTypes.INTEGER(11),
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
+        validate: {
+            len: [1, 11],
+          },
     } ,
     firstName: {
         type: DataTypes.STRING(50),
@@ -30,8 +34,15 @@ const Employees = sequelize.define('employees', {
         
     },
     reportsTo: {
-        type: DataTypes.INTEGER(11),
+        type: DataTypes.INTEGER,
         allowNull: true,
+        references: {
+            model: Employee,
+            key: "employeeNumber",
+        },
+        validate: {
+            len: [1, 11],
+        },
     },
     jobTitle: {
         type: DataTypes.STRING(50),
@@ -39,12 +50,17 @@ const Employees = sequelize.define('employees', {
         values: ['President', 'Leader', 'Manager', 'Staff'],
     },
     role: {
-        type: DataTypes.INTEGER(11),
+        type: DataTypes.INTEGER,
+        validate: {
+            len: [1, 11],
+        },
     },
+}, {
+    tableName: 'employees'
 })
 
 
-Employees.hasMany(Employees);
+Employee.hasMany(Employee);
+Employee.hasMany(Customer);
 
-
-export default Employees;
+export default Employee;
