@@ -1,8 +1,7 @@
 import { Sequelize } from 'sequelize';
 import config from './config.mjs';
 
-// Option 3: Passing parameters separately (other dialects)
-export const sequelize = new Sequelize(config.databaseName, config.user, config.password, {
+const sequelize = new Sequelize(config.databaseName, config.user, config.password, {
   host: config.host,
   dialect: 'mysql'
 });
@@ -17,4 +16,3 @@ const connectToDb = async () => {
 }
 
 export default connectToDb;
-
