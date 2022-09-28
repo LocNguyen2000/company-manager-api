@@ -96,5 +96,6 @@ const Customer = sequelize.define("Customer", {
     tableName: 'customers'
 });
 
+Customer.belongsTo(Employee);
 
 export default Customer
