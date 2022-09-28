@@ -43,6 +43,7 @@ const Orderdetail = sequelize.define(
   },
   {
     tableName: "orderdetails",
+    timestamps: false,
   }
 );
 export default Orderdetail;

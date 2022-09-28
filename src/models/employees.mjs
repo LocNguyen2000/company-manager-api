@@ -36,10 +36,6 @@ const Employee = sequelize.define('Employee', {
     reportsTo: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        references: {
-            model: Employee,
-            key: "employeeNumber",
-        },
         validate: {
             len: [1, 11],
         },
@@ -55,12 +51,10 @@ const Employee = sequelize.define('Employee', {
             len: [1, 11],
         },
     },
-}, {
-    tableName: 'employees'
+},{
+    tableName: 'employees',
+    timestamps: false,
 })
 
-
-Employee.hasMany(Employee);
-Employee.hasMany(Customer);
 
 export default Employee;

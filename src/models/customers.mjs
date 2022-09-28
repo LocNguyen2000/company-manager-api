@@ -93,9 +93,8 @@ const Customer = sequelize.define("Customer", {
   },
   creditLimit: { type: DataTypes.FLOAT(10, 2), allowNull: true },
 },{
-    tableName: 'customers'
+    tableName: 'customers',
+    timestamps: false,
 });
-
-Customer.belongsTo(Employee);
 
 export default Customer
