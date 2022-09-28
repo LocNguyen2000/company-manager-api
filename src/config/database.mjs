@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import config from './config.mjs';
 
-const sequelize = new Sequelize(config.databaseName, config.user, config.password, {
+export const sequelize = new Sequelize(config.databaseName, config.user, config.password, {
   host: config.host,
   dialect: 'mysql'
 });

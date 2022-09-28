@@ -97,6 +97,4 @@ const Customer = sequelize.define("Customer", {
     timestamps: false,
 });
 
-Customer.belongsTo(Employee);
-
 export default Customer

@@ -16,7 +16,8 @@ const ProductLine = sequelize.define('ProductLine', {
         type: DataTypes.BLOB['medium']
     },
 }, {
-    tableName: 'productlines'
+    tableName: 'productlines',
+    timestamps: false,
 })
 
 export default ProductLine;
