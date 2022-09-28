@@ -31,7 +31,7 @@ const Order = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    delete: {
+    deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },

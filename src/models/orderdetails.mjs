@@ -36,7 +36,7 @@ const Orderdetail = sequelize.define(
         min: 0,
       },
     },
-    delete: {
+    deleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     }

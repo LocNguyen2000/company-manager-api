@@ -26,7 +26,7 @@ const Payment = sequelize.define(
       type: DataTypes.FLOAT(10, 2),
       allowNull: false,
     },
-    delete: {
+    deleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
