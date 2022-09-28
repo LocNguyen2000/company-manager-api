@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.mjs";
 
-const Employees = sequelize.define('employees', {
+const Employee = sequelize.define('Employee', {
     employeeNumber: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
@@ -41,10 +41,12 @@ const Employees = sequelize.define('employees', {
     role: {
         type: DataTypes.INTEGER(11),
     },
+},{
+    tableName: 'employees'
 })
 
 
-Employees.hasMany(Employees);
+Employee.hasMany(Employee);
 
 
-export default Employees;
+export default Employee;
