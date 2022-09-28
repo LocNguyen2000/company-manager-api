@@ -4,9 +4,9 @@ export const getCustomerById = async (req, res) => {
     try {
         const {code} = req.params
 
-        const customer = await Customer.findOne({ where: { customerNumber: code } });
+        const customers = await Customer.findAll({ where: { customerNumber: code } });
 
-        return res.status(200).json(customer);
+        return res.status(200).json(customers);
 
     } catch (error) {
         return res.status(500).json("Something is wrong with server")
