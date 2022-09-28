@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.mjs";
+import Employee from "./employees.mjs";
 
 const Customer = sequelize.define("Customer", {
   customerNumber: {
@@ -95,5 +96,6 @@ const Customer = sequelize.define("Customer", {
     tableName: 'customers'
 });
 
+Customer.belongsTo(Employee);
 
 export default Customer
