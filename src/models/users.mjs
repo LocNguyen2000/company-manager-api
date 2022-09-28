@@ -37,6 +37,8 @@ const User = sequelize.define('User', {
             key: 'customerNumber'
         }
     },
+},{
+    tableName: 'users',
 })
 
 export default User;
