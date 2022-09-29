@@ -23,6 +23,10 @@ const User = sequelize.define('User', {
         },
         allowNull: false,
     },
+    isEmployee: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
     employeeNumber: {
         type: DataTypes.INTEGER,
         references: {

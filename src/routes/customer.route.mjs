@@ -4,7 +4,7 @@ import { addCustomer, deleteCustomer, getCustomerById, updateCustomer } from '..
 
 const router = Router()
 
-router.get('/:code', getCustomerById)
+router.get('/', getCustomerById)
 router.post('/', addCustomer)
 router.put('/:code',  updateCustomer)
 router.delete('/:code', deleteCustomer)
