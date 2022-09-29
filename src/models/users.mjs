@@ -1,4 +1,4 @@
-import { DataType, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.mjs";
 import Customer from "./customers.mjs";
 import Employee from "./employees.mjs";
