@@ -4,7 +4,7 @@ import { addEmployee, deleteEmployee, getEmployeeById, updateEmployee, addEmploy
 
 const router = Router()
 
-router.get('/:code',  getEmployeeById)
+router.get('/',  getEmployeeById)
 router.post('/',  addEmployee)
 router.post('/batch', addEmployeeWithCustomerBatch)
 router.put('/:code', updateEmployee)

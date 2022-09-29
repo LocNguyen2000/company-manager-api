@@ -2,7 +2,8 @@ import Customer from "../models/customers.mjs"
 
 export const getCustomerById = async (req, res) => {
     try {
-        const {code} = req.params
+        const customerQuery = req.query
+
 
         const customers = await Customer.findAll({ where: { customerNumber: code } });
 
