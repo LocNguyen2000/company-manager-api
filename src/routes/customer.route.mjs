@@ -1,12 +1,12 @@
 import {Router} from 'express'
 
-import { addCustomer, deleteCustomer, getCustomerByQuery, updateCustomer } from '../controllers/customer.controller.mjs'
+import { addCustomer, deleteCustomer, getCustomer, updateCustomer } from '../controllers/customer.controller.mjs'
 
 const router = Router()
 
-router.get('/', getCustomerByQuery)
+router.get('/', getCustomer)
 router.post('/', addCustomer)
-router.put('/:code',  updateCustomer)
-router.delete('/:code', deleteCustomer)
+router.put('/:id',  updateCustomer)
+router.delete('/:id', deleteCustomer)
 
 export default router;
