@@ -5,7 +5,7 @@ import { ValidationError } from "sequelize";
 
 export const getEmployee = async (req, res, next) => {
   const id = req.employeeNumber,
-    role = req.role,
+    role = req.role.toLowerCase(),
     { p: page } = req.query,
     officeCode = req.officeCode,
     queryFilter = req.query;
@@ -61,7 +61,7 @@ export const updateEmployee = async (req, res) => {
   try {
     const role = req.role.toLowerCase(),
       officeCode = req.officeCode,
-      { employee, employeeID } = req.body;
+      { employee } = req.body, {employeeID} = req.params;
 
     if (role === "staff" || role === "leader") {
       return next(createError(401, "Not permitted!"));
@@ -88,7 +88,7 @@ export const updateEmployee = async (req, res) => {
 export const deleteEmployee = async (req, res) => {
   try {
     const role = req.role.toLowerCase(),
-      { employeeID } = req.body;
+      { employeeID } = req.params;
 
     if (role === "staff" || role === "manager" || role === "leader") {
       return next(createError(401, "Not permitted!"));

@@ -1,13 +1,12 @@
 import {Router} from 'express'
 
-import { addEmployee, deleteEmployee, getEmployeeById, updateEmployee, addEmployeeWithCustomerBatch } from '../controllers/employee.controller.mjs'
+import { addEmployee, deleteEmployee, getEmployee, updateEmployee } from '../controllers/employee.controller.mjs'
 
 const router = Router()
 
-router.get('/',  getEmployeeById)
+router.get('/',  getEmployee)
 router.post('/',  addEmployee)
-router.post('/batch', addEmployeeWithCustomerBatch)
-router.put('/:code', updateEmployee)
-router.delete('/:code', deleteEmployee)
+router.put('/:employeeID', updateEmployee)
+router.delete('/:employeeID', deleteEmployee)
 
 export default router;

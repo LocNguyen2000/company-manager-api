@@ -1,7 +1,2 @@
 /node_modules
-<<<<<<< HEAD
-.env.local
-.env.example
-=======
 .env.*
->>>>>>> a986463e692dfa3d23aa3a6ec875378649f90c80
