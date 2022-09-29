@@ -15,6 +15,20 @@ const ProductLine = sequelize.define('ProductLine', {
     image : {
         type: DataTypes.BLOB['medium']
     },
+    createdBy: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        validate: {
+          len: [2,50]
+        }
+      },
+      updatedBy: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        validate: {
+          len: [2,50]
+        }
+      },
 }, {
     tableName: 'productlines',
 

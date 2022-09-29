@@ -91,7 +91,23 @@ const Customer = sequelize.define("Customer", {
       key: "employeeNumber",
     },
   },
-  creditLimit: { type: DataTypes.FLOAT(10, 2), allowNull: true },
+  creditLimit: { 
+    type: DataTypes.FLOAT(10, 2), 
+    allowNull: true },
+  createdBy: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    validate: {
+      len: [2,50]
+    }
+  },
+  updatedBy: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    validate: {
+      len: [2,50]
+    }
+  },
 },{
     tableName: 'customers',
 });

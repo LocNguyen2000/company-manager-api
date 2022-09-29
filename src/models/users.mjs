@@ -1,4 +1,4 @@
-import { DataType, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.mjs";
 import Customer from "./customers.mjs";
 import Employee from "./employees.mjs";
@@ -23,6 +23,10 @@ const User = sequelize.define('User', {
         },
         allowNull: false,
     },
+    isEmployee: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
     employeeNumber: {
         type: DataTypes.INTEGER,
         references: {
@@ -37,6 +41,8 @@ const User = sequelize.define('User', {
             key: 'customerNumber'
         }
     },
+},{
+    tableName: 'users',
 })
 
 export default User;
