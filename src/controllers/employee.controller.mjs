@@ -4,15 +4,15 @@ import Employee from "../models/employees.mjs";
 import { ValidationError } from "sequelize";
 
 export const getEmployee = async (req, res, next) => {
-  const id = req.employeeNumber,
-    role = req.role.toLowerCase(),
-    { p: page } = req.query,
-    officeCode = req.officeCode,
-    queryFilter = req.query;
-
-  if (page) delete queryFilter.p;
-
   try {
+    const id = req.employeeNumber,
+      role = req.role.toLowerCase(),
+      { p: page } = req.query,
+      officeCode = req.officeCode,
+      queryFilter = req.query;
+
+    if (page) delete queryFilter.p;
+    
     if (role.toLowerCase === "staff") {
       queryFilter = Object.assign(queryFilter, { employeeNumber: id });
     } else if (role.toLowerCase === "leader") {
@@ -61,7 +61,8 @@ export const updateEmployee = async (req, res) => {
   try {
     const role = req.role.toLowerCase(),
       officeCode = req.officeCode,
-      { employee } = req.body, {employeeID} = req.params;
+      { employee } = req.body,
+      { employeeID } = req.params;
 
     if (role === "staff" || role === "leader") {
       return next(createError(401, "Not permitted!"));
@@ -94,11 +95,12 @@ export const deleteEmployee = async (req, res) => {
       return next(createError(401, "Not permitted!"));
     }
 
-    let employeeInstance = await Employee.destroy({where: {employeeNumber: employeeID}});
+    let employeeInstance = await Employee.destroy({
+      where: { employeeNumber: employeeID },
+    });
     return res
       .status(200)
       .json({ employeeNumber: employeeInstance.employeeNumber });
-
   } catch (error) {
     next(error);
   }
