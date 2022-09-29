@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.mjs";
-
+import Role from "./role.mjs"
 const Employee = sequelize.define('Employee', {
     employeeNumber: {
         type: DataTypes.INTEGER,
@@ -49,6 +49,10 @@ const Employee = sequelize.define('Employee', {
         validate: {
             len: [1, 11],
         },
+        references: {
+            model: Role,
+            key: 'id'
+        }
     },
     createdBy: {
         type: DataTypes.STRING(50),
