@@ -10,7 +10,8 @@ export const getEmployee = async (req, res, next) => {
     officeCode = req.officeCode,
     queryFilter = req.query;
 
-  delete queryFilter.p;
+  if (page) delete queryFilter.p;
+
   try {
     if (role.toLowerCase === "staff") {
       queryFilter = Object.assign(queryFilter, { employeeNumber: id });
@@ -86,6 +87,18 @@ export const updateEmployee = async (req, res) => {
 
 export const deleteEmployee = async (req, res) => {
   try {
+    const role = req.role.toLowerCase(),
+      { employeeID } = req.body;
+
+    if (role === "staff" || role === "manager" || role === "leader") {
+      return next(createError(401, "Not permitted!"));
+    }
+
+    let employeeInstance = await Employee.destroy({where: {employeeNumber: employeeID}});
+    return res
+      .status(200)
+      .json({ employeeNumber: employeeInstance.employeeNumber });
+
   } catch (error) {
     next(error);
   }
