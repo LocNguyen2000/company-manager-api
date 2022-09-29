@@ -46,11 +46,10 @@ export const getCustomerByQuery = async (req, res) => {
 export const addCustomer = async (req, res) => {
     try {
         const customerReq = req.body;
-        
 
         if (req.role == ROLE.MANAGER || req.role == ROLE.PRESIDENT || req.role == ROLE.LEADER){
             // Staff trở lên được tạo mọi dữ liệu khách hàng
-            
+                        
         }
         else {
             return res.status(403).json('You are not authorized');
