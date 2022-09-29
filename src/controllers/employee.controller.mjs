@@ -1,7 +1,10 @@
-import { query } from "express";
 import createError from "http-errors";
-import Employee from "../models/employees.mjs";
 import { ValidationError } from "sequelize";
+
+import { ROLE } from "../config/variables.mjs";
+import Employee from "../models/employees.mjs";
+
+
 
 export const getEmployee = async (req, res, next) => {
   try {
@@ -15,21 +18,19 @@ export const getEmployee = async (req, res, next) => {
     
     if (role.toLowerCase === "staff") {
       queryFilter = Object.assign(queryFilter, { employeeNumber: id });
-    } else if (role.toLowerCase === "leader") {
+    } else if (role === ROLE.LEADER) {
       queryFilter = Object.assign(queryFilter, { reportsTo: id });
-    } else if (role.toLowerCase === "manager") {
+    } else if (role === ROLE.MANAGER) {
       queryFilter = Object.assign(queryFilter, { officeCode });
     }
 
     let employeeList = await Employee.findAndCountAll({
       where: queryFilter,
-      offset: (page || 1 - 1) * 10,
+      offset: ((page || 1) - 1) * 10,
       limit: 10,
     });
 
-    return res.status(200).json({
-      employeeList,
-    });
+    return res.status(200).json({data: employeeList});
   } catch (error) {
     next(error);
   }
@@ -37,40 +38,39 @@ export const getEmployee = async (req, res, next) => {
 
 export const addEmployee = async (req, res, next) => {
   try {
-    const role = req.role.toLowerCase(),
-      { employee } = req.body;
+    const role = req.role,
+      employee = req.body;
 
-    if (role === "staff" || role === "manager" || role === "leader") {
+    if (role === ROLE.STAFF || role === ROLE.MANAGER || role === ROLE.LEADER) {
       return next(createError(401, "Not permitted!"));
     }
 
     let employeeInstance = await Employee.create(employee);
-    return res
-      .status(200)
-      .json({ employeeNumber: employeeInstance.employeeNumber });
+
+    return res.status(200).json({ employeeNumber: employeeInstance.employeeNumber });
   } catch (error) {
     if (error instanceof ValidationError) {
-      next(createError(400, "Wrong data!"));
-    } else {
-      next(error);
-    }
+      return next(createError(400, "Wrong data!"));
+    } 
+    return next(error);
+    
   }
 };
 
 export const updateEmployee = async (req, res) => {
   try {
-    const role = req.role.toLowerCase(),
+    const role = req.role,
       officeCode = req.officeCode,
-      { employee } = req.body,
-      { employeeID } = req.params;
+      employee = req.body,
+      { id } = req.params;
 
-    if (role === "staff" || role === "leader") {
+    if (role === ROLE.STAFF || role === ROLE.LEADER) {
       return next(createError(401, "Not permitted!"));
     }
 
-    let queryObj = Object.assign({}, { employeeNumber: employeeID });
+    let queryObj = Object.assign({}, { employeeNumber: id });
 
-    if (role === "manager") {
+    if (role === ROLE.MANAGER) {
       queryObj = Object.assign(queryObj, { officeCode });
     }
 
@@ -78,9 +78,7 @@ export const updateEmployee = async (req, res) => {
       where: queryObj,
     });
 
-    return res
-      .status(200)
-      .json({ employeeNumber: employeeInstance.employeeNumber });
+    return res.status(200).json({ data: employeeInstance });
   } catch (error) {
     next(error);
   }
@@ -88,19 +86,17 @@ export const updateEmployee = async (req, res) => {
 
 export const deleteEmployee = async (req, res) => {
   try {
-    const role = req.role.toLowerCase(),
-      { employeeID } = req.params;
+    const role = req.role,
+      { id } = req.params;
 
-    if (role === "staff" || role === "manager" || role === "leader") {
+    if (role === ROLE.STAFF || role === ROLE.MANAGER || role === ROLE.LEADER) {
       return next(createError(401, "Not permitted!"));
     }
 
-    let employeeInstance = await Employee.destroy({
-      where: { employeeNumber: employeeID },
-    });
-    return res
-      .status(200)
-      .json({ employeeNumber: employeeInstance.employeeNumber });
+    let employeeInstance = await Employee.destroy({where: {employeeNumber: id}});
+
+    return res.status(200).json({ employeeNumber: employeeInstance.employeeNumber });
+
   } catch (error) {
     next(error);
   }
