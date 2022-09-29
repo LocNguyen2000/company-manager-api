@@ -39,7 +39,7 @@ export const getEmployee = async (req, res, next) => {
 export const addEmployee = async (req, res, next) => {
   try {
     const role = req.role,
-      { employee } = req.body;
+      employee = req.body;
 
     if (role === ROLE.STAFF || role === ROLE.MANAGER || role === ROLE.LEADER) {
       return next(createError(401, "Not permitted!"));
@@ -59,9 +59,9 @@ export const addEmployee = async (req, res, next) => {
 
 export const updateEmployee = async (req, res) => {
   try {
-    const role = req.role(),
+    const role = req.role,
       officeCode = req.officeCode,
-      { employee } = req.body,
+      employee = req.body,
       { id } = req.params;
 
     if (role === ROLE.STAFF || role === ROLE.LEADER) {

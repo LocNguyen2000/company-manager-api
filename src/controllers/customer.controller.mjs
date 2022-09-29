@@ -1,7 +1,10 @@
+import createError from "http-errors";
+import { ValidationError, where } from "sequelize";
+
 import Customer from "../models/customers.mjs"
 import { ROLE } from "../config/variables.mjs";
 
-export const getCustomerByQuery = async (req, res) => {
+export const getCustomer = async (req, res, next) => {
     try {
         const customerQuery = req.query;
         
@@ -18,7 +21,7 @@ export const getCustomerByQuery = async (req, res) => {
             // Staff chỉ được xem khách hàng của họ
             for (const customer of customers) {
                 if (customer.salesRepEmployeeNumber != req.employeeNumber){
-                    return res.status(403).json('You are not authorized');
+                    return next(createError(403, "Not permitted!"));
                 }
             }
 
@@ -34,47 +37,76 @@ export const getCustomerByQuery = async (req, res) => {
                     return res.status(200).json([customer]);
                 }
             }
-            return res.status(403).json('You are not authorized');
+            return next(createError(403, "Not permitted!"));
         }
 
     } catch (error) {
-        console.log(error.message);
-        return res.status(500).json("Something is wrong with server")
+        return next(error);
     }
 }
 
-export const addCustomer = async (req, res) => {
+export const addCustomer = async (req, res, next) => {
     try {
-        const customerReq = req.body;
+        const customerRequest = req.body;
 
-        if (req.role == ROLE.MANAGER || req.role == ROLE.PRESIDENT || req.role == ROLE.LEADER){
-            // Staff trở lên được tạo mọi dữ liệu khách hàng
-                        
+        if (req.role == ROLE.STAFF || req.role == ROLE.STAFF){
+            return next(createError(403, "Not permitted!"));
         }
-        else {
-            return res.status(403).json('You are not authorized');
-        }
-    } catch (error) {
-        console.log(error.message);
-        return res.status(400).json("Bad request error")
-    }
-}
+        // Staff trở lên được tạo mọi dữ liệu khách hàng
+        let customer = await Customer.create(customerRequest);
 
-export const updateCustomer = async (req, res) => {
-    try {
+        return res.status(201).json({data: customer});
         
-       
     } catch (error) {
-        console.log(error.message);
-        return res.status(500).json("Something is wrong with server")
+        if (error instanceof ValidationError) {
+            return next(createError(400, "Wrong data"));
+        } 
+        return next(error);
     }
 }
 
-export const deleteCustomer = async (req, res) => {
+export const updateCustomer = async (req, res, next) => {
     try {
-       
+        const {id} = req.params;
+        const customerRequest = req.body;
+
+        if (req.role === ROLE.STAFF) {
+            return next(createError(401, "Staff cannot update customer data"));
+        }
+        else if (req.role === ROLE.CUSTOMER){
+            // Customer chỉ được sửa dữ liệu bản thân
+            if (req.customerNumber != id){
+                return next(createError(401, "Customer cannot change others data"));
+            }
+          
+        }
+        // Staff trở lên được update mọi dữ liệu khách hàng
+        let queryObj = { customerNumber: id }
+        let rowAffected = await Customer.update(customerRequest, { where: queryObj});
+
+        return res.status(200).json({data: `Update successfully ${rowAffected} row`})
+
     } catch (error) {
-        console.log(error.message);
-        return res.status(500).json("Something is wrong with server")
+        if (error instanceof ValidationError) {
+            return next(createError(400, "Wrong data!"));
+        } 
+        return next(error);
+    }
+}
+
+export const deleteCustomer = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+
+        if (req.role === ROLE.STAFF || req.role === ROLE.CUSTOMER) {
+            return next(createError(401, "Not permitted!"));
+        }
+        // Staff trở lên được xóa mọi dữ liệu khách hàng
+        let queryObj = { customerNumber: id }
+        let rowAffected = await Customer.destroy({ where: queryObj});
+
+        return res.status(200).json({data: `Delete successfully ${rowAffected} row`})
+    } catch (error) {
+        return next(error);
     }
 }
