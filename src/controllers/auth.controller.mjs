@@ -2,7 +2,6 @@ import {Op} from "sequelize"
 import User from "../models/users.mjs";
 import Employee from "../models/employees.mjs";
 import Customer from "../models/customers.mjs"
-// const jwt = require("jsonwebtoken");
 import { encryptPassword } from "../utils/security.mjs";
 
 export const register = async (req, res) => {
