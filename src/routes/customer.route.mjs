@@ -6,7 +6,7 @@ const router = Router()
 
 router.get('/', getCustomerByQuery)
 router.post('/', addCustomer)
-router.put('/:code',  updateCustomer)
-router.delete('/:code', deleteCustomer)
+router.put('/:id',  updateCustomer)
+router.delete('/:id', deleteCustomer)
 
 export default router;
