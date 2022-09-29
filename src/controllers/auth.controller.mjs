@@ -1,8 +1,9 @@
 import {Op} from "sequelize"
 import User from "../models/users.mjs";
 import Employee from "../models/employees.mjs";
-import Customer from "../models/customers.mjs"
-import { encryptPassword } from "../utils/security.mjs";
+import Customer from "../models/customers.mjs";
+import Role from "../models/role.mjs"
+import { encryptPassword, comparePassword } from "../utils/security.mjs";
 
 export const register = async (req, res) => {
   const { username, password, customerNumber, employeeNumber, isEmployee } =
@@ -36,8 +37,35 @@ export const register = async (req, res) => {
     const user = await User.create({username, password: hashPash, isEmployee, employeeNumber, customerNumber})
     return res.status(200).json({message: "Register successfully",data: user})
   } catch (error) {
-    return res.status(400).json({message: error.message});
+    console.log(error);
   }
 };
 
 
+export const login = async (req, res) => {
+  const {username, password} = req.body;
+  let result, userRole;
+  try {
+    result = await User.findAll({where: {username: username},include: { model: Employee}})
+    console.log(result);
+    // if(!result) {
+    //   return res.status(400).json({ message: "Username or Password is invalid"})
+    // }
+    // let comparePass = await comparePassword(password, result.password);
+    // if(!comparePass) {
+    //   return res.status(400).json({ message: "Username or Password is invalid"})
+    // }
+    // if(!result.isEmployee){
+    //   return userRole = ROLE.CUSTOMER
+    // } 
+    // userRole = result.role
+    
+    // let dataInfo = {
+    //   employeeNumber: result.employeeNumber,
+    //   customerNumber: result.customerNumber,
+    //   role: userRole,
+    // }
+  } catch (error) {
+    console.log(error);
+  }
+}

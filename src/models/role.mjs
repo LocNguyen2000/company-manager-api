@@ -10,7 +10,8 @@ const Role = sequelize.define(
       autoIncrement: true,
     },
     role: {
-      type: DataTypes.ENUM['President','Manager','Leader', 'Staff', 'Customer'],
+      type: DataTypes.ENUM,
+      values: ['President','Manager','Leader', 'Staff', 'Customer'],
       allowNull: false,
       unique: true,
       validate: {
