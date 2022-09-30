@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Role = sequelize.define(
-  "Role",
+  'Role',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -34,7 +34,7 @@ const Role = sequelize.define(
     },
   },
   {
-    tableName: "role",
+    tableName: 'role',
   }
 );
 

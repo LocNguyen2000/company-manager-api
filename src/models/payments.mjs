@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Payment = sequelize.define(
-  "Payment",
+  'Payment',
   {
     customerNumber: {
       type: DataTypes.INTEGER,

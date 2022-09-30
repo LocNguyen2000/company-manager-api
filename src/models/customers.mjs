@@ -1,9 +1,9 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
-import Employee from "./employees.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
+import Employee from './employees.mjs';
 
 const Customer = sequelize.define(
-  "Customer",
+  'Customer',
   {
     customerNumber: {
       type: DataTypes.INTEGER,
@@ -90,7 +90,7 @@ const Customer = sequelize.define(
       },
       references: {
         model: Employee,
-        key: "employeeNumber",
+        key: 'employeeNumber',
       },
     },
     creditLimit: {
@@ -113,7 +113,7 @@ const Customer = sequelize.define(
     },
   },
   {
-    tableName: "customers",
+    tableName: 'customers',
   }
 );
 

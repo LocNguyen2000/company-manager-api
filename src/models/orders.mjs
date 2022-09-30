@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Order = sequelize.define(
-  "Order",
+  'Order',
   {
     orderNumber: {
       type: DataTypes.INTEGER,
@@ -51,7 +51,7 @@ const Order = sequelize.define(
     },
   },
   {
-    tableName: "orders",
+    tableName: 'orders',
   }
 );
 export default Order;

@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const ProductLine = sequelize.define(
   "ProductLine",

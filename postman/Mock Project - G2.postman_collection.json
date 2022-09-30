@@ -1,122 +1,103 @@
 {
-	"info": {
-		"_postman_id": "30b0b78d-7a8a-4c05-951c-b4a28ea5e514",
-		"name": "Mock Project - G2",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Customer",
-			"item": [
-				{
-					"name": "New Request",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{LOCAL_API}}/customers/201",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"customers",
-								"201"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Employee",
-			"item": [
-				{
-					"name": "New Request",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"employee\": {\r\n        \"employeeNumber\": 6,\r\n        \"lastName\": \"Nguyen\",\r\n        \"firstName\": \"Loc\",\r\n        \"extension\": \"x100\",\r\n        \"email\": \"LocNH16@gmail.com\",\r\n        \"officeCode\": \"1\",\r\n        \"jobTitle\": \"Leader\"\r\n    },\r\n    \"customers\": [\r\n        {\r\n            \"customerNumber\": 201,\r\n            \"customerName\": \"Nguyen Huu Loc\",\r\n            \"contactLastName\": \"Huu Loc\",\r\n            \"contactFirstName\": \"Nguyen\",\r\n            \"phone\": \"(171) 555-2282\",\r\n            \"addressLine1\": \"12, Berkeley Gardens Blvd\",\r\n            \"city\": \"Liverpool\",\r\n            \"postalCode\": \"WX1 6LT\",\r\n            \"country\": \"UK\",\r\n            \"creditLimit\": 92700\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{LOCAL_API}}/employees/batch",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"employees",
-								"batch"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Register",
-			"item": [
-				{
-					"name": "New Request",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"newcus\",\r\n    \"password\": \"123\",\r\n    \"isEmployee\": false,\r\n    \"customerNumber\": 103,\r\n    \"employeeNumber\": null\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{LOCAL_API}}/users/register",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"users",
-								"register"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "LOCAL_API",
-			"value": "http://localhost:4000"
-		}
-	]
+  "info": {
+    "_postman_id": "30b0b78d-7a8a-4c05-951c-b4a28ea5e514",
+    "name": "Mock Project - G2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Customer",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL_API}}/customers/201",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["customers", "201"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employee",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"employee\": {\r\n        \"employeeNumber\": 6,\r\n        \"lastName\": \"Nguyen\",\r\n        \"firstName\": \"Loc\",\r\n        \"extension\": \"x100\",\r\n        \"email\": \"LocNH16@gmail.com\",\r\n        \"officeCode\": \"1\",\r\n        \"jobTitle\": \"Leader\"\r\n    },\r\n    \"customers\": [\r\n        {\r\n            \"customerNumber\": 201,\r\n            \"customerName\": \"Nguyen Huu Loc\",\r\n            \"contactLastName\": \"Huu Loc\",\r\n            \"contactFirstName\": \"Nguyen\",\r\n            \"phone\": \"(171) 555-2282\",\r\n            \"addressLine1\": \"12, Berkeley Gardens Blvd\",\r\n            \"city\": \"Liverpool\",\r\n            \"postalCode\": \"WX1 6LT\",\r\n            \"country\": \"UK\",\r\n            \"creditLimit\": 92700\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{LOCAL_API}}/employees/batch",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["employees", "batch"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Register",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"newcus\",\r\n    \"password\": \"123\",\r\n    \"isEmployee\": false,\r\n    \"customerNumber\": 103,\r\n    \"employeeNumber\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{LOCAL_API}}/users/register",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["users", "register"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "LOCAL_API",
+      "value": "http://localhost:4000"
+    }
+  ]
 }
