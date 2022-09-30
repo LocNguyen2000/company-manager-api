@@ -59,14 +59,12 @@ const Product = sequelize.define(
     },
     createdBy: {
       type: DataTypes.STRING(50),
-      allowNull: false,
       validate: {
         len: [2, 50],
       },
     },
     updatedBy: {
       type: DataTypes.STRING(50),
-      allowNull: false,
       validate: {
         len: [2, 50],
       },

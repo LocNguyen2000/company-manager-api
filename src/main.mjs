@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import createError from 'http-errors';
 import config from './config/config.mjs';
 import connectToDb from './config/database.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -31,13 +31,13 @@ app.use('/products', productRouter);
 
 // Not found method
 app.use((err, req, res, next) => {
-  if (!err) return next(createHttpError(404, 'Not found'));
+  if (!err) return next(createError(404, 'Not found'));
   return next(err);
 });
 
 // Error handling middleware
-app.use((err, req, res) => {
-  return res.status(err.status || 500).json({ message: err.message });
+app.use((err, req, res, next) => {
+  return res.status(err.status || 500).json({ status: err.status || 500, message: err.message });
 });
 
 app.listen(port, () => {
