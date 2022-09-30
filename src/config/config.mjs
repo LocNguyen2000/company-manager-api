@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv'
+import * as dotenv from 'dotenv';
 
-dotenv.config({ path: '../.env.local' })
+dotenv.config({ path: '../.env.local' });
 
 export default {
   host: process.env.HOST,
@@ -9,4 +9,4 @@ export default {
   password: process.env.PASSWORD,
   databaseName: process.env.DB_NAME,
   secretKey: process.env.SECRET_KEY,
-}
+};

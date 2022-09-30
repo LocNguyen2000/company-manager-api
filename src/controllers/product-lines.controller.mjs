@@ -1,6 +1,6 @@
-import createError from "http-errors";
-import { ValidationError } from "sequelize";
-import ProductLine from "../models/productlines.mjs";
+import createError from 'http-errors';
+import { ValidationError } from 'sequelize';
+import ProductLine from '../models/productlines.mjs';
 
 export const getProductLine = async (req, res, next) => {
   try {
@@ -9,6 +9,7 @@ export const getProductLine = async (req, res, next) => {
 
     if (page) delete queryFilter.p;
 
+    // Customer trở lên được vào route
     let productLineList = await ProductLine.findAndCountAll({
       where: queryFilter,
       offset: ((page || 1) - 1) * 10,
@@ -31,12 +32,13 @@ export const addProductLine = async (req, res, next) => {
       updatedBy: id,
     });
 
+    // Customer trở lên được vào route
     let productLineInstance = await ProductLine.create(productLine, { transaction: t });
 
     return res.status(200).json({ data: productLineInstance });
   } catch (error) {
     if (error instanceof ValidationError) {
-      return next(createError(400, "Wrong data!"));
+      return next(createError(400, 'Wrong data!'));
     }
     return next(error);
   }
@@ -49,9 +51,10 @@ export const updateProductLine = async (req, res) => {
       { id } = req.params;
 
     productLine = Object.assign(productLine, {
-        updatedBy: employeeNumber
-    })
+      updatedBy: employeeNumber,
+    });
 
+    // Customer trở lên được vào route
     let productLineInstance = await ProductLine.update(productLine, {
       where: {
         productLine: id,
@@ -68,6 +71,7 @@ export const deleteProductLine = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // Customer trở lên được vào route
     let productLineInstance = await ProductLine.destroy({ where: { productLine: id } });
 
     return res.status(200).json({ data: productLineInstance.productLine });
