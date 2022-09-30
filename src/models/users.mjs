@@ -1,7 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-import Customer from './customers.mjs';
-import Employee from './employees.mjs';
 
 const User = sequelize.define(
   'User',
@@ -41,7 +39,6 @@ const User = sequelize.define(
   }
 );
 
-User.belongsTo(Employee, { foreignKey: 'employeeNumber' });
-User.belongsTo(Customer, { foreignKey: 'customerNumber' });
+
 
 export default User;

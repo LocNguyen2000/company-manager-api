@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-import Employee from './employees.mjs';
 
 const Office = sequelize.define(
   'Office',
@@ -88,8 +87,6 @@ const Office = sequelize.define(
   }
 );
 
-Office.hasMany(Employee,{
-  foreignKey: 'officeCode'
-})
+
 
 export default Office;

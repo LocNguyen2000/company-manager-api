@@ -57,8 +57,6 @@ const Order = sequelize.define(
   }
 );
 
-Order.belongsToMany(Product, {
-  through: Orderdetail
-})
+
 
 export default Order;

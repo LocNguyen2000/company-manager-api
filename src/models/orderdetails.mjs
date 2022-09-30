@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
 import Product from './products.mjs';
+import Order from './orders.mjs'
 
-const Orderdetail = sequelize.define(
+const OrderDetail = sequelize.define(
   'OrderDetail',
   {
     orderNumber: {
@@ -11,6 +12,10 @@ const Orderdetail = sequelize.define(
       validate: {
         min: 0,
       },
+      references: {
+        model: Order, // 'Movies' would also work
+        key: 'orderNumber'
+      }
     },
     productCode: {
       type: DataTypes.STRING(15),
@@ -18,6 +23,10 @@ const Orderdetail = sequelize.define(
       validate: {
         len: [5, 15],
       },
+      references: {
+        model: Product, // 'Movies' would also work
+        key: 'productCode'
+      }
     },
     quantityOrdered: {
       type: DataTypes.INTEGER,
@@ -61,4 +70,4 @@ const Orderdetail = sequelize.define(
   }
 );
 
-export default Orderdetail;
+export default OrderDetail;

@@ -1,7 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-import Employee from './employees.mjs';
-import User from './users.mjs';
 
 const Customer = sequelize.define(
   'Customer',
@@ -90,10 +88,6 @@ const Customer = sequelize.define(
       validate: {
         min: 0,
       },
-      references: {
-        model: Employee,
-        key: 'employeeNumber',
-      },
     },
     creditLimit: {
       type: DataTypes.FLOAT(10, 2),
@@ -119,6 +113,6 @@ const Customer = sequelize.define(
   }
 );
 
-Customer.hasOne(User)
+
 
 export default Customer;
