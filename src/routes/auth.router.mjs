@@ -1,10 +1,10 @@
-import {Router} from 'express'
+import { Router } from 'express';
 
-import {register, login} from '../controllers/auth.controller.mjs'
+import { register, login } from '../controllers/auth.controller.mjs';
 
-const router = Router()
+const router = Router();
 
-router.post("/register", register);
-router.post("/login", login)
+router.post('/register', register);
+router.post('/login', login);
 
 export default router;

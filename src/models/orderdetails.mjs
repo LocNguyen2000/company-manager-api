@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Orderdetail = sequelize.define(
-  "OrderDetail",
+  'OrderDetail',
   {
     orderNumber: {
       type: DataTypes.INTEGER,
@@ -37,27 +37,26 @@ const Orderdetail = sequelize.define(
       },
     },
     deleted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     createdBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
-      updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+    },
+    updatedBy: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
+    },
   },
   {
-    tableName: "orderdetails",
-
+    tableName: 'orderdetails',
   }
 );
 export default Orderdetail;

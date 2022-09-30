@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Order = sequelize.define(
-  "Order",
+  'Order',
   {
     orderNumber: {
       type: DataTypes.INTEGER,
@@ -36,22 +36,22 @@ const Order = sequelize.define(
       defaultValue: false,
     },
     createdBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
-      updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+    },
+    updatedBy: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
+    },
   },
   {
-    tableName: "orders",
+    tableName: 'orders',
   }
 );
 export default Order;

@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Office = sequelize.define(
-  "Office",
+  'Office',
   {
     officeCode: {
       type: DataTypes.STRING(50),
@@ -83,7 +83,7 @@ const Office = sequelize.define(
     },
   },
   {
-    tableName: "offices",
+    tableName: 'offices',
   }
 );
 export default Office;

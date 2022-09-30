@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cd src && nodemon main.mjs",
+    "format": "npx prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,5 +32,8 @@
     "sequelize": "^6.23.2",
     "swagger-ui-express": "^4.5.0",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "prettier": "2.7.1"
   }
 }

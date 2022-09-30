@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Payment = sequelize.define(
-  "Payment",
+  'Payment',
   {
     customerNumber: {
       type: DataTypes.INTEGER,
@@ -27,27 +27,26 @@ const Payment = sequelize.define(
       allowNull: false,
     },
     deleted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    createdBy: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
-      createdBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+    },
+    updatedBy: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
-      updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
-      },
+    },
   },
   {
-    tableName: "payments",
-
+    tableName: 'payments',
   }
 );
 export default Payment;
