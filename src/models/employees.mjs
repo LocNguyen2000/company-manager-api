@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
-import Role from "./role.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
+import Role from './role.mjs';
 const Employee = sequelize.define(
-  "Employee",
+  'Employee',
   {
     employeeNumber: {
       type: DataTypes.INTEGER,
@@ -42,18 +42,18 @@ const Employee = sequelize.define(
     jobTitle: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      values: ["President", "Leader", "Manager", "Staff"],
+      values: ['President', 'Leader', 'Manager', 'Staff'],
     },
     role: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-            len: [1, 11],
-        },
-        references: {
-            model: Role,
-            key: 'id'
-        }
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        len: [1, 11],
+      },
+      references: {
+        model: Role,
+        key: 'id',
+      },
     },
     createdBy: {
       type: DataTypes.STRING(50),
@@ -71,10 +71,9 @@ const Employee = sequelize.define(
     },
   },
   {
-    tableName: "employees",
+    tableName: 'employees',
   }
 );
 
-
-Employee.belongsTo(Role, {foreignKey: 'role'})
+Employee.belongsTo(Role, { foreignKey: 'role' });
 export default Employee;

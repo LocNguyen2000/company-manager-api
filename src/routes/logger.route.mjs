@@ -1,10 +1,10 @@
-import { Router } from 'express'
-import { addLog, getLog, updateLog } from '../controllers/logger.controller.mjs'
+import { Router } from 'express';
+import { addLog, getLog, updateLog } from '../controllers/logger.controller.mjs';
 
-const router = Router()
+const router = Router();
 
-router.get('/', getLog)
-router.post('/', addLog)
-router.put('/:id', updateLog)
+router.get('/', getLog);
+router.post('/', addLog);
+router.put('/:id', updateLog);
 
 export default router;

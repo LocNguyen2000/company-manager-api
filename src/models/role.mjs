@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database.mjs";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.mjs';
 
 const Role = sequelize.define(
-  "Role",
+  'Role',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,31 +11,30 @@ const Role = sequelize.define(
     },
     role: {
       type: DataTypes.ENUM,
-      values: ['President','Manager','Leader', 'Staff', 'Customer'],
+      values: ['President', 'Manager', 'Leader', 'Staff', 'Customer'],
       allowNull: false,
       unique: true,
       validate: {
         len: [2, 50],
-        
       },
     },
     createdBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
-      updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+    },
+    updatedBy: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [2, 50],
       },
+    },
   },
   {
-    tableName: "role",
+    tableName: 'role',
   }
 );
 
