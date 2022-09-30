@@ -29,20 +29,13 @@ const User = sequelize.define('User', {
     },
     employeeNumber: {
         type: DataTypes.INTEGER,
-        references: {
-            model: Employee,
-            key: 'employeeNumber'
-        }
     },
     customerNumber: {
         type: DataTypes.INTEGER,
-        references: {
-            model: Customer,
-            key: 'customerNumber'
-        }
     },
 },{
     tableName: 'users',
 })
-
+User.belongsTo(Employee, {foreignKey: 'employeeNumber'})
+User.belongsTo(Customer, {foreignKey: 'customerNumber'})
 export default User;

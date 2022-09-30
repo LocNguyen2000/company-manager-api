@@ -12,7 +12,7 @@ const Orderdetail = sequelize.define(
       },
     },
     productCode: {
-      type: DataTypes.STRING[15],
+      type: DataTypes.STRING(15),
       primaryKey: true,
       validate: {
         len: [5, 15],

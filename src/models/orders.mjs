@@ -21,7 +21,7 @@ const Order = sequelize.define(
       type: DataTypes.DATE,
     },
     status: {
-      type: DataTypes.STRING[15],
+      type: DataTypes.STRING(15),
       allowNull: false,
       validate: {
         len: [5, 15],

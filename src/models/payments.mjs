@@ -12,7 +12,7 @@ const Payment = sequelize.define(
       },
     },
     checkNumber: {
-      type: DataTypes.STRING[50],
+      type: DataTypes.STRING(50),
       primaryKey: true,
       validate: {
         len: [5, 50],

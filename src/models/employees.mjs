@@ -45,14 +45,15 @@ const Employee = sequelize.define(
       values: ["President", "Leader", "Manager", "Staff"],
     },
     role: {
-      type: DataTypes.INTEGER,
-      validate: {
-        len: [1, 11],
-      },
-      references: {
-        model: Role,
-        key: "id",
-      },
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+            len: [1, 11],
+        },
+        references: {
+            model: Role,
+            key: 'id'
+        }
     },
     createdBy: {
       type: DataTypes.STRING(50),
@@ -74,4 +75,6 @@ const Employee = sequelize.define(
   }
 );
 
+
+Employee.belongsTo(Role, {foreignKey: 'role'})
 export default Employee;

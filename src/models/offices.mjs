@@ -5,42 +5,42 @@ const Office = sequelize.define(
   "Office",
   {
     officeCode: {
-      type: DataTypes.STRING[50],
+      type: DataTypes.STRING(50),
       primaryKey: true,
       validate: {
         len: [1, 50],
       },
     },
     city: {
-      type: DataTypes.STRING[50],
+      type: DataTypes.STRING(50),
       allowNull: false,
       validate: {
         len: [5, 50],
       },
     },
     phone: {
-      type: DataTypes.STRING[20],
+      type: DataTypes.STRING(20),
       allowNull: false,
       validate: {
         len: [8, 20],
       },
     },
     addressLine1: {
-      type: DataTypes.STRING[50],
+      type: DataTypes.STRING(50),
       allowNull: false,
       validate: {
         len: [5, 50],
       },
     },
     addressLine2: {
-      type: DataTypes.STRING[50],
+      type: DataTypes.STRING(50),
       allowNull: true,
       validate: {
         len: [5, 50],
       },
     },
     state: {
-      type: DataTypes.STRING[50],
+      type: DataTypes.STRING(50),
       allowNull: true,
       validate: {
         len: [5, 50],
