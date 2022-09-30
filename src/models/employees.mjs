@@ -45,7 +45,6 @@ const Employee = sequelize.define(
       values: ["President", "Leader", "Manager", "Staff"],
     },
     role: {
-<<<<<<< HEAD
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
@@ -55,16 +54,6 @@ const Employee = sequelize.define(
             model: Role,
             key: 'id'
         }
-=======
-      type: DataTypes.INTEGER,
-      validate: {
-        len: [1, 11],
-      },
-      references: {
-        model: Role,
-        key: "id",
-      },
->>>>>>> 8f64204ee9f7144138e61ebeff14d6981608b521
     },
     createdBy: {
       type: DataTypes.STRING(50),
@@ -86,11 +75,6 @@ const Employee = sequelize.define(
   }
 );
 
-<<<<<<< HEAD
-})
 
 Employee.belongsTo(Role, {foreignKey: 'role'})
 export default Employee;
-=======
-export default Employee;
->>>>>>> 8f64204ee9f7144138e61ebeff14d6981608b521

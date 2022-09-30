@@ -2,7 +2,6 @@ import { Op } from "sequelize";
 import User from "../models/users.mjs";
 import Employee from "../models/employees.mjs";
 import Customer from "../models/customers.mjs";
-import Role from "../models/role.mjs";
 import { ROLE } from "../config/variables.mjs";
 import {
   encryptPassword,
@@ -54,7 +53,7 @@ export const register = async (req, res) => {
       .status(200)
       .json({ message: "Register successfully", data: user });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
@@ -66,19 +65,6 @@ export const login = async (req, res) => {
       where: {
         username,
       },
-      // include: [
-      //   {
-      //     model: Employee,
-      //     required: true,
-      //     attributes: ["role", "officeCode"],
-      //     include: [
-      //       {
-      //         model: Role,
-      //         required: true,
-      //       },
-      //     ],
-      //   }
-      // ],
       include: {
         all: true,
         include: {
@@ -88,7 +74,6 @@ export const login = async (req, res) => {
       raw: true,
       nest: true,
     });
-    console.log(result.Employee.officeCode);
     if (!result) {
       return res
         .status(400)
@@ -120,6 +105,6 @@ export const login = async (req, res) => {
         token: accessToken,
       });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };

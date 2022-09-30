@@ -36,10 +36,6 @@ const User = sequelize.define('User', {
 },{
     tableName: 'users',
 })
-<<<<<<< HEAD
 User.belongsTo(Employee, {foreignKey: 'employeeNumber'})
 User.belongsTo(Customer, {foreignKey: 'customerNumber'})
-=======
-
->>>>>>> 8f64204ee9f7144138e61ebeff14d6981608b521
 export default User;
