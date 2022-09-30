@@ -1,13 +1,17 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
+import Office from './offices.mjs';
 import Role from './role.mjs';
+import User from './users.mjs';
+
 const Employee = sequelize.define(
   'Employee',
   {
     employeeNumber: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
       validate: {
         min: 0,
       },
@@ -56,14 +60,14 @@ const Employee = sequelize.define(
       },
     },
     createdBy: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         min: 0,
       },
     },
     updatedBy: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         min: 0,
@@ -76,4 +80,7 @@ const Employee = sequelize.define(
 );
 
 Employee.belongsTo(Role, { foreignKey: 'role' });
+Employee.hasOne(User)
+Employee.belongsTo(Office)
+
 export default Employee;

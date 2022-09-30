@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
+import Product from './products.mjs';
 
 const Orderdetail = sequelize.define(
   'OrderDetail',
@@ -59,4 +60,5 @@ const Orderdetail = sequelize.define(
     tableName: 'orderdetails',
   }
 );
+
 export default Orderdetail;

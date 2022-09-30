@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
 import Employee from './employees.mjs';
+import User from './users.mjs';
 
 const Customer = sequelize.define(
   'Customer',
@@ -8,6 +9,7 @@ const Customer = sequelize.define(
     customerNumber: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
       validate: {
         min: 0,
       },
@@ -116,5 +118,7 @@ const Customer = sequelize.define(
     tableName: 'customers',
   }
 );
+
+Customer.hasOne(User)
 
 export default Customer;

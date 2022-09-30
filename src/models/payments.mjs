@@ -49,4 +49,5 @@ const Payment = sequelize.define(
     tableName: 'payments',
   }
 );
+
 export default Payment;

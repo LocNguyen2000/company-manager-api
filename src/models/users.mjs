@@ -40,6 +40,8 @@ const User = sequelize.define(
     tableName: 'users',
   }
 );
+
 User.belongsTo(Employee, { foreignKey: 'employeeNumber' });
 User.belongsTo(Customer, { foreignKey: 'customerNumber' });
+
 export default User;

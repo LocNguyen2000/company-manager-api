@@ -1,12 +1,14 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-
+import Orderdetail from './orderdetails.mjs';
+import Product from './products.mjs';
 const Order = sequelize.define(
   'Order',
   {
     orderNumber: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
       validate: {
         min: 0,
       },
@@ -54,4 +56,9 @@ const Order = sequelize.define(
     tableName: 'orders',
   }
 );
+
+Order.belongsToMany(Product, {
+  through: Orderdetail
+})
+
 export default Order;

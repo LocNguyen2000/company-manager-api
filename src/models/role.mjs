@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-
+import Employee from './employees.mjs';
 const Role = sequelize.define(
   'Role',
   {
@@ -37,5 +37,7 @@ const Role = sequelize.define(
     tableName: 'role',
   }
 );
+
+Role.hasMany(Employee)
 
 export default Role;

@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-
+import Product from './products.mjs';
 const ProductLine = sequelize.define(
   'ProductLine',
   {
@@ -37,4 +37,5 @@ const ProductLine = sequelize.define(
   }
 );
 
+ProductLine.hasMany(Product)
 export default ProductLine;

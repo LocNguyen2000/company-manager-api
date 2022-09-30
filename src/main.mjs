@@ -36,8 +36,8 @@ app.use((err, req, res, next) => {
 });
 
 // Error handling middleware
-app.use((err, req, res) => {
-  return res.status(err.status || 500).json({ message: err.message });
+app.use((err, req, res, next) => {
+  return res.status(err.status || 500).json({ status: err.status || 500, message: err.message });
 });
 
 app.listen(port, () => {

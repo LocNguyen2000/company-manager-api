@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
+import Orderdetail from './orderdetails.mjs';
 import Order from './orders.mjs';
 import ProductLine from './productlines.mjs';
 
@@ -77,7 +78,10 @@ const Product = sequelize.define(
   }
 );
 
-Product.belongsTo(ProductLine);
-Product.hasMany(Order);
+Product.belongsTo(ProductLine, {foreignKey: 'productLine'});
+
+Product.belongsToMany(Order, {
+  through: Orderdetail
+})
 
 export default Product;
