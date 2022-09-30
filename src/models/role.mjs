@@ -11,28 +11,27 @@ const Role = sequelize.define(
     },
     role: {
       type: DataTypes.ENUM,
-      values: ['President','Manager','Leader', 'Staff', 'Customer'],
+      values: ["President", "Manager", "Leader", "Staff", "Customer"],
       allowNull: false,
       unique: true,
       validate: {
         len: [2, 50],
-        
       },
     },
     createdBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+        min: 0,
       },
-      updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+    },
+    updatedBy: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+        min: 0,
       },
+    },
   },
   {
     tableName: "role",

@@ -56,18 +56,18 @@ const Product = sequelize.define("Product", {
     allowNull: false,
   },
   createdBy: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.INTEGER(11),
     allowNull: false,
     validate: {
-      len: [2,50]
-    }
+      min: 0,
+    },
   },
   updatedBy: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.INTEGER(11),
     allowNull: false,
     validate: {
-      len: [2,50]
-    }
+      min: 0,
+    },
   },
 },{
     tableName: 'products',

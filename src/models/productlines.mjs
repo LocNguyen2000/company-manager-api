@@ -1,37 +1,40 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.mjs";
 
-const ProductLine = sequelize.define('ProductLine', {
-    productLine : {
-        type: DataTypes.STRING(50),
-        primaryKey: true
+const ProductLine = sequelize.define(
+  "ProductLine",
+  {
+    productLine: {
+      type: DataTypes.STRING(50),
+      primaryKey: true,
     },
-    textDescription : {
-        type: DataTypes.STRING(4000)
+    textDescription: {
+      type: DataTypes.STRING(4000),
     },
-    htmlDescription : {
-        type: DataTypes.TEXT('medium')
-    },   
-    image : {
-        type: DataTypes.BLOB('medium')
+    htmlDescription: {
+      type: DataTypes.TEXT("medium"),
+    },
+    image: {
+      type: DataTypes.BLOB("medium"),
     },
     createdBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+        min: 0,
       },
-      updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+    },
+    updatedBy: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+        min: 0,
       },
-}, {
-    tableName: 'productlines',
-
-})
+    },
+  },
+  {
+    tableName: "productlines",
+  }
+);
 
 export default ProductLine;

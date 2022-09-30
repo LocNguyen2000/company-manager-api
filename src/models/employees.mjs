@@ -5,11 +5,11 @@ const Employee = sequelize.define(
   "Employee",
   {
     employeeNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       validate: {
-        len: [1, 11],
+        min: 0,
       },
     },
     firstName: {
@@ -45,28 +45,28 @@ const Employee = sequelize.define(
       values: ["President", "Leader", "Manager", "Staff"],
     },
     role: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-            len: [1, 11],
-        },
-        references: {
-            model: Role,
-            key: 'id'
-        }
-    },
-    createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        len: [2, 50],
+        len: [1, 11],
+      },
+      references: {
+        model: Role,
+        key: "id",
+      },
+    },
+    createdBy: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+        min: 0,
       },
     },
     updatedBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       validate: {
-        len: [2, 50],
+        min: 0,
       },
     },
   },
@@ -75,6 +75,5 @@ const Employee = sequelize.define(
   }
 );
 
-
-Employee.belongsTo(Role, {foreignKey: 'role'})
+Employee.belongsTo(Role, { foreignKey: "role" });
 export default Employee;

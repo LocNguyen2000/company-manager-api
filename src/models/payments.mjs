@@ -27,27 +27,26 @@ const Payment = sequelize.define(
       allowNull: false,
     },
     deleted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    createdBy: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+        min: 0,
       },
-      createdBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
+    },
+    updatedBy: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+        min: 0,
       },
-      updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          len: [2,50]
-        }
-      },
+    },
   },
   {
     tableName: "payments",
-
   }
 );
 export default Payment;
