@@ -46,6 +46,7 @@ const Employee = sequelize.define('Employee', {
     },
     role: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         validate: {
             len: [1, 11],
         },
@@ -73,5 +74,5 @@ const Employee = sequelize.define('Employee', {
 
 })
 
-
+Employee.belongsTo(Role, {foreignKey: 'role'})
 export default Employee;

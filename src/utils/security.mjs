@@ -6,7 +6,7 @@ export const jwtGenerate = (userInfo) => {
   const payload = {
     data: userInfo,
   }
-  return jwt.sign(payload, config.secretKey, { expiresIn: 60 * 60 })
+  return jwt.sign(payload, config.secretKey)
 }
 
 export const comparePassword = async (loginPass, userPassword) => {
