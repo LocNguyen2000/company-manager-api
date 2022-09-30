@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from 'cookie-parser'
 
 import config from "./config/config.mjs";
 import connectToDb from "./config/database.mjs";
-
 import customerRouter from './routes/customer.route.mjs'
 import employeeRouter from './routes/employee.route.mjs'
 import loggerRouter from './routes/logger.route.mjs'
@@ -15,11 +15,12 @@ const app = express();
 const port = config.port || process.env.PORT;
 
 connectToDb();
-
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+// application middleware
 app.use('/users', userRouter)
 app.use('/customers', customerRouter)
 app.use('/employees', employeeRouter)
@@ -27,17 +28,15 @@ app.use('/offices', officeRouter)
 app.use('/logger', loggerRouter)
 app.use('/products', productRouter)
 
+// Not found method
 app.use((err, req, res, next) => {
-  if (!err) next(createHttpError(404, "Not found"));
-  else {
-    next(err);
-  }
+  if (!err) return next(createHttpError(404,'Not found'));
+  return next(err);
 });
 
+// Error handling middleware
 app.use((err, req, res) => {
-  res
-    .status(err.status || 500)
-    .json({ status: err.status || 500, message: err.message });
+  return res.status(err.status || 500).json({message: err.message});
 });
 
 app.listen(port, () => {
