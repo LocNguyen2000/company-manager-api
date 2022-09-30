@@ -44,6 +44,5 @@ const User = sequelize.define('User', {
 },{
     tableName: 'users',
 })
-User.hasOne(Employee)
-User.hasOne(Customer)
+
 export default User;
