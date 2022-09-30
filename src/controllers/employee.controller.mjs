@@ -53,9 +53,7 @@ export const addEmployee = async (req, res, next) => {
       })
     );
 
-    return res
-      .status(200)
-      .json({ data: employeeInstance });
+    return res.status(200).json({ data: employeeInstance, message: 'Create employee successfully' });
   } catch (error) {
     if (error instanceof ValidationError) {
       return next(createError(400, "Wrong data!"));
@@ -82,7 +80,7 @@ export const updateEmployee = async (req, res) => {
       queryObj = Object.assign(queryObj, { officeCode });
     }
 
-    let employeeInstance = await Employee.update(
+    let rowAffected = await Employee.update(
       Object.assign(employee, {
         updatedBy: employeeNumber,
       }),
@@ -91,7 +89,7 @@ export const updateEmployee = async (req, res) => {
       }
     );
 
-    return res.status(200).json({ data: employeeInstance });
+    return res.status(200).json({ message: `Update successfully ${rowAffected} record` });
   } catch (error) {
     next(error);
   }

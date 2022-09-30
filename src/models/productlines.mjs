@@ -10,10 +10,10 @@ const ProductLine = sequelize.define('ProductLine', {
         type: DataTypes.STRING(4000)
     },
     htmlDescription : {
-        type: DataTypes.TEXT['medium']
+        type: DataTypes.TEXT('medium')
     },   
     image : {
-        type: DataTypes.BLOB['medium']
+        type: DataTypes.BLOB('medium')
     },
     createdBy: {
         type: DataTypes.STRING(50),
