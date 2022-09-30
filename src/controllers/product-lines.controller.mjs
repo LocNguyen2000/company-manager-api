@@ -5,10 +5,9 @@ import { sequelize } from "../config/database.mjs";
 import { ROLE } from "../config/variables.mjs";
 import Office from "../models/offices.mjs"
 import Employee from "../models/employees.mjs";
+import ProductLine from '../models/productlines.mjs'
 
-
-
-export const getOffice = async (req, res, next) => {
+export const getProductLine = async (req, res, next) => {
   try {
     const queryFilter = req.query;
 
