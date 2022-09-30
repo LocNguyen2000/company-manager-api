@@ -55,7 +55,7 @@ export const addEmployee = async (req, res, next) => {
 
     return res
       .status(200)
-      .json({ employeeNumber: employeeInstance.employeeNumber });
+      .json({ data: employeeInstance });
   } catch (error) {
     if (error instanceof ValidationError) {
       return next(createError(400, "Wrong data!"));

@@ -54,7 +54,7 @@ export const addOffice = async (req, res, next) => {
 
     await t.commit()
 
-    return res.status(200).json({ officeCode: officeInstance.officeCode });
+    return res.status(200).json({ data: officeInstance });
   } catch (error) {
     await t.rollback()
 
@@ -99,7 +99,7 @@ export const deleteOffice = async (req, res) => {
 
     let officeInstance = await Office.destroy({where: {officeCode: id}});
 
-    return res.status(200).json({ officeCode: officeInstance.officeCode });
+    return res.status(200).json({ data: officeInstance.officeCode });
 
   } catch (error) {
     next(error);

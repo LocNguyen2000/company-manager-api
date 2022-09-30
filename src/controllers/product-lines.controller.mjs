@@ -1,105 +1,76 @@
 import createError from "http-errors";
 import { ValidationError } from "sequelize";
-import { sequelize } from "../config/database.mjs";
-
-import { ROLE } from "../config/variables.mjs";
-import Office from "../models/offices.mjs"
-import Employee from "../models/employees.mjs";
-import ProductLine from '../models/productlines.mjs'
+import ProductLine from "../models/productlines.mjs";
 
 export const getProductLine = async (req, res, next) => {
   try {
-    const queryFilter = req.query;
+    const { p: page } = req.query,
+      queryFilter = req.query;
 
-    let officeList = await Employee.findAll({
+    if (page) delete queryFilter.p;
+
+    let productLineList = await ProductLine.findAndCountAll({
       where: queryFilter,
+      offset: ((page || 1) - 1) * 10,
+      limit: 10,
     });
 
-    return res.status(200).json({data: officeList});
+    return res.status(200).json({ data: productLineList });
   } catch (error) {
     next(error);
   }
 };
 
-export const addOffice = async (req, res, next) => {
+export const addProductLine = async (req, res, next) => {
   try {
-    const role = req.role, id = req.employeeNumber,
-      office = req.body;
+    const id = req.employeeNumber,
+      productLine = req.body;
 
-    if (role === ROLE.STAFF || role === ROLE.MANAGER || role === ROLE.LEADER) {
-      return next(createError(401, "Not permitted!"));
-    }
+    productLine = Object.assign(productLine, {
+      createdBy: id,
+      updatedBy: id,
+    });
 
-    office = Object.assign(office, {
-        createdBy: id,
-        updatedBy: id
-    })
+    let productLineInstance = await ProductLine.create(productLine, { transaction: t });
 
-    const t = await sequelize.transaction()
-
-    let officeInstance = await Office.create(office, {transaction: t});
-
-    let employeeDefault = await Employee.create({
-        lastname: '9999',
-        createdBy: id,
-        updatedBy: id,
-        role: 4,
-        jobTitle: 'Staff',
-        officeCode: officeInstance.officeCode,
-        email: '',
-        extension: '',
-        firstname: '',
-    },{transaction: t})
-
-    await t.commit()
-
-    return res.status(200).json({ officeCode: officeInstance.officeCode });
+    return res.status(200).json({ data: productLineInstance });
   } catch (error) {
-    await t.rollback()
-
     if (error instanceof ValidationError) {
       return next(createError(400, "Wrong data!"));
-    } 
+    }
     return next(error);
-    
   }
 };
 
-export const updateOffice = async (req, res) => {
+export const updateProductLine = async (req, res) => {
   try {
-    const role = req.role,
-      office = req.body,
+    const employeeNumber = req.employeeNumber,
+      productLine = req.body,
       { id } = req.params;
 
-    if (role === ROLE.STAFF || role === ROLE.LEADER || role === ROLE.MANAGER) {
-      return next(createError(401, "Not permitted!"));
-    }
+    productLine = Object.assign(productLine, {
+        updatedBy: employeeNumber
+    })
 
-    let officeInstance = await Office.update(office, {
+    let productLineInstance = await ProductLine.update(productLine, {
       where: {
-        officeCode: id
+        productLine: id,
       },
     });
 
-    return res.status(200).json({ data: officeInstance });
+    return res.status(200).json({ data: productLineInstance });
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteOffice = async (req, res) => {
+export const deleteProductLine = async (req, res) => {
   try {
-    const role = req.role,
-      { id } = req.params;
+    const { id } = req.params;
 
-    if (role === ROLE.STAFF || role === ROLE.MANAGER || role === ROLE.LEADER) {
-      return next(createError(401, "Not permitted!"));
-    }
+    let productLineInstance = await ProductLine.destroy({ where: { productLine: id } });
 
-    let officeInstance = await Office.destroy({where: {officeCode: id}});
-
-    return res.status(200).json({ officeCode: officeInstance.officeCode });
-
+    return res.status(200).json({ data: productLineInstance.productLine });
   } catch (error) {
     next(error);
   }
