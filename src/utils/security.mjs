@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken'
 import config from '../config/config.mjs' 
 import bcrypt from 'bcrypt'
+import { TIME_TO_LIVE } from '../config/variables.mjs'
 
 export const jwtGenerate = (userInfo) => {
   const payload = {
     data: userInfo,
   }
-  return jwt.sign(payload, config.secretKey)
+  return jwt.sign(payload, config.secretKey, { expiresIn: TIME_TO_LIVE })
 }
 
 export const comparePassword = async (loginPass, userPassword) => {

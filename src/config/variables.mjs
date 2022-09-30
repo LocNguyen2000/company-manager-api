@@ -5,3 +5,6 @@ export const ROLE = {
     STAFF: 'Staff',
     CUSTOMER: 'Customer',
 }
+
+// second
+export const TIME_TO_LIVE = 60 * 60; 

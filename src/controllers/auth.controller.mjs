@@ -74,17 +74,20 @@ export const login = async (req, res) => {
       raw: true,
       nest: true,
     });
+    
     if (!result) {
       return res
         .status(400)
         .json({ message: "Username or Password is invalid" });
     }
     let comparePass = await comparePassword(password, result.password);
+
     if (!comparePass) {
       return res
         .status(400)
         .json({ message: "Username or Password is invalid" });
     }
+
     userRole = result.isEmployee ? result.Employee.Role.role : ROLE.CUSTOMER;
 
     let dataInfo = {
@@ -93,10 +96,12 @@ export const login = async (req, res) => {
       role: userRole,
       officeCode: result.Employee.officeCode
     };
+    
     let accessToken = jwtGenerate(dataInfo);
+
     res
       .cookie("access_token", accessToken, {
-        maxAge: 60*10000,
+        maxAge: TIME_TO_LIVE * 1000,
         httpOnly: true,
       })
       .status(200).json({

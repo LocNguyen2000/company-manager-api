@@ -12,7 +12,11 @@ export const getOffice = async (req, res, next) => {
   try {
     const queryFilter = req.query;
 
-    let officeList = await Employee.findAll({
+    if (req.role == ROLE.LEADER || req.role == ROLE.STAFF || req.role == ROLE.STAFF){
+        return next(createError(401, "Not permitted!"))
+    }
+
+    let officeList = await Office.findAll({
       where: queryFilter,
     });
 
@@ -40,7 +44,7 @@ export const addOffice = async (req, res, next) => {
 
     let officeInstance = await Office.create(office, {transaction: t});
 
-    let employeeDefault = await Employee.create({
+    await Employee.create({
         lastname: '9999',
         createdBy: id,
         updatedBy: id,

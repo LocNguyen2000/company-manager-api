@@ -1,7 +1,7 @@
 import createError from "http-errors";
 import { ValidationError } from "sequelize";
-import { sequelize } from "../config/database.mjs";
 
+import { sequelize } from "../config/database.mjs";
 import { ROLE } from "../config/variables.mjs";
 import Customer from "../models/customers.mjs";
 import Employee from "../models/employees.mjs";
@@ -9,14 +9,14 @@ import Employee from "../models/employees.mjs";
 export const getEmployee = async (req, res, next) => {
   try {
     const id = req.employeeNumber,
-      role = req.role.toLowerCase(),
+      role = req.role,
       { p: page } = req.query,
       officeCode = req.officeCode,
       queryFilter = req.query;
 
     if (page) delete queryFilter.p;
 
-    if (role.toLowerCase === "staff") {
+    if (role === ROLE.STAFF) {
       queryFilter = Object.assign(queryFilter, { employeeNumber: id });
     } else if (role === ROLE.LEADER) {
       queryFilter = Object.assign(queryFilter, { reportsTo: id });
@@ -105,34 +105,37 @@ export const deleteEmployee = async (req, res) => {
   }
 
   // add transaction
-  const transaction = await sequelize.transaction();
+  const t = await sequelize.transaction();
 
   try {
     // Find all customer from deleted employee
     const defaultEmployee = await Employee.findOne({
       where: { lastName: "9999", officeCode: officeCode },
+      transaction: t,
     });
     const currentCustomers = await Customer.findAll({
       where: { salesRepEmployeeNumber: id },
+      transaction: t
     });
 
     // change current employee's customer > default employee's customer
     for (const customer of currentCustomers) {
       await customer.update({
         salesRepEmployeeNumber: defaultEmployee.employeeNumber,
+        transaction: t
       });
     }
 
     // delete employeee successfully
-    let rowAffected = await Employee.destroy({ where: { employeeNumber: id } });
+    let rowAffected = await Employee.destroy({ where: { employeeNumber: id }, transaction: t });
 
-    await transaction.commit();
+    await t.commit();
 
     return res
       .status(200)
       .json({ message: `Delete successfully ${rowAffected} record` });
   } catch (error) {
-    await transaction.rollback();
+    await t.rollback();
     next(error);
   }
 };

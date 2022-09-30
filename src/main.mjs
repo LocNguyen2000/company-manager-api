@@ -15,6 +15,7 @@ const app = express();
 const port = config.port || process.env.PORT;
 
 connectToDb();
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
