@@ -16,11 +16,10 @@ export const getCustomer = async (req, res, next) => {
     if (req.role == ROLE.MANAGER || req.role == ROLE.PRESIDENT || req.role == ROLE.LEADER) {
       // Staff trở lên được xem mọi dữ liệu khách hàng
       if (customers.length == 0) {
-        return res.status(204).json({message: 'Customer not found'});
+        return res.status(204).json({ message: 'Customer not found' });
       }
       return res.status(200).json({ data: customers });
-    } 
-    else if (req.role == ROLE.STAFF) {
+    } else if (req.role == ROLE.STAFF) {
       // Staff chỉ được xem khách hàng của họ
       for (const customer of customers) {
         if (customer.salesRepEmployeeNumber != req.employeeNumber) {
@@ -28,11 +27,10 @@ export const getCustomer = async (req, res, next) => {
         }
       }
       return res.status(200).json({ data: customers });
-    } 
-    else if (req.role == ROLE.CUSTOMER) {
+    } else if (req.role == ROLE.CUSTOMER) {
       // Chỉ được xem thông tin của họ
       if (customers.length == 0) {
-        return res.status(204).json({message: 'Customer not found'});
+        return res.status(204).json({ message: 'Customer not found' });
       }
       for (const customer of customers) {
         if (customer.customerNumber == req.customerNumber) {

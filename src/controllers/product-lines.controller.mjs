@@ -32,7 +32,7 @@ export const addProductLine = async (req, res, next) => {
       updatedBy: id,
     });
 
-     // Customer trở lên được vào route
+    // Customer trở lên được vào route
     let productLineInstance = await ProductLine.create(productLine, { transaction: t });
 
     return res.status(200).json({ data: productLineInstance });
@@ -54,7 +54,7 @@ export const updateProductLine = async (req, res) => {
       updatedBy: employeeNumber,
     });
 
-     // Customer trở lên được vào route
+    // Customer trở lên được vào route
     let productLineInstance = await ProductLine.update(productLine, {
       where: {
         productLine: id,
@@ -71,7 +71,7 @@ export const deleteProductLine = async (req, res) => {
   try {
     const { id } = req.params;
 
-     // Customer trở lên được vào route
+    // Customer trở lên được vào route
     let productLineInstance = await ProductLine.destroy({ where: { productLine: id } });
 
     return res.status(200).json({ data: productLineInstance.productLine });
