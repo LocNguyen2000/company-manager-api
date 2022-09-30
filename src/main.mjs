@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from 'cookie-parser'
 
 import config from "./config/config.mjs";
 import connectToDb from "./config/database.mjs";
-
 import customerRouter from './routes/customer.route.mjs'
 import employeeRouter from './routes/employee.route.mjs'
 import loggerRouter from './routes/logger.route.mjs'
@@ -15,8 +15,7 @@ const app = express();
 const port = config.port || process.env.PORT;
 
 connectToDb();
-
-// third-party middleware
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

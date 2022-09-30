@@ -96,7 +96,7 @@ export const login = async (req, res) => {
     let accessToken = jwtGenerate(dataInfo);
     res
       .cookie("access_token", accessToken, {
-        maxAge: 60000,
+        maxAge: 60*10000,
         httpOnly: true,
       })
       .status(200).json({
