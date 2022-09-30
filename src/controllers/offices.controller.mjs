@@ -12,7 +12,7 @@ export const getOffice = async (req, res, next) => {
   try {
     const queryFilter = req.query;
 
-    let officeList = await Employee.findAll({
+    let officeList = await Office.findAll({
       where: queryFilter,
     });
 
