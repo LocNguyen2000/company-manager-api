@@ -11,7 +11,7 @@ const Role = sequelize.define(
     },
     role: {
       type: DataTypes.ENUM,
-      values: ["President", "Manager", "Leader", "Staff", "Customer"],
+      values: ['President', 'Manager', 'Leader', 'Staff', 'Customer'],
       allowNull: false,
       unique: true,
       validate: {

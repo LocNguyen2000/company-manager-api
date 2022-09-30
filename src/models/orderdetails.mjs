@@ -56,7 +56,7 @@ const Orderdetail = sequelize.define(
     },
   },
   {
-    tableName: "orderdetails",
+    tableName: 'orderdetails',
   }
 );
 export default Orderdetail;

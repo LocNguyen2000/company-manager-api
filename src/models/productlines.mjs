@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
 
 const ProductLine = sequelize.define(
-  "ProductLine",
+  'ProductLine',
   {
     productLine: {
       type: DataTypes.STRING(50),
@@ -12,10 +12,10 @@ const ProductLine = sequelize.define(
       type: DataTypes.STRING(4000),
     },
     htmlDescription: {
-      type: DataTypes.TEXT("medium"),
+      type: DataTypes.TEXT('medium'),
     },
     image: {
-      type: DataTypes.BLOB("medium"),
+      type: DataTypes.BLOB('medium'),
     },
     createdBy: {
       type: DataTypes.INTEGER(11),
@@ -33,7 +33,7 @@ const ProductLine = sequelize.define(
     },
   },
   {
-    tableName: "productlines",
+    tableName: 'productlines',
   }
 );
 

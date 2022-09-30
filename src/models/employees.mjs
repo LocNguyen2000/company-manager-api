@@ -52,7 +52,7 @@ const Employee = sequelize.define(
       },
       references: {
         model: Role,
-        key: "id",
+        key: 'id',
       },
     },
     createdBy: {
@@ -75,5 +75,5 @@ const Employee = sequelize.define(
   }
 );
 
-Employee.belongsTo(Role, { foreignKey: "role" });
+Employee.belongsTo(Role, { foreignKey: 'role' });
 export default Employee;

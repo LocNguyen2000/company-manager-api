@@ -1,5 +1,4 @@
 {
   "printWidth": 1000,
-  "singleQuote": true,
-  "editor.formatOnSave": true
+  "singleQuote": true
 }
