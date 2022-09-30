@@ -1,14 +1,14 @@
 import createError from "http-errors";
-import { ValidationError, where } from "sequelize";
+import { ValidationError } from "sequelize";
 
 import Customer from "../models/customers.mjs"
 import { ROLE } from "../config/variables.mjs";
 
 export const getCustomer = async (req, res, next) => {
     try {
-        const customerQuery = req.query;
+        const queryFilter = req.query;
         
-        let customers = await Customer.findAll({ where: customerQuery });
+        let customers = await Customer.findAll({ where: queryFilter });
 
         if (req.role == ROLE.MANAGER || req.role == ROLE.PRESIDENT || req.role == ROLE.LEADER){
             // Staff trở lên được xem mọi dữ liệu khách hàng
@@ -24,7 +24,6 @@ export const getCustomer = async (req, res, next) => {
                     return next(createError(403, "Not permitted!"));
                 }
             }
-
             return res.status(200).json(customers);
         }
         else if (req.role == ROLE.CUSTOMER){
