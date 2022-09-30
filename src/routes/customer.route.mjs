@@ -1,12 +1,12 @@
 import {Router} from 'express'
 
 import { addCustomer, deleteCustomer, getCustomer, updateCustomer } from '../controllers/customer.controller.mjs'
-
+import {verifyToken, isAccess} from '../middlewares/authenticate.mjs'
 const router = Router()
 
-router.get('/', getCustomer)
-router.post('/', addCustomer)
-router.put('/:id',  updateCustomer)
-router.delete('/:id', deleteCustomer)
+router.get('/', verifyToken, getCustomer)
+router.post('/',verifyToken, addCustomer)
+router.put('/:id',verifyToken,  updateCustomer)
+router.delete('/:id',verifyToken, deleteCustomer)
 
 export default router;
