@@ -16,10 +16,12 @@ const port = config.port || process.env.PORT;
 
 connectToDb();
 
+// third-party middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+// application middleware
 app.use('/users', userRouter)
 app.use('/customers', customerRouter)
 app.use('/employees', employeeRouter)
@@ -27,15 +29,15 @@ app.use('/offices', officeRouter)
 app.use('/logger', loggerRouter)
 app.use('/products', productRouter)
 
+// Not found method
 app.use((err, req, res, next) => {
-  if (!err) next(createHttpError(404,'Not found'));
-  else {
-    next(err);
-  }
+  if (!err) return next(createHttpError(404,'Not found'));
+  return next(err);
 });
 
+// Error handling middleware
 app.use((err, req, res) => {
-  res.status(err.status || 500).json(err.message);
+  return res.status(err.status || 500).json({message: err.message});
 });
 
 app.listen(port, () => {

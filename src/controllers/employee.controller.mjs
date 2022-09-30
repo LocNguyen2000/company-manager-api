@@ -6,8 +6,6 @@ import { ROLE } from "../config/variables.mjs";
 import Customer from "../models/customers.mjs";
 import Employee from "../models/employees.mjs";
 
-
-
 export const getEmployee = async (req, res, next) => {
   const id = req.employeeNumber,
     role = req.role,
@@ -49,13 +47,12 @@ export const addEmployee = async (req, res, next) => {
 
     let employeeInstance = await Employee.create(employee);
 
-    return res.status(200).json({ employeeNumber: employeeInstance.employeeNumber });
+    return res.status(200).json({ data: employeeInstance, message: 'Create employee successfully' });
   } catch (error) {
     if (error instanceof ValidationError) {
       return next(createError(400, "Wrong data!"));
     }
     return next(error);
-
   }
 };
 
@@ -76,11 +73,11 @@ export const updateEmployee = async (req, res) => {
       queryObj = Object.assign(queryObj, { officeCode });
     }
 
-    let employeeInstance = await Employee.update(employee, {
+    let rowAffected = await Employee.update(employee, {
       where: queryObj,
     });
 
-    return res.status(200).json({ data: employeeInstance });
+    return res.status(200).json({ message: `Update successfully ${rowAffected} record` });
   } catch (error) {
     next(error);
   }

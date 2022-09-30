@@ -35,7 +35,7 @@ export const register = async (req, res) => {
     }
     let hashPash = await encryptPassword(password)
     const user = await User.create({username, password: hashPash, isEmployee, employeeNumber, customerNumber})
-    return res.status(200).json({message: "Register successfully",data: user})
+    return res.status(200).json({message: "Register successfully", data: user})
   } catch (error) {
     console.log(error);
   }
