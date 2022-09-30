@@ -28,14 +28,16 @@ app.use('/logger', loggerRouter)
 app.use('/products', productRouter)
 
 app.use((err, req, res, next) => {
-  if (!err) next(createHttpError(404,'Not found'));
+  if (!err) next(createHttpError(404, "Not found"));
   else {
     next(err);
   }
 });
 
 app.use((err, req, res) => {
-  res.status(err.status || 500).json(err.message);
+  res
+    .status(err.status || 500)
+    .json({ status: err.status || 500, message: err.message });
 });
 
 app.listen(port, () => {
