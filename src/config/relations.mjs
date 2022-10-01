@@ -40,9 +40,4 @@ export default function addRelations(sequelize) {
 
   ProductLine.hasMany(Product, { foreignKey: 'productLine' });
   Product.belongsTo(ProductLine);
-
-  
-  
-  
-  
 }

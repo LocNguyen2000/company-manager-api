@@ -12,7 +12,7 @@ const connectToDb = async () => {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
 
-    addRelations(sequelize)
+    // addRelations(sequelize)
 
     await sequelize.sync({ alter: true });
     console.log('All models were synchronized successfully.');
