@@ -5,7 +5,7 @@ import Customer from '../models/customers.mjs';
 import { ROLE } from '../config/variables.mjs';
 import { encryptPassword, comparePassword, jwtGenerate } from '../utils/security.mjs';
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   const { username, password, customerNumber, employeeNumber, isEmployee } = req.body;
   let result;
   try {
@@ -42,7 +42,7 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { username, password } = req.body;
   let result, userRole;
   try {
