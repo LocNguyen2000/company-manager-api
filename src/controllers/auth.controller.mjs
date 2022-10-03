@@ -79,15 +79,15 @@ export const login = async (req, res, next) => {
 
     let dataInfo = {
       username: result.username,
-
-stomerNumber,
+      employeeNumber: result.employeeNumber,
+      customerNumber: result.customerNumber,
       role: userRole,
       officeCode: result.Employee.officeCode,
     };
 
     let accessToken = jwtGenerate(dataInfo);
 
-    res
+    return res
       .cookie('access_token', accessToken, {
         maxAge: TIME_TO_LIVE * 1000,
         httpOnly: true,
