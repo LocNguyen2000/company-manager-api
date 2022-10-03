@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
-import { ROLE } from '../config/variables.mjs';
+import  sequelize  from '../config/database.mjs';
+import { ROLE, TIME_TO_LIVE } from '../config/variables.mjs';
 import { encryptPassword, comparePassword, jwtGenerate } from '../utils/security.mjs';
 
 const {User, Employee, Customer} = sequelize.models;
@@ -12,19 +12,22 @@ export const register = async (req, res) => {
     if (!username || !password) {
       return res.status(400).json({ message: 'not be empty' });
     }
+
     result = await User.findAll({
       where: {
-        [Op.or]: [{ username: username }, { employeeNumber: employeeNumber }, { customerNumber: customerNumber }],
+        [Op.or]: [
+          { username: username }, 
+          { employeeNumber: employeeNumber ? employeeNumber : null }, 
+          { customerNumber: customerNumber ? customerNumber : null }
+        ],
       },
     });
     if (result.length > 0) {
       return res.status(400).json({ message: 'this username or userId already exist' });
     }
-    if (isEmployee) {
-      result = await Employee.findByPk(employeeNumber);
-    } else {
-      result = await Customer.findByPk(customerNumber);
-    }
+
+    result = isEmployee ? (await Employee.findByPk(employeeNumber)) : (await Customer.findByPk(customerNumber));
+
     if (!result) {
       return res.status(400).json({ message: 'this customer or employee does not exist' });
     }
@@ -42,7 +45,7 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { username, password } = req.body;
   let result, userRole;
   try {

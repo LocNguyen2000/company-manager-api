@@ -12,35 +12,26 @@ import { ProductLineFunc } from '../models/productlines.mjs';
 import { OfficeFunc } from '../models/offices.mjs';
 import { PaymentFunc } from '../models/payments.mjs';
 
-export const sequelize = new Sequelize(config.databaseName, config.user, config.password, {
+const sequelize = new Sequelize(config.databaseName, config.user, config.password, {
   host: config.host,
   dialect: 'mysql',
 });
 
-const connectToDb = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+const createModelsAndRelations = () => {
+  ProductFunc(sequelize);
+  ProductLineFunc(sequelize);
+  CustomerFunc(sequelize);
+  EmployeeFunc(sequelize);
+  RoleFunc(sequelize);
+  OrderDetailFunc(sequelize);
+  OrderFunc(sequelize);
+  UserFunc(sequelize);
+  OfficeFunc(sequelize);
+  PaymentFunc(sequelize);
 
-    ProductFunc(sequelize)
-    ProductLineFunc(sequelize)
-    CustomerFunc(sequelize)
-    EmployeeFunc(sequelize)
-    RoleFunc(sequelize)
-    OrderDetailFunc(sequelize)
-    OrderFunc(sequelize)
-    UserFunc(sequelize)
-    OfficeFunc(sequelize)
-    PaymentFunc(sequelize)
-
-
-    addRelations(sequelize, DataTypes)
-
-    await sequelize.sync({ alter: true });
-    console.log('All models were synchronized successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
+  addRelations(sequelize, DataTypes);
 };
 
-export default connectToDb;
+createModelsAndRelations();
+
+export default sequelize;

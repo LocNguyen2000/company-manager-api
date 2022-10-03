@@ -1,5 +1,4 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
 import { ProductFunc } from './products.mjs';
 import { OrderFunc } from './orders.mjs';
 
@@ -14,7 +13,7 @@ export const OrderDetailFunc = (sequelize) =>
           min: 0,
         },
         references: {
-          model: OrderFunc(sequelize), // 'Movies' would also work
+          model: OrderFunc(sequelize),
           key: 'orderNumber',
         },
       },
@@ -25,7 +24,7 @@ export const OrderDetailFunc = (sequelize) =>
           len: [5, 15],
         },
         references: {
-          model: ProductFunc(sequelize), // 'Movies' would also work
+          model: ProductFunc(sequelize),
           key: 'productCode',
         },
       },
@@ -53,14 +52,12 @@ export const OrderDetailFunc = (sequelize) =>
       },
       createdBy: {
         type: DataTypes.INTEGER(11),
-        allowNull: false,
         validate: {
           min: 0,
         },
       },
       updatedBy: {
         type: DataTypes.INTEGER(11),
-        allowNull: false,
         validate: {
           min: 0,
         },
@@ -70,6 +67,3 @@ export const OrderDetailFunc = (sequelize) =>
       tableName: 'orderdetails',
     }
   );
-
-// const OrderDetail = OrderDetailFunc(sequelize)
-// export default OrderDetail;

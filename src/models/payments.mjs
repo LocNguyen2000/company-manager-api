@@ -1,5 +1,4 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
 
 export const PaymentFunc = sequelize => sequelize.define(
   'Payment',
@@ -32,14 +31,12 @@ export const PaymentFunc = sequelize => sequelize.define(
     },
     createdBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
     },
     updatedBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
@@ -50,5 +47,3 @@ export const PaymentFunc = sequelize => sequelize.define(
   }
 );
 
-// const Payment = PaymentFunc(sequelize)
-// export default Payment;

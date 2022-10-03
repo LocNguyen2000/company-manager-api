@@ -71,8 +71,8 @@ export default function addRelations(sequelize, DataTypes) {
     },
   });
 
-  Order.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
-  Customer.hasMany(Order, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
+  Order.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
+  Customer.hasMany(Order, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
 
   Employee.belongsTo(Office, {
     foreignKey: { name: 'officeCode', type: DataTypes.STRING(10), allowNull: false },
@@ -99,6 +99,7 @@ export default function addRelations(sequelize, DataTypes) {
       },
     },
   });
+  
   Product.belongsTo(ProductLine, {
     foreignKey: {
       name: 'productLine',

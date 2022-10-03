@@ -1,6 +1,4 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
-
 
 export const ProductFunc = sequelize => sequelize.define(
   'Product',
@@ -19,13 +17,6 @@ export const ProductFunc = sequelize => sequelize.define(
         len: [0, 70],
       },
     },
-    // productLine: {
-    //   type: DataTypes.STRING(50),
-    //   allowNull: false,
-    //   validate: {
-    //     len: [0, 50],
-    //   },
-    // },
     productScale: {
       type: DataTypes.STRING(10),
       allowNull: false,
@@ -58,14 +49,12 @@ export const ProductFunc = sequelize => sequelize.define(
     },
     createdBy: {
       type: DataTypes.STRING(50),
-      allowNull: false,
       validate: {
         len: [2, 50],
       },
     },
     updatedBy: {
       type: DataTypes.STRING(50),
-      allowNull: false,
       validate: {
         len: [2, 50],
       },
@@ -76,6 +65,3 @@ export const ProductFunc = sequelize => sequelize.define(
   }
 );
 
-
-// const Product = ProductFunc(sequelize)
-// export default Product;

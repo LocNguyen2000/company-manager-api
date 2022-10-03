@@ -1,20 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import createError from 'http-errors';
 import config from './config/config.mjs';
-import connectToDb from './config/database.mjs';
+import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
 import employeeRouter from './routes/employee.route.mjs';
 import loggerRouter from './routes/logger.route.mjs';
 import officeRouter from './routes/offices.route.mjs';
 import userRouter from './routes/auth.router.mjs';
 import productRouter from './routes/product.route.mjs';
+import sequelize from './config/database.mjs';
 
 const app = express();
 const port = config.port || process.env.PORT;
 
-connectToDb();
+connectToDb(sequelize);
 
 app.use(cookieParser());
 app.use(express.json());
@@ -31,7 +32,7 @@ app.use('/products', productRouter);
 
 // Not found method
 app.use((err, req, res, next) => {
-  if (!err) return next(createHttpError(404, 'Not found'));
+  if (!err) return next(createError(404, 'Not found'));
   return next(err);
 });
 

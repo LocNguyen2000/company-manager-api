@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
+
 
 export const CustomerFunc = sequelize => sequelize.define(
   'Customer',
@@ -9,7 +9,7 @@ export const CustomerFunc = sequelize => sequelize.define(
       primaryKey: true,
       autoIncrement: true,
       validate: {
-        min: 0,
+        min: {args: 1, msg: 'Must be a positive number'},
       },
     },
     customerName: {
@@ -17,6 +17,12 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         len: [5, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     contactLastName: {
@@ -24,6 +30,12 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         len: [3, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     contactFirstName: {
@@ -31,6 +43,12 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         len: [3, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     phone: {
@@ -38,6 +56,12 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         len: [8, 20],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     addressLine1: {
@@ -45,6 +69,12 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         len: [10, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     addressLine2: {
@@ -59,6 +89,12 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         len: [2, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     state: {
@@ -80,6 +116,12 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         len: [2, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     creditLimit: {
@@ -88,14 +130,12 @@ export const CustomerFunc = sequelize => sequelize.define(
     },
     createdBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
     },
     updatedBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
@@ -103,6 +143,6 @@ export const CustomerFunc = sequelize => sequelize.define(
   },
   {
     tableName: 'customers',
-  }
+  },
 );
 

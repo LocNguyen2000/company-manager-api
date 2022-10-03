@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
+
 export const RoleFunc = sequelize => sequelize.define(
   'Role',
   {
@@ -19,14 +19,12 @@ export const RoleFunc = sequelize => sequelize.define(
     },
     createdBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
     },
     updatedBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
@@ -37,6 +35,3 @@ export const RoleFunc = sequelize => sequelize.define(
   }
 );
 
-
-// const Role = RoleFunc(sequelize)
-// export default Role;

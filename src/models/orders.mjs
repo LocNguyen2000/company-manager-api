@@ -1,5 +1,4 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
 
 
 export const OrderFunc = sequelize => sequelize.define(
@@ -31,7 +30,6 @@ export const OrderFunc = sequelize => sequelize.define(
     },
     comments: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     deleted: {
       type: DataTypes.BOOLEAN,
@@ -39,14 +37,12 @@ export const OrderFunc = sequelize => sequelize.define(
     },
     createdBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
     },
     updatedBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
@@ -57,6 +53,3 @@ export const OrderFunc = sequelize => sequelize.define(
   }
 );
 
-
-// const Order = OrderFunc(sequelize)
-// export default Order;

@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
+import  sequelize from '../config/database.mjs';
 import { ROLE } from '../config/variables.mjs';
 
 const { Customer } = sequelize.models;
@@ -12,40 +12,24 @@ export const getCustomer = async (req, res, next) => {
 
     if (page) delete queryFilter.p;
 
-    let customers = await Customer.findAndCountAll({
-      where: queryFilter,
-      offset: ((page || 1) - 1) * 10,
-      limit: 10,
-    });
-
-    if (req.role == ROLE.MANAGER || req.role == ROLE.PRESIDENT || req.role == ROLE.LEADER) {
-      // Staff trở lên được xem mọi dữ liệu khách hàng
-      if (customers.length == 0) {
-        return res.status(204).json({ message: 'Customer not found' });
-      }
-      return res.status(200).json({ data: customers });
-    } else if (req.role == ROLE.STAFF) {
+    if (req.role == ROLE.STAFF) {
       // Staff chỉ được xem khách hàng của họ
-      for (const customer of customers) {
-        if (customer.salesRepEmployeeNumber != req.employeeNumber) {
-          return next(createError(403, 'Not permitted!'));
-        }
-      }
-      return res.status(200).json({ data: customers });
+      queryFilter = Object.assign(queryFilter, {salesRepEmployeeNumber: req.employeeNumber})
     } else if (req.role == ROLE.CUSTOMER) {
       // Chỉ được xem thông tin của họ
-      if (customers.length == 0) {
-        return res.status(204).json({ message: 'Customer not found' });
-      }
-      for (const customer of customers) {
-        if (customer.customerNumber == req.customerNumber) {
-          return res.status(200).json({
-            data: [customer],
-          });
-        }
-      }
-      return next(createError(403, 'Not permitted!'));
+      queryFilter = Object.assign(queryFilter, {customerNumber: req.customerNumber})
     }
+
+    // Leader, Manager, President trở lên được xem mọi dữ liệu khách hàng
+    let customers = await Customer.findAndCountAll({ where: queryFilter, offset: ((page || 1) - 1) * 10, limit: 10 });
+
+    if (customers.rows.length == 0) {
+      return res.status(204).json({ message: 'Customer not found' });
+    }
+
+    return res.status(200).json({ data: customers });
+
+    
   } catch (error) {
     return next(error);
   }

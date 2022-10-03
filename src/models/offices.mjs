@@ -1,5 +1,4 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
 
 export const OfficeFunc = sequelize => sequelize.define(
   'Office',
@@ -69,14 +68,12 @@ export const OfficeFunc = sequelize => sequelize.define(
     },
     createdBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
     },
     updatedBy: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
       validate: {
         min: 0,
       },
