@@ -36,8 +36,7 @@ export const getEmployee = async (req, res, next) => {
 
 export const addEmployee = async (req, res, next) => {
   try {
-    const id = req.employeeNumber,
-      employee = req.body,
+    const employee = req.body,
       username = req.username;
 
     let employeeInstance = await Employee.create(

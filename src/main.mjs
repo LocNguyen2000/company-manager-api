@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
+import swaggerUI from 'swagger-ui-express';
+import { readFile } from 'fs/promises';
 
 import config from './config/config.mjs';
 import connectToDb from './config/database.mjs';
@@ -17,6 +19,18 @@ const app = express();
 const port = config.port || process.env.PORT;
 
 connectToDb();
+
+const swaggerDoc = JSON.parse(
+  await readFile(
+    new URL('./docs/swagger.json', import.meta.url)
+  )
+);
+const options = {
+  swaggerOptions: {
+    explorer: true,
+  },
+};
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 
 app.use(cookieParser());
 app.use(express.json());
