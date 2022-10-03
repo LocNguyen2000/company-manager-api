@@ -13,9 +13,14 @@ export const register = async (req, res, next) => {
       return res.status(400).json({ message: 'not be empty' });
     }
 
+    let queryFilters = []
+    if (customerNumber) queryFilters.push({customerNumber});
+    if (employeeNumber) queryFilters.push({employeeNumber});
+    if (username) queryFilters.push({username});
+
     result = await User.findAll({
       where: {
-        [Op.or]: [{ username: username }, { employeeNumber: employeeNumber }, { customerNumber: customerNumber }],
+        [Op.or]: queryFilters,
       },
     });
 
@@ -74,8 +79,8 @@ export const login = async (req, res, next) => {
 
     let dataInfo = {
       username: result.username,
-      employeeNumber: result.employeeNumber,
-      customerNumber: result.customerNumber,
+
+stomerNumber,
       role: userRole,
       officeCode: result.Employee.officeCode,
     };
