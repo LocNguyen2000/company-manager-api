@@ -1,5 +1,5 @@
 
-const mockCustomer = {
+export const mockCustomer = {
     "customerNumber": 201,
     "customerName": "UK Collectables, Ltd.",
     "contactLastName": "Devon",

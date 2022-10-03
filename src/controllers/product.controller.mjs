@@ -1,17 +1,17 @@
 import createError from 'http-errors';
 
-import { ROLE } from '../config/variables.mjs';
 import Product from '../models/products.mjs';
 
 export const getProduct = async (req, res, next) => {
   try {
     const queryFilter = req.query;
-    const { p: page } = req.query;
+    let { p: page } = req.query;
 
-    if (page) delete queryFilter.p;
+    page = page ? ((page <= 0) ? 1 : page) : 1
+    delete queryFilter.p
 
     // Customer trở lên được quyền vs product
-    const products = await Product.findAndCountAll({ where: queryFilter, offset: ((page || 1) - 1) * 10, limit: 10 });
+    const products = await Product.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10 });
 
     if (products.length == 0) {
       return res.status(204).json({ message: 'Products not found' });
