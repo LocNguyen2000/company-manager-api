@@ -12,19 +12,22 @@ export const register = async (req, res, next) => {
     if (!username || !password) {
       return res.status(400).json({ message: 'not be empty' });
     }
+
     result = await User.findAll({
       where: {
-        [Op.or]: [{ username: username }, { employeeNumber: employeeNumber }, { customerNumber: customerNumber }],
+        [Op.or]: [
+          { username: username }, 
+          { employeeNumber: employeeNumber ? employeeNumber : null }, 
+          { customerNumber: customerNumber ? customerNumber : null }
+        ],
       },
     });
     if (result.length > 0) {
       return res.status(400).json({ message: 'this username or userId already exist' });
     }
-    if (isEmployee) {
-      result = await Employee.findByPk(employeeNumber);
-    } else {
-      result = await Customer.findByPk(customerNumber);
-    }
+
+    result = isEmployee ? (await Employee.findByPk(employeeNumber)) : (await Customer.findByPk(customerNumber));
+
     if (!result) {
       return res.status(400).json({ message: 'this customer or employee does not exist' });
     }

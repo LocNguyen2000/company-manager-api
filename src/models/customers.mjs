@@ -9,7 +9,7 @@ const Customer = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       validate: {
-        min: 0,
+        min: {args: 1, msg: 'Must be a positive number'},
       },
     },
     customerName: {
@@ -17,6 +17,12 @@ const Customer = sequelize.define(
       allowNull: false,
       validate: {
         len: [5, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     contactLastName: {
@@ -24,6 +30,12 @@ const Customer = sequelize.define(
       allowNull: false,
       validate: {
         len: [3, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     contactFirstName: {
@@ -31,6 +43,12 @@ const Customer = sequelize.define(
       allowNull: false,
       validate: {
         len: [3, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     phone: {
@@ -38,6 +56,12 @@ const Customer = sequelize.define(
       allowNull: false,
       validate: {
         len: [8, 20],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     addressLine1: {
@@ -45,6 +69,12 @@ const Customer = sequelize.define(
       allowNull: false,
       validate: {
         len: [10, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     addressLine2: {
@@ -59,6 +89,12 @@ const Customer = sequelize.define(
       allowNull: false,
       validate: {
         len: [2, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     state: {
@@ -80,6 +116,12 @@ const Customer = sequelize.define(
       allowNull: false,
       validate: {
         len: [2, 50],
+        notNull: {
+          msg: 'Must not be null'
+        },
+        notEmpty: {
+          msg: 'Must have a value'
+        }
       },
     },
     salesRepEmployeeNumber: {
@@ -112,7 +154,7 @@ const Customer = sequelize.define(
   },
   {
     tableName: 'customers',
-  }
+  },
 );
 
 export default Customer;
