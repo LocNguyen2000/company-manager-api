@@ -1,3 +1,1 @@
-import Customer from "../../models/customers.mjs";
-
-
+import Customer from '../../models/customers.mjs';

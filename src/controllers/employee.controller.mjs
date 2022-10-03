@@ -37,12 +37,13 @@ export const getEmployee = async (req, res, next) => {
 export const addEmployee = async (req, res, next) => {
   try {
     const id = req.employeeNumber,
-      employee = req.body;
+      employee = req.body,
+      username = req.username;
 
     let employeeInstance = await Employee.create(
       Object.assign(employee, {
-        updatedBy: id,
-        createdBy: id,
+        updatedBy: username,
+        createdBy: username,
       })
     );
 
@@ -59,7 +60,7 @@ export const updateEmployee = async (req, res) => {
   try {
     const role = req.role,
       officeCode = req.officeCode,
-      employeeNumber = req.employeeNumber,
+      username = req.username,
       employee = req.body,
       { id } = req.params;
 
@@ -71,7 +72,7 @@ export const updateEmployee = async (req, res) => {
 
     let rowAffected = await Employee.update(
       Object.assign(employee, {
-        updatedBy: employeeNumber,
+        updatedBy: username,
       }),
       {
         where: queryObj,

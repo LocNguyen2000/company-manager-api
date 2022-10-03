@@ -17,8 +17,8 @@ const User = sequelize.define(
         len: [3, 20],
         min: {
           args: 3,
-          msg: 'Password must have more than 3 characters'
-        }
+          msg: 'Password must have more than 3 characters',
+        },
       },
       allowNull: false,
     },
@@ -28,8 +28,8 @@ const User = sequelize.define(
         len: [6, 100],
         min: {
           args: 6,
-          msg: 'Password must have more than 6 characters'
-        }
+          msg: 'Password must have more than 6 characters',
+        },
       },
       allowNull: false,
     },
@@ -38,9 +38,9 @@ const User = sequelize.define(
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Must have this field isEmployee'
-        }
-      }
+          msg: 'Must have this field isEmployee',
+        },
+      },
     },
     employeeNumber: {
       type: DataTypes.INTEGER,
@@ -50,19 +50,17 @@ const User = sequelize.define(
     },
     createdBy: {
       type: DataTypes.STRING(50),
-      allowNull: false,
       defaultValue: 'admin',
       validate: {
-          len: [2, 50],
+        len: [2, 50],
       },
     },
     updatedBy: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        defaultValue: 'admin',
-        validate: {
-            len: [2, 50],
-        },
+      type: DataTypes.STRING(50),
+      defaultValue: 'admin',
+      validate: {
+        len: [2, 50],
+      },
     },
   },
   {
