@@ -1,8 +1,9 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
-
-import Customer from '../models/customers.mjs';
+import { sequelize } from '../config/database.mjs';
 import { ROLE } from '../config/variables.mjs';
+
+const { Customer } = sequelize.models;
 
 export const getCustomer = async (req, res, next) => {
   try {
@@ -11,7 +12,11 @@ export const getCustomer = async (req, res, next) => {
 
     if (page) delete queryFilter.p;
 
-    let customers = await Customer.findAndCountAll({ where: queryFilter, offset: ((page || 1) - 1) * 10, limit: 10 });
+    let customers = await Customer.findAndCountAll({
+      where: queryFilter,
+      offset: ((page || 1) - 1) * 10,
+      limit: 10,
+    });
 
     if (req.role == ROLE.MANAGER || req.role == ROLE.PRESIDENT || req.role == ROLE.LEADER) {
       // Staff trở lên được xem mọi dữ liệu khách hàng

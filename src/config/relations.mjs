@@ -1,33 +1,84 @@
-import Product from "../models/products.mjs";
-import Order from "../models/orders.mjs";
-import OrderDetail from "../models/orderdetails.mjs";
-import User from '../models/users.mjs'
-import Employee from "../models/employees.mjs";
-import Customer from "../models/customers.mjs";
-import Role from "../models/role.mjs"
-import ProductLine from '../models/productlines.mjs'
-import Office from '../models/offices.mjs'
-
-export default function addRelations(sequelize) {
+export default function addRelations(sequelize, DataTypes) {
   const { Product, Office, Employee, OrderDetail, ProductLine, User, Order, Customer, Role } =
     sequelize.models;
 
-  Customer.hasOne(User, { foreignKey: 'customerNumber' });
-  User.belongsTo(Customer);
+  Customer.hasOne(User, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
+  User.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
 
-  Employee.hasOne(User, { foreignKey: 'employeeNumber' });
-  User.belongsTo(Employee);
+  Employee.hasOne(User, { foreignKey: { name: 'employeeNumber', type: DataTypes.INTEGER } });
+  User.belongsTo(Employee, { foreignKey: { name: 'employeeNumber', type: DataTypes.INTEGER } });
 
+  Employee.belongsTo(Role, {
+    foreignKey: {
+      name: 'role',
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        len: [1, 11],
+      },
+    },
+  });
+  Role.hasMany(Employee, {
+    foreignKey: {
+      name: 'role',
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        len: [1, 11],
+      },
+    },
+  });
 
-  Employee.belongsTo(Role);
-  Role.hasMany(Employee, { foreignKey: 'role' });
+  Employee.belongsTo(Employee, {
+    foreignKey: {
+      name: 'reportsTo',
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
+  });
+  Employee.hasMany(Employee, {
+    foreignKey: {
+      name: 'reportsTo',
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
+  });
 
-  Order.belongsTo(Customer);
-  Customer.hasMany(Order, { foreignKey: 'customerNumber' });
+  Customer.belongsTo(Employee, {
+    foreignKey: {
+      name: 'salesRepEmployeeNumber',
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
+  });
+  Employee.hasMany(Customer, {
+    foreignKey: {
+      name: 'salesRepEmployeeNumber',
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
+  });
 
-  Employee.belongsTo(Office);
+  Order.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
+  Customer.hasMany(Order, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
+
+  Employee.belongsTo(Office, {
+    foreignKey: { name: 'officeCode', type: DataTypes.STRING(10), allowNull: false },
+  });
   Office.hasMany(Employee, {
-    foreignKey: 'officeCode',
+    foreignKey: { name: 'officeCode', type: DataTypes.STRING(10), allowNull: false },
   });
 
   Order.belongsToMany(Product, {
@@ -38,6 +89,24 @@ export default function addRelations(sequelize) {
     through: OrderDetail,
   });
 
-  ProductLine.hasMany(Product, { foreignKey: 'productLine' });
-  Product.belongsTo(ProductLine);
-}
+  ProductLine.hasMany(Product, {
+    foreignKey: {
+      name: 'productLine',
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [0, 50],
+      },
+    },
+  });
+  Product.belongsTo(ProductLine, {
+    foreignKey: {
+      name: 'productLine',
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      validate: {
+        len: [0, 50],
+      },
+    },
+  });
+} 

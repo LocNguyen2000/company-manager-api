@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
 
-const Customer = sequelize.define(
+export const CustomerFunc = sequelize => sequelize.define(
   'Customer',
   {
     customerNumber: {
@@ -82,13 +82,6 @@ const Customer = sequelize.define(
         len: [2, 50],
       },
     },
-    salesRepEmployeeNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        min: 0,
-      },
-    },
     creditLimit: {
       type: DataTypes.FLOAT(10, 2),
       allowNull: true,
@@ -113,4 +106,3 @@ const Customer = sequelize.define(
   }
 );
 
-export default Customer;

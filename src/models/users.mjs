@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
 
-const User = sequelize.define(
+export const UserFunc = sequelize => sequelize.define(
   'User',
   {
     id: {
@@ -27,12 +27,12 @@ const User = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    employeeNumber: {
-      type: DataTypes.INTEGER,
-    },
-    customerNumber: {
-      type: DataTypes.INTEGER,
-    },
+    // employeeNumber: {
+    //   type: DataTypes.INTEGER,
+    // },
+    // customerNumber: {
+    //   type: DataTypes.INTEGER,
+    // },
   },
   {
     tableName: 'users',
@@ -40,5 +40,5 @@ const User = sequelize.define(
 );
 
 
-
-export default User;
+// const User = UserFunc(sequelize)
+// export default User;

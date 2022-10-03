@@ -4,7 +4,7 @@ import { sequelize } from '../config/database.mjs';
 // import Role from './role.mjs';
 // import User from './users.mjs';
 
-const Employee = sequelize.define(
+export const EmployeeFunc = sequelize => sequelize.define(
   'Employee',
   {
     employeeNumber: {
@@ -32,28 +32,10 @@ const Employee = sequelize.define(
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    officeCode: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-    },
-    reportsTo: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        len: [1, 11],
-      },
-    },
     jobTitle: {
       type: DataTypes.STRING(50),
       allowNull: false,
       values: ['President', 'Leader', 'Manager', 'Staff'],
-    },
-    role: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        len: [1, 11],
-      },
     },
     createdBy: {
       type: DataTypes.INTEGER,
@@ -76,5 +58,5 @@ const Employee = sequelize.define(
 );
 
 
-
-export default Employee;
+// const Employee = EmployeeFunc(sequelize)
+// export default Employee;

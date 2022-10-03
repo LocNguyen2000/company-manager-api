@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
 
-const Office = sequelize.define(
+export const OfficeFunc = sequelize => sequelize.define(
   'Office',
   {
     officeCode: {
@@ -87,6 +87,6 @@ const Office = sequelize.define(
   }
 );
 
+// const Office = OfficeFunc(sequelize)
 
-
-export default Office;
+// export default Office;

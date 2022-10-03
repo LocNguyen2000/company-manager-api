@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-import Orderdetail from './orderdetails.mjs';
-import Product from './products.mjs';
-const Order = sequelize.define(
+
+
+export const OrderFunc = sequelize => sequelize.define(
   'Order',
   {
     orderNumber: {
@@ -58,5 +58,5 @@ const Order = sequelize.define(
 );
 
 
-
-export default Order;
+// const Order = OrderFunc(sequelize)
+// export default Order;

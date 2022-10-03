@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
 
-const Payment = sequelize.define(
+export const PaymentFunc = sequelize => sequelize.define(
   'Payment',
   {
     customerNumber: {
@@ -50,4 +50,5 @@ const Payment = sequelize.define(
   }
 );
 
-export default Payment;
+// const Payment = PaymentFunc(sequelize)
+// export default Payment;

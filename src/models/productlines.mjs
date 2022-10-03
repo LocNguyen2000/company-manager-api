@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.mjs';
-const ProductLine = sequelize.define(
+export const ProductLineFunc = sequelize => sequelize.define(
   'ProductLine',
   {
     productLine: {
@@ -36,5 +36,5 @@ const ProductLine = sequelize.define(
   }
 );
 
-
-export default ProductLine;
+// const ProductLine = ProductLineFunc(sequelize)
+// export default ProductLine;
