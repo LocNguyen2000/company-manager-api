@@ -7,9 +7,10 @@ import { ROLE } from '../config/variables.mjs';
 export const getCustomer = async (req, res, next) => {
   try {
     const queryFilter = req.query;
-    const { p: page } = req.query;
+    let { p: page } = req.query;
 
-    if (page) delete queryFilter.p;
+    page = page ? ((page <= 0) ? 1 : page) : 1
+    delete queryFilter.p
 
     if (req.role == ROLE.STAFF) {
       // Staff chỉ được xem khách hàng của họ
@@ -20,7 +21,7 @@ export const getCustomer = async (req, res, next) => {
     }
 
     // Leader, Manager, President trở lên được xem mọi dữ liệu khách hàng
-    let customers = await Customer.findAndCountAll({ where: queryFilter, offset: ((page || 1) - 1) * 10, limit: 10 });
+    let customers = await Customer.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10 });
 
     if (customers.rows.length == 0) {
       return res.status(204).json({ message: 'Customer not found' });

@@ -4,15 +4,16 @@ import ProductLine from '../models/productlines.mjs';
 
 export const getProductLine = async (req, res, next) => {
   try {
-    const { p: page } = req.query,
-      queryFilter = req.query;
+    let { p: page } = req.query;
+    const queryFilter = req.query;
 
-    if (page) delete queryFilter.p;
+    page = page ? ((page <= 0) ? 1 : page) : 1
+    delete queryFilter.p
 
     // Customer trở lên được vào route
     let productLineList = await ProductLine.findAndCountAll({
       where: queryFilter,
-      offset: ((page || 1) - 1) * 10,
+      offset: (page - 1) * 10,
       limit: 10,
     });
 

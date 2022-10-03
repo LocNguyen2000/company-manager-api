@@ -10,11 +10,13 @@ export const getEmployee = async (req, res, next) => {
   try {
     const id = req.employeeNumber,
       role = req.role,
-      { p: page } = req.query,
       officeCode = req.officeCode,
       queryFilter = req.query;
+    
+    let{ p: page } = req.query;
 
-    if (page) delete queryFilter.p;
+    page = page ? ((page <= 0) ? 1 : page) : 1
+    delete queryFilter.p
 
     if (role === ROLE.LEADER) {
       queryFilter = Object.assign(queryFilter, { reportsTo: id });
@@ -24,7 +26,7 @@ export const getEmployee = async (req, res, next) => {
 
     let employeeList = await Employee.findAndCountAll({
       where: queryFilter,
-      offset: ((page || 1) - 1) * 10,
+      offset: (page - 1) * 10,
       limit: 10,
     });
 
