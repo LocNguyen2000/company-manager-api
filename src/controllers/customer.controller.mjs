@@ -13,10 +13,10 @@ export const getCustomer = async (req, res, next) => {
 
     if (req.role == ROLE.STAFF) {
       // Staff chỉ được xem khách hàng của họ
-      queryFilter = Object.assign(queryFilter, {salesRepEmployeeNumber: req.employeeNumber})
+      queryFilter = Object.assign(queryFilter, { salesRepEmployeeNumber: req.employeeNumber });
     } else if (req.role == ROLE.CUSTOMER) {
       // Chỉ được xem thông tin của họ
-      queryFilter = Object.assign(queryFilter, {customerNumber: req.customerNumber})
+      queryFilter = Object.assign(queryFilter, { customerNumber: req.customerNumber });
     }
 
     // Leader, Manager, President trở lên được xem mọi dữ liệu khách hàng
@@ -27,8 +27,6 @@ export const getCustomer = async (req, res, next) => {
     }
 
     return res.status(200).json({ data: customers });
-
-    
   } catch (error) {
     return next(error);
   }
@@ -37,9 +35,15 @@ export const getCustomer = async (req, res, next) => {
 export const addCustomer = async (req, res, next) => {
   try {
     const customerRequest = req.body;
+    const username = req.username;
 
     // Staff trở lên được tạo mọi dữ liệu khách hàng
-    let customer = await Customer.create(customerRequest);
+    let customer = await Customer.create(
+      Object.assign(customerRequest, {
+        updatedBy: username,
+        createdBy: username,
+      })
+    );
 
     return res.status(201).json({ data: customer });
   } catch (error) {
@@ -53,6 +57,7 @@ export const addCustomer = async (req, res, next) => {
 export const updateCustomer = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const username = req.username;
     const customerRequest = req.body;
 
     if (req.role === ROLE.CUSTOMER) {
@@ -63,7 +68,12 @@ export const updateCustomer = async (req, res, next) => {
     }
     // Staff trở lên được update mọi dữ liệu khách hàng
     let queryObj = { customerNumber: id };
-    let rowAffected = await Customer.update(customerRequest, { where: queryObj });
+    let rowAffected = await Customer.update(
+      Object.assign(customerRequest, {
+        updatedBy: username,
+      }),
+      { where: queryObj }
+    );
 
     return res.status(200).json({ data: `Update successfully ${rowAffected} row` });
   } catch (error) {

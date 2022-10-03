@@ -21,12 +21,12 @@ export const getOffice = async (req, res, next) => {
 
 export const addOffice = async (req, res, next) => {
   try {
-    const id = req.employeeNumber,
+    const username = req.username,
       office = req.body;
 
     office = Object.assign(office, {
-      createdBy: id,
-      updatedBy: id,
+      createdBy: username,
+      updatedBy: username,
     });
 
     const t = await sequelize.transaction();
@@ -36,8 +36,8 @@ export const addOffice = async (req, res, next) => {
     await Employee.create(
       {
         lastname: '9999',
-        createdBy: id,
-        updatedBy: id,
+        createdBy: username,
+        updatedBy: username,
         role: 4,
         jobTitle: 'Staff',
         officeCode: officeInstance.officeCode,
@@ -63,10 +63,11 @@ export const addOffice = async (req, res, next) => {
 
 export const updateOffice = async (req, res) => {
   try {
-    const office = req.body,
-      { id } = req.params;
+    const username = req.username,
+      { id } = req.params,
+      office = req.body;
 
-    let officeInstance = await Office.update(office, {
+    let officeInstance = await Office.update(Object.assign(office, { updatedBy: username }), {
       where: {
         officeCode: id,
       },
