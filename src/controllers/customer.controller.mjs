@@ -77,7 +77,7 @@ export const updateCustomer = async (req, res, next) => {
       { where: queryObj }
     );
 
-    return res.status(200).json({ data: `Update successfully ${rowAffected} row` });
+    return res.status(200).json({ message: `Update successfully ${rowAffected} row` });
   } catch (error) {
     if (error instanceof ValidationError) {
       return next(createError(400, 'Wrong data!'));
@@ -94,7 +94,7 @@ export const deleteCustomer = async (req, res, next) => {
     let queryObj = { customerNumber: id };
     let rowAffected = await Customer.destroy({ where: queryObj });
 
-    return res.status(200).json({ data: `Delete successfully ${rowAffected} row` });
+    return res.status(200).json({ message: `Delete successfully ${rowAffected} row` });
   } catch (error) {
     return next(error);
   }
