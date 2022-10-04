@@ -33,7 +33,7 @@ describe('Customer controller', () => {
         afterEach(() => {
             jest.clearAllMocks()
         })
-        test('success as president', async () => {
+        test('success: as president', async () => {
             mockRequest.query.p = -1;
             mockRequest.role = ROLE.PRESIDENT;
             mockRequest.employeeNumber = 1
@@ -50,7 +50,7 @@ describe('Customer controller', () => {
             expect(result.status.mock.calls[0][0]).toEqual(200);
             expect(result.json.mock.calls[0][0]).toEqual({ data: mockCustomersQuery });
         })
-        test('found no customer as staff', async () => {
+        test('error: found no customer as staff', async () => {
             mockRequest.role = ROLE.STAFF;
             mockRequest.employeeNumber = 1;
             mockRequest.query.customerNumber = mockCustomer.customerNumber;
@@ -66,7 +66,7 @@ describe('Customer controller', () => {
             expect(result.status.mock.calls[0][0]).toEqual(204)
             expect(result.json.mock.calls[0][0]).toEqual({ message: 'Customer not found' })
         })
-        test('catch error as customer', async () => {
+        test('error: not exist as customer', async () => {
             mockRequest.role = ROLE.CUSTOMER;
             mockRequest.customerNumber = 1;
 
@@ -97,7 +97,7 @@ describe('Customer controller', () => {
         afterEach(() => {
             jest.clearAllMocks();
         })
-        test('create success with status 201', async () => {
+        test('success: customers with status 201', async () => {
             mockRequest.body = mockCustomer;
 
             // fake dữ liệu trả về
@@ -109,7 +109,7 @@ describe('Customer controller', () => {
             expect(result.json.mock.calls[0][0]).toEqual({data: mockCustomer});
         })
 
-        test('create error with status 400', async () => {
+        test('error: body request with status 400', async () => {
             mockRequest.body = mockCustomer;
 
             // trả về lỗi
@@ -120,7 +120,7 @@ describe('Customer controller', () => {
 
             expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data'));
         })
-        test('create error with status 500', async () => {
+        test('error: server fail with status 500', async () => {
             mockRequest.body = mockCustomer;
 
             // trả về lỗi
@@ -152,7 +152,7 @@ describe('Customer controller', () => {
         afterEach(() => {
             jest.clearAllMocks();
         })
-        test('update success with status 200 as any', async () => {
+        test('success: status 200 as any', async () => {
             mockRequest.body = mockCustomer;
 
             // fake ket qua tra ve
@@ -164,7 +164,7 @@ describe('Customer controller', () => {
             expect(result.status.mock.calls[0][0]).toEqual(200);
             expect(result.json.mock.calls[0][0]).toEqual({message: `Update successfully ${rowAffected} row`});
         })
-        test('update success with status 200 as customer', async () => {
+        test('success: with status 200 as customer', async () => {
             mockRequest.body = mockCustomer;
             mockRequest.role = ROLE.CUSTOMER;
             mockRequest.customerNumber = mockRequest.params.id;
@@ -178,7 +178,7 @@ describe('Customer controller', () => {
             expect(result.status.mock.calls[0][0]).toEqual(200);
             expect(result.json.mock.calls[0][0]).toEqual({message: `Update successfully ${rowAffected} row`});
         })
-        test('update other profile error as customer & status 401', async () => {
+        test('error: update other profile as customer & status 401', async () => {
             mockRequest.body = mockCustomer;
             mockRequest.role = ROLE.CUSTOMER;
             mockRequest.customerNumber = 2;
@@ -188,7 +188,7 @@ describe('Customer controller', () => {
             expect(mockNext.mock.calls[0][0]).toEqual(createError(401, 'Customer cannot change others data'));
         })
 
-        test('update error with status 400', async () => {
+        test('error: update body request fail with status 400', async () => {
             mockRequest.body = mockCustomer;
             mockRequest.customerNumber = 2;
 
@@ -200,7 +200,7 @@ describe('Customer controller', () => {
             expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
         })
 
-        test('update error with status 500', async () => {
+        test('error: server fail with status 500', async () => {
             mockRequest.body = mockCustomer;
             mockRequest.customerNumber = 2;
 
@@ -230,7 +230,7 @@ describe('Customer controller', () => {
         afterEach(() => {
             jest.clearAllMocks();
         })
-        test('delete success with status 200', async () => {
+        test('success: status 200', async () => {
             // fake ket qua tra ve
             let rowAffected = 1;
             Customer.destroy.mockResolvedValue(rowAffected);
@@ -240,7 +240,7 @@ describe('Customer controller', () => {
             expect(result.status.mock.calls[0][0]).toEqual(200)
             expect(result.json.mock.calls[0][0]).toEqual({ message: `Delete successfully ${rowAffected} row` })
         })
-        test('delete error', async () => {
+        test('error: server fail', async () => {
              // fake ket qua tra ve
              let error = new Error('Server error fail')
              Customer.destroy.mockRejectedValue(error);

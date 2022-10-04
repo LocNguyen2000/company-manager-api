@@ -24,7 +24,6 @@ export const register = async (req, res, next) => {
       },
     });
 
-    console.log(result);
     if (result.length > 0) {
       return res.status(400).json({ message: 'this username or userId already exist' });
     }
