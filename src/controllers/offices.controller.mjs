@@ -6,13 +6,18 @@ const {Office, Employee} = sequelize.models
 
 export const getOffice = async (req, res, next) => {
   try {
-    const queryFilter = req.query;
+    let queryFilter = req.query;
+    let { p: page } = req.query;
 
-    let officeList = await Office.findAll({
-      where: queryFilter,
-    });
+    page = page ? ((page <= 0) ? 1 : page) : 1
+    delete queryFilter.p
 
-    return res.status(200).json({ data: officeList });
+    let offices = await Office.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10 });
+
+    if (offices.rows.length == 0) {
+      return res.status(204).json({ message: 'Office not found' });
+    }
+    return res.status(200).json({ data: offices });
   } catch (error) {
     next(error);
   }
@@ -60,31 +65,34 @@ export const addOffice = async (req, res, next) => {
   }
 };
 
-export const updateOffice = async (req, res) => {
+export const updateOffice = async (req, res, next) => {
   try {
     const username = req.username,
       { id } = req.params,
       office = req.body;
 
-    let officeInstance = await Office.update(Object.assign(office, { updatedBy: username }), {
+    let rowAffected = await Office.update(Object.assign(office, { updatedBy: username }), {
       where: {
         officeCode: id,
       },
     });
 
-    return res.status(200).json({ data: officeInstance });
+    return res.status(200).json({  message: `Update successfully ${rowAffected} row` });
   } catch (error) {
+    if (error instanceof ValidationError) {
+      return next(createError(400, 'Wrong data!'));
+    }
     next(error);
   }
 };
 
-export const deleteOffice = async (req, res) => {
+export const deleteOffice = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    let officeInstance = await Office.destroy({ where: { officeCode: id } });
+    let rowAffected = await Office.destroy({ where: { officeCode: id } });
 
-    return res.status(200).json({ data: officeInstance.officeCode });
+    return res.status(200).json({  message: `Delete successfully ${rowAffected} row` });
   } catch (error) {
     next(error);
   }
