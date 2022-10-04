@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
+import swaggerUI from 'swagger-ui-express';
+import { readFile } from 'fs/promises';
+
 import config from './config/config.mjs';
 import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -11,11 +14,24 @@ import officeRouter from './routes/offices.route.mjs';
 import userRouter from './routes/auth.router.mjs';
 import productRouter from './routes/product.route.mjs';
 import sequelize from './config/database.mjs';
+import orderRouter from './routes/order.route.mjs'
 
 const app = express();
 const port = config.port || process.env.PORT;
 
 connectToDb(sequelize);
+
+const swaggerDoc = JSON.parse(
+  await readFile(
+    new URL('./docs/swagger.json', import.meta.url)
+  )
+);
+const options = {
+  swaggerOptions: {
+    explorer: true,
+  },
+};
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -29,6 +45,7 @@ app.use('/employees', employeeRouter);
 app.use('/offices', officeRouter);
 app.use('/logger', loggerRouter);
 app.use('/products', productRouter);
+app.use('/orders', orderRouter)
 
 // Not found method
 app.use((err, req, res, next) => {

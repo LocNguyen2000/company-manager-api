@@ -1,198 +1,168 @@
 {
-	"info": {
-		"_postman_id": "5ee9cade-7729-43a7-b79d-3e205a58e258",
-		"name": "Mock Project - G2",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "15019266"
-	},
-	"item": [
-		{
-			"name": "Customer",
-			"item": [
-				{
-					"name": "Get customer by filter",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{LOCAL_API}}/customers",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create new cus",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n        \"customerNumber\": 100,\r\n        \"customerName\": \"Australian Collectors, Co.\",\r\n        \"contactLastName\": \"Ferguson\",\r\n        \"contactFirstName\": \"Peter\",\r\n        \"phone\": \"03 9520 4555\",\r\n        \"addressLine1\": \"636 St Kilda Road\",\r\n        \"addressLine2\": \"Level 34567\",\r\n        \"city\": \"Melbourne\",\r\n        \"state\": \"Victoria\",\r\n        \"postalCode\": \"30041\",\r\n        \"country\": \"Australia\",\r\n        \"salesRepEmployeeNumber\": 1002 ,\r\n        \"creditLimit\": 117300\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{LOCAL_API}}/customers",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Employee",
-			"item": [
-				{
-					"name": "Get employee by filter",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{LOCAL_API}}/employees",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"employees"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create new employee",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"employeeNumber\": 2006,\r\n    \"firstName\": \"Pham\",\r\n    \"lastName\": \"Cuong\",\r\n    \"extension\": \"X2000\",\r\n    \"email\": \"abc@gmail.com\",\r\n    \"officeCode\": \"2\",\r\n    \"reportsTo\": 1002,\r\n    \"role\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{LOCAL_API}}/employees",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"employees"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Register",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"newcus\",\r\n    \"password\": \"123\",\r\n    \"isEmployee\": false,\r\n    \"customerNumber\": 103,\r\n    \"employeeNumber\": null\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{LOCAL_API}}/users/register",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"users",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"newEm\",\r\n    \"password\": \"123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{LOCAL_API}}/users/login",
-							"host": [
-								"{{LOCAL_API}}"
-							],
-							"path": [
-								"users",
-								"login"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "LOCAL_API",
-			"value": "http://localhost:4000"
-		}
-	]
+  "info": {
+    "_postman_id": "5ee9cade-7729-43a7-b79d-3e205a58e258",
+    "name": "Mock Project - G2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "15019266"
+  },
+  "item": [
+    {
+      "name": "Customer",
+      "item": [
+        {
+          "name": "Get customer by filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL_API}}/customers",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["customers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create new cus",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"customerNumber\": 100,\r\n        \"customerName\": \"Australian Collectors, Co.\",\r\n        \"contactLastName\": \"Ferguson\",\r\n        \"contactFirstName\": \"Peter\",\r\n        \"phone\": \"03 9520 4555\",\r\n        \"addressLine1\": \"636 St Kilda Road\",\r\n        \"addressLine2\": \"Level 34567\",\r\n        \"city\": \"Melbourne\",\r\n        \"state\": \"Victoria\",\r\n        \"postalCode\": \"30041\",\r\n        \"country\": \"Australia\",\r\n        \"salesRepEmployeeNumber\": 1002 ,\r\n        \"creditLimit\": 117300\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{LOCAL_API}}/customers",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["customers"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employee",
+      "item": [
+        {
+          "name": "Get employee by filter",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{LOCAL_API}}/employees",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["employees"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create new employee",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"employeeNumber\": 2006,\r\n    \"firstName\": \"Pham\",\r\n    \"lastName\": \"Cuong\",\r\n    \"extension\": \"X2000\",\r\n    \"email\": \"abc@gmail.com\",\r\n    \"officeCode\": \"2\",\r\n    \"reportsTo\": 1002,\r\n    \"role\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{LOCAL_API}}/employees",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["employees"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"newcus\",\r\n    \"password\": \"123\",\r\n    \"isEmployee\": false,\r\n    \"customerNumber\": 103,\r\n    \"employeeNumber\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{LOCAL_API}}/users/register",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["users", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"newEm\",\r\n    \"password\": \"123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{LOCAL_API}}/users/login",
+              "host": ["{{LOCAL_API}}"],
+              "path": ["users", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "LOCAL_API",
+      "value": "http://localhost:4000"
+    }
+  ]
 }

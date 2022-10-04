@@ -9,7 +9,7 @@ export const CustomerFunc = sequelize => sequelize.define(
       primaryKey: true,
       autoIncrement: true,
       validate: {
-        min: {args: 1, msg: 'Must be a positive number'},
+        min: { args: 1, msg: 'Must be a positive number' },
       },
     },
     customerName: {
@@ -18,11 +18,11 @@ export const CustomerFunc = sequelize => sequelize.define(
       validate: {
         len: [5, 50],
         notNull: {
-          msg: 'Must not be null'
+          msg: 'Must not be null',
         },
         notEmpty: {
-          msg: 'Must have a value'
-        }
+          msg: 'Must have a value',
+        },
       },
     },
     contactLastName: {
@@ -31,11 +31,11 @@ export const CustomerFunc = sequelize => sequelize.define(
       validate: {
         len: [3, 50],
         notNull: {
-          msg: 'Must not be null'
+          msg: 'Must not be null',
         },
         notEmpty: {
-          msg: 'Must have a value'
-        }
+          msg: 'Must have a value',
+        },
       },
     },
     contactFirstName: {
@@ -44,11 +44,11 @@ export const CustomerFunc = sequelize => sequelize.define(
       validate: {
         len: [3, 50],
         notNull: {
-          msg: 'Must not be null'
+          msg: 'Must not be null',
         },
         notEmpty: {
-          msg: 'Must have a value'
-        }
+          msg: 'Must have a value',
+        },
       },
     },
     phone: {
@@ -57,11 +57,11 @@ export const CustomerFunc = sequelize => sequelize.define(
       validate: {
         len: [8, 20],
         notNull: {
-          msg: 'Must not be null'
+          msg: 'Must not be null',
         },
         notEmpty: {
-          msg: 'Must have a value'
-        }
+          msg: 'Must have a value',
+        },
       },
     },
     addressLine1: {
@@ -70,11 +70,11 @@ export const CustomerFunc = sequelize => sequelize.define(
       validate: {
         len: [10, 50],
         notNull: {
-          msg: 'Must not be null'
+          msg: 'Must not be null',
         },
         notEmpty: {
-          msg: 'Must have a value'
-        }
+          msg: 'Must have a value',
+        },
       },
     },
     addressLine2: {
@@ -90,11 +90,11 @@ export const CustomerFunc = sequelize => sequelize.define(
       validate: {
         len: [2, 50],
         notNull: {
-          msg: 'Must not be null'
+          msg: 'Must not be null',
         },
         notEmpty: {
-          msg: 'Must have a value'
-        }
+          msg: 'Must have a value',
+        },
       },
     },
     state: {
@@ -117,11 +117,11 @@ export const CustomerFunc = sequelize => sequelize.define(
       validate: {
         len: [2, 50],
         notNull: {
-          msg: 'Must not be null'
+          msg: 'Must not be null',
         },
         notEmpty: {
-          msg: 'Must have a value'
-        }
+          msg: 'Must have a value',
+        },
       },
     },
     creditLimit: {
@@ -129,20 +129,28 @@ export const CustomerFunc = sequelize => sequelize.define(
       allowNull: true,
     },
     createdBy: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.STRING(20),
       validate: {
-        min: 0,
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
     updatedBy: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.STRING(20),
       validate: {
-        min: 0,
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
   },
   {
     tableName: 'customers',
-  },
+  }
 );
 

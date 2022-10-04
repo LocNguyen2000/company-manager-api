@@ -13,20 +13,23 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: 'not be empty' });
     }
 
+    let queryFilters = []
+    if (customerNumber) queryFilters.push({customerNumber});
+    if (employeeNumber) queryFilters.push({employeeNumber});
+    if (username) queryFilters.push({username});
+
     result = await User.findAll({
       where: {
-        [Op.or]: [
-          { username: username }, 
-          { employeeNumber: employeeNumber ? employeeNumber : null }, 
-          { customerNumber: customerNumber ? customerNumber : null }
-        ],
+        [Op.or]: queryFilters,
       },
     });
+
+    console.log(result);
     if (result.length > 0) {
       return res.status(400).json({ message: 'this username or userId already exist' });
     }
 
-    result = isEmployee ? (await Employee.findByPk(employeeNumber)) : (await Customer.findByPk(customerNumber));
+    result = isEmployee ? await Employee.findByPk(employeeNumber) : await Customer.findByPk(customerNumber);
 
     if (!result) {
       return res.status(400).json({ message: 'this customer or employee does not exist' });
@@ -75,6 +78,7 @@ export const login = async (req, res, next) => {
     userRole = result.isEmployee ? result.Employee.Role.role : ROLE.CUSTOMER;
 
     let dataInfo = {
+      username: result.username,
       employeeNumber: result.employeeNumber,
       customerNumber: result.customerNumber,
       role: userRole,
@@ -83,7 +87,7 @@ export const login = async (req, res, next) => {
 
     let accessToken = jwtGenerate(dataInfo);
 
-    res
+    return res
       .cookie('access_token', accessToken, {
         maxAge: TIME_TO_LIVE * 1000,
         httpOnly: true,

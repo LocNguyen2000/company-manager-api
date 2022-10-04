@@ -67,15 +67,23 @@ export const OfficeFunc = sequelize => sequelize.define(
       },
     },
     createdBy: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.STRING(20),
       validate: {
-        min: 0,
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
     updatedBy: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.STRING(20),
       validate: {
-        min: 0,
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
   },

@@ -13,7 +13,7 @@ export default function addRelations(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        len: [1, 11],
+        min: 0,
       },
     },
   });
@@ -23,7 +23,7 @@ export default function addRelations(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        len: [1, 11],
+        min: 0,
       },
     },
   });
@@ -74,10 +74,34 @@ export default function addRelations(sequelize, DataTypes) {
   Customer.hasMany(Order, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
 
   Employee.belongsTo(Office, {
-    foreignKey: { name: 'officeCode', type: DataTypes.STRING(10), allowNull: false },
+    foreignKey: {
+      name: 'officeCode',
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Must not be null',
+        },
+        notEmpty: {
+          msg: 'Must have a value',
+        },
+      },
+    },
   });
   Office.hasMany(Employee, {
-    foreignKey: { name: 'officeCode', type: DataTypes.STRING(10), allowNull: false },
+    foreignKey: {
+      name: 'officeCode',
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Must not be null',
+        },
+        notEmpty: {
+          msg: 'Must have a value',
+        },
+      },
+    },
   });
 
   Order.belongsToMany(Product, {

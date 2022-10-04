@@ -25,8 +25,8 @@ export const UserFunc = sequelize => sequelize.define(
         len: [6, 100],
         min: {
           args: 6,
-          msg: 'Password must have more than 6 characters'
-        }
+          msg: 'Password must have more than 6 characters',
+        },
       },
       allowNull: false,
     },
@@ -35,19 +35,19 @@ export const UserFunc = sequelize => sequelize.define(
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Must have this field isEmployee'
-        }
-      }
+          msg: 'Must have this field isEmployee',
+        },
+      },
     },
     createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       defaultValue: 'admin',
       validate: {
-          len: [2, 50],
+        len: [2, 50],
       },
     },
     updatedBy: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(20),
         defaultValue: 'admin',
         validate: {
             len: [2, 50],

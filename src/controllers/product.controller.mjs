@@ -6,12 +6,13 @@ const {Product} = sequelize.models
 export const getProduct = async (req, res, next) => {
   try {
     const queryFilter = req.query;
-    const { p: page } = req.query;
+    let { p: page } = req.query;
 
-    if (page) delete queryFilter.p;
+    page = page ? ((page <= 0) ? 1 : page) : 1
+    delete queryFilter.p
 
     // Customer trở lên được quyền vs product
-    const products = await Product.findAndCountAll({ where: queryFilter, offset: ((page || 1) - 1) * 10, limit: 10 });
+    const products = await Product.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10 });
 
     if (products.length == 0) {
       return res.status(204).json({ message: 'Products not found' });
@@ -24,10 +25,16 @@ export const getProduct = async (req, res, next) => {
 };
 export const addProduct = async (req, res, next) => {
   try {
+    const username = req.username;
     const product = req.body;
 
     // Customer trở lên được quyền vs product
-    const productInstance = await Product.create(product);
+    const productInstance = await Product.create(
+      Object.assign(product, {
+        updateBy: username,
+        createdBy: username,
+      })
+    );
 
     return res.status(200).json({ data: productInstance, message: 'Create employee successfully' });
   } catch (error) {
@@ -36,13 +43,14 @@ export const addProduct = async (req, res, next) => {
 };
 export const updateProduct = async (req, res, next) => {
   try {
+    const username = req.username;
     const { id } = req.params;
     const product = req.body;
 
     // Customer trở lên được quyền vs product
     const queryFilter = { productCode: id };
 
-    await Product.update(product, { where: queryFilter });
+    await Product.update(Object.assign(product, { updatedBy: username }), { where: queryFilter });
 
     return res.status(200).json({ message: 'Update product successfully' });
   } catch (error) {
