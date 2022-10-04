@@ -10,9 +10,9 @@ export const getEmployee = async (req, res, next) => {
   try {
     const id = req.employeeNumber,
       role = req.role,
-      officeCode = req.officeCode,
-      queryFilter = req.query;
-    
+      officeCode = req.officeCode;
+      
+    let queryFilter = req.query;
     let{ p: page } = req.query;
 
     page = page ? ((page <= 0) ? 1 : page) : 1
