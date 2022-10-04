@@ -1,12 +1,14 @@
-import {Router} from 'express'
+import { Router } from 'express';
+import { ROLE } from '../config/variables.mjs';
 
-import { addCustomer, deleteCustomer, getCustomerById, updateCustomer } from '../controllers/customer.controller.mjs'
+import { addCustomer, deleteCustomer, getCustomer, updateCustomer } from '../controllers/customer.controller.mjs';
+import { verifyToken, isAccess } from '../middlewares/authenticate.mjs';
 
-const router = Router()
+const router = Router();
 
-router.get('/:code', getCustomerById)
-router.post('/', addCustomer)
-router.put('/:code',  updateCustomer)
-router.delete('/:code', deleteCustomer)
+router.get('/', verifyToken, isAccess(ROLE.PRESIDENT, ROLE.MANAGER, ROLE.LEADER, ROLE.STAFF, ROLE.CUSTOMER), getCustomer);
+router.post('/', verifyToken, isAccess(ROLE.PRESIDENT, ROLE.MANAGER, ROLE.LEADER), addCustomer);
+router.put('/:id', verifyToken, isAccess(ROLE.PRESIDENT, ROLE.MANAGER, ROLE.LEADER, ROLE.CUSTOMER), updateCustomer);
+router.delete('/:id', verifyToken, isAccess(ROLE.PRESIDENT, ROLE.MANAGER, ROLE.LEADER), deleteCustomer);
 
 export default router;
