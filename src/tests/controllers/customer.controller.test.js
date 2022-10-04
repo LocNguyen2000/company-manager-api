@@ -34,6 +34,7 @@ describe('Customer controller', () => {
             jest.clearAllMocks()
         })
         test('success as president', async () => {
+            mockRequest.query.p = -1;
             mockRequest.role = ROLE.PRESIDENT;
             mockRequest.employeeNumber = 1
             mockRequest.query.customerNumber = mockCustomer.customerNumber;
@@ -132,9 +133,122 @@ describe('Customer controller', () => {
         })
     })
     describe('put', () => {
+        beforeEach(() => {
+            mockRequest = {
+                body: null,
+                username: 'tester',
+                params: {
+                    id: 1
+                }
+            }
+            mockResponse = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn().mockReturnThis(),
+            }
+            mockNext = jest.fn()
 
+            Customer.update = jest.fn()
+        })
+        afterEach(() => {
+            jest.clearAllMocks();
+        })
+        test('update success with status 200 as any', async () => {
+            mockRequest.body = mockCustomer;
+
+            // fake ket qua tra ve
+            let rowAffected = 1;
+            Customer.update.mockResolvedValue(rowAffected);
+
+            let result = await updateCustomer(mockRequest, mockResponse, mockNext);
+
+            expect(result.status.mock.calls[0][0]).toEqual(200);
+            expect(result.json.mock.calls[0][0]).toEqual({message: `Update successfully ${rowAffected} row`});
+        })
+        test('update success with status 200 as customer', async () => {
+            mockRequest.body = mockCustomer;
+            mockRequest.role = ROLE.CUSTOMER;
+            mockRequest.customerNumber = mockRequest.params.id;
+
+            // fake ket qua tra ve
+            let rowAffected = 1;
+            Customer.update.mockResolvedValue(rowAffected);
+
+            let result = await updateCustomer(mockRequest, mockResponse, mockNext);
+
+            expect(result.status.mock.calls[0][0]).toEqual(200);
+            expect(result.json.mock.calls[0][0]).toEqual({message: `Update successfully ${rowAffected} row`});
+        })
+        test('update other profile error as customer & status 401', async () => {
+            mockRequest.body = mockCustomer;
+            mockRequest.role = ROLE.CUSTOMER;
+            mockRequest.customerNumber = 2;
+
+            await updateCustomer(mockRequest, mockResponse, mockNext);
+
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(401, 'Customer cannot change others data'));
+        })
+
+        test('update error with status 400', async () => {
+            mockRequest.body = mockCustomer;
+            mockRequest.customerNumber = 2;
+
+            let error = new ValidationError('Body request validate fail')
+            Customer.update.mockRejectedValue(error);
+
+            await updateCustomer(mockRequest, mockResponse, mockNext);
+
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
+        })
+
+        test('update error with status 500', async () => {
+            mockRequest.body = mockCustomer;
+            mockRequest.customerNumber = 2;
+
+            let error = new Error('Server error fail')
+            Customer.update.mockRejectedValue(error);
+
+            await updateCustomer(mockRequest, mockResponse, mockNext);
+            
+            expect(mockNext.mock.calls[0][0]).toEqual(error);
+        })
     })
     describe('delete', () => {
+        beforeEach(() => {
+            mockRequest = {
+                params: {
+                    id: 1
+                }
+            }
+            mockResponse = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn().mockReturnThis(),
+            }
+            mockNext = jest.fn()
+
+            Customer.destroy = jest.fn()
+        })
+        afterEach(() => {
+            jest.clearAllMocks();
+        })
+        test('delete success with status 200', async () => {
+            // fake ket qua tra ve
+            let rowAffected = 1;
+            Customer.destroy.mockResolvedValue(rowAffected);
+
+            let result = await deleteCustomer(mockRequest, mockResponse, mockNext);
+
+            expect(result.status.mock.calls[0][0]).toEqual(200)
+            expect(result.json.mock.calls[0][0]).toEqual({ message: `Delete successfully ${rowAffected} row` })
+        })
+        test('delete error', async () => {
+             // fake ket qua tra ve
+             let error = new Error('Server error fail')
+             Customer.destroy.mockRejectedValue(error);
+ 
+             await deleteCustomer(mockRequest, mockResponse, mockNext);
+ 
+             expect(mockNext.mock.calls[0][0]).toEqual(error)
+        })
 
     })
 })
