@@ -5,7 +5,7 @@ import { encryptPassword, comparePassword, jwtGenerate } from '../utils/security
 
 const {User, Employee, Customer} = sequelize.models;
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   const { username, password, customerNumber, employeeNumber, isEmployee } = req.body;
   let result;
   try {
