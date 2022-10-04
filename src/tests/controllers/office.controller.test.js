@@ -3,6 +3,7 @@ import { ValidationError } from 'sequelize';
 
 import sequelize from '../../config/database.mjs';
 import { mockOffice, mockOfficeQuery } from '../mocks/officeData.mjs';
+import { mockEmployee } from '../mocks/employeeData.mjs';
 import { getOffice, addOffice, updateOffice, deleteOffice } from '../../controllers/offices.controller.mjs';
 
 let mockRequest, mockResponse, mockNext, mockTransaction;
@@ -78,16 +79,52 @@ describe('Office controller', () => {
                 rollback: jest.fn()
             };
 
-            sequelize.transaction = jest.fn(() => {
-                return mockTransaction;
-            })
+            sequelize.transaction = jest.fn().mockResolvedValue(mockTransaction);
             Office.create = jest.fn()
+            Employee.create = jest.fn()
         })
         afterEach(() => {
             jest.clearAllMocks();
         })
-        test('success: ', async () => {
-            
+        test('success: create success with status 201', async () => {
+            mockRequest.body = mockEmployee;
+
+            Office.create.mockResolvedValue(mockOffice);
+            Employee.create.mockResolvedValue();
+            mockTransaction.commit.mockResolvedValue();
+            mockTransaction.rollback.mockResolvedValue();
+
+            let result = await addOffice(mockRequest, mockResponse, mockNext);
+
+            expect(mockTransaction.commit).toHaveBeenCalled();
+            expect(result.status.mock.calls[0][0]).toEqual(201);
+            expect(result.json.mock.calls[0][0]).toEqual({data: mockOffice});
+        })
+
+        test('error: create fail with status 400', async () => {
+            mockRequest.body = mockEmployee;
+
+            let error = new ValidationError('Body request error')
+            Office.create.mockRejectedValue(error);
+            mockTransaction.rollback.mockResolvedValue();
+
+            await addOffice(mockRequest, mockResponse, mockNext);
+
+            expect(mockTransaction.rollback).toHaveBeenCalled();
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
+        })
+
+        test('error: server fail with status 500', async () => {
+            mockRequest.body = mockEmployee;
+
+            let error = new Error('Server error fail')
+            Office.create.mockRejectedValue(error);
+            mockTransaction.rollback.mockResolvedValue();
+
+            await addOffice(mockRequest, mockResponse, mockNext);
+
+            expect(mockTransaction.rollback).toHaveBeenCalled();
+            expect(mockNext.mock.calls[0][0]).toEqual(error);
         })
     })
     describe('put', () => {

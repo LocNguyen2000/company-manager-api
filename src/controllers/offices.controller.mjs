@@ -24,9 +24,8 @@ export const getOffice = async (req, res, next) => {
 };
 
 export const addOffice = async (req, res, next) => {
-  try {
-    const username = req.username,
-      office = req.body;
+    const username = req.username;
+    let office = req.body;
 
     office = Object.assign(office, {
       createdBy: username,
@@ -34,27 +33,27 @@ export const addOffice = async (req, res, next) => {
     });
 
     const t = await sequelize.transaction();
+    try {
+      let officeInstance = await Office.create(office, { transaction: t });
 
-    let officeInstance = await Office.create(office, { transaction: t });
+      await Employee.create(
+        {
+          lastname: '9999',
+          createdBy: username,
+          updatedBy: username,
+          role: 4,
+          jobTitle: 'Staff',
+          officeCode: officeInstance.officeCode,
+          email: '',
+          extension: '',
+          firstname: '',
+        },
+        { transaction: t }
+      );
 
-    await Employee.create(
-      {
-        lastname: '9999',
-        createdBy: username,
-        updatedBy: username,
-        role: 4,
-        jobTitle: 'Staff',
-        officeCode: officeInstance.officeCode,
-        email: '',
-        extension: '',
-        firstname: '',
-      },
-      { transaction: t }
-    );
+      await t.commit();
 
-    await t.commit();
-
-    return res.status(200).json({ data: officeInstance });
+      return res.status(201).json({ data: officeInstance });
   } catch (error) {
     await t.rollback();
 
