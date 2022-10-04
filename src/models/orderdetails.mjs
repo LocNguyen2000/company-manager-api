@@ -21,7 +21,7 @@ export const OrderDetailFunc = (sequelize) =>
         type: DataTypes.STRING(15),
         primaryKey: true,
         validate: {
-          len: [5, 15],
+          len: [1, 15],
         },
         references: {
           model: ProductFunc(sequelize),

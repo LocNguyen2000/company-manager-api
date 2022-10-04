@@ -1,6 +1,5 @@
 export default function addRelations(sequelize, DataTypes) {
-  const { Product, Office, Employee, OrderDetail, ProductLine, User, Order, Customer, Role } =
-    sequelize.models;
+  const { Product, Office, Employee, OrderDetail, ProductLine, User, Order, Customer, Role } = sequelize.models;
 
   Customer.hasOne(User, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
   User.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
@@ -83,10 +82,16 @@ export default function addRelations(sequelize, DataTypes) {
 
   Order.belongsToMany(Product, {
     through: OrderDetail,
+    foreignKey: {
+      name: 'orderNumber',
+    },
   });
 
   Product.belongsToMany(Order, {
     through: OrderDetail,
+    foreignKey: {
+      name: 'productCode',
+    },
   });
 
   ProductLine.hasMany(Product, {
@@ -99,7 +104,7 @@ export default function addRelations(sequelize, DataTypes) {
       },
     },
   });
-  
+
   Product.belongsTo(ProductLine, {
     foreignKey: {
       name: 'productLine',
@@ -110,4 +115,4 @@ export default function addRelations(sequelize, DataTypes) {
       },
     },
   });
-} 
+}

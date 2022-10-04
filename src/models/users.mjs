@@ -14,7 +14,7 @@ export const UserFunc = sequelize => sequelize.define(
         len: [3, 20],
         min: {
           args: 3,
-          msg: 'Password must have more than 3 characters'
+          msg: 'Username must have more than 3 characters'
         }
       },
       allowNull: false,
