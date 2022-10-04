@@ -1,12 +1,14 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
 
-import Customer from '../../models/customers.mjs';
+import sequelize from '../../config/database.mjs';
 import { ROLE } from '../../config/variables.mjs'
 import { mockCustomersQuery, mockCustomer } from '../mocks/customerData.mjs'
 import { getCustomer, addCustomer, updateCustomer, deleteCustomer } from '../../controllers/customer.controller.mjs';
 
 let mockRequest, mockResponse, mockNext;
+
+const { Customer } = sequelize.models;
 
 describe('Customer controller', () => {
     describe('get', () => {
