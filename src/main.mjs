@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import swaggerUI from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
-
+import logger from './config/logger.mjs';
 import config from './config/config.mjs';
 import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -14,18 +14,17 @@ import officeRouter from './routes/offices.route.mjs';
 import userRouter from './routes/auth.router.mjs';
 import productRouter from './routes/product.route.mjs';
 import sequelize from './config/database.mjs';
-import orderRouter from './routes/order.route.mjs'
+import orderRouter from './routes/order.route.mjs';
+import morgan, { token } from 'morgan';
 
 const app = express();
 const port = config.port || process.env.PORT;
 
 connectToDb(sequelize);
+logger.connect();
 
-const swaggerDoc = JSON.parse(
-  await readFile(
-    new URL('./docs/swagger.json', import.meta.url)
-  )
-);
+const swaggerDoc = JSON.parse(await readFile(new URL('./docs/swagger.json', import.meta.url)));
+
 const options = {
   swaggerOptions: {
     explorer: true,
@@ -37,6 +36,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(morgan('dev'));
 
 // application middleware
 app.use('/users', userRouter);
@@ -45,16 +45,23 @@ app.use('/employees', employeeRouter);
 app.use('/offices', officeRouter);
 app.use('/logger', loggerRouter);
 app.use('/products', productRouter);
-app.use('/orders', orderRouter)
+app.use('/orders', orderRouter);
 
 // Not found method
-app.use((err, req, res, next) => {
-  if (!err) return next(createError(404, 'Not found'));
-  return next(err);
+app.use((req, res, next) => {
+  next(createError(404, 'Not found'));
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+  if (!err.status) {
+    logger.write('Error', err.message, req.ip, req.username || '');
+  } else if (err.status === 400) {
+    logger.write('Info', err.message, req.ip, req.username || '');
+  } else {
+    logger.write('Warning', err.message, req.ip, req.username || '');
+  }
+
   return res.status(err.status || 500).json({ status: err.status || 500, message: err.message });
 });
 

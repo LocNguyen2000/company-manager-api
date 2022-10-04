@@ -1,12 +1,15 @@
 import mongoose from 'mongoose';
 
-const Logger = new mongoose.Schema(
+const LoggerSchema = new mongoose.Schema(
   {
     logLevel: { type: String, required: true, enum: ['Error', 'Warning', 'Info'], default: 'Info' },
-    user: { type: String, required: true },
+    user: { type: String },
     message: { type: String, required: true },
+    ip: { type: String, required: true },
   },
   { timestamps: true }
 );
+
+const Logger = mongoose.model('Log', LoggerSchema);
 
 export default Logger;
