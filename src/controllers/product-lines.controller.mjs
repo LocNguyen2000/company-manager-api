@@ -1,6 +1,8 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
-import ProductLine from '../models/productlines.mjs';
+import sequelize from '../config/database.mjs';
+
+const {ProductLine} = sequelize.models
 
 export const getProductLine = async (req, res, next) => {
   try {

@@ -6,19 +6,20 @@ import swaggerUI from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
 
 import config from './config/config.mjs';
-import connectToDb from './config/database.mjs';
+import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
 import employeeRouter from './routes/employee.route.mjs';
 import loggerRouter from './routes/logger.route.mjs';
 import officeRouter from './routes/offices.route.mjs';
 import userRouter from './routes/auth.router.mjs';
 import productRouter from './routes/product.route.mjs';
+import sequelize from './config/database.mjs';
 import orderRouter from './routes/order.route.mjs'
 
 const app = express();
 const port = config.port || process.env.PORT;
 
-connectToDb();
+connectToDb(sequelize);
 
 const swaggerDoc = JSON.parse(
   await readFile(

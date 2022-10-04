@@ -1,9 +1,8 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
+import  sequelize  from '../config/database.mjs';
 
-import Office from '../models/offices.mjs';
-import Employee from '../models/employees.mjs';
+const {Office, Employee} = sequelize.models
 
 export const getOffice = async (req, res, next) => {
   try {

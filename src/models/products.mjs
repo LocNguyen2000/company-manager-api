@@ -1,9 +1,6 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
-import Order from './orders.mjs';
-import ProductLine from './productlines.mjs';
 
-const Product = sequelize.define(
+export const ProductFunc = sequelize => sequelize.define(
   'Product',
   {
     productCode: {
@@ -18,13 +15,6 @@ const Product = sequelize.define(
       allowNull: false,
       validate: {
         len: [0, 70],
-      },
-    },
-    productLine: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      validate: {
-        len: [0, 50],
       },
     },
     productScale: {
@@ -58,15 +48,23 @@ const Product = sequelize.define(
       allowNull: false,
     },
     createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
     updatedBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
   },
@@ -75,7 +73,3 @@ const Product = sequelize.define(
   }
 );
 
-Product.belongsTo(ProductLine);
-Product.hasMany(Order);
-
-export default Product;

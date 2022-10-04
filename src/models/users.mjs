@@ -1,9 +1,6 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
-import Customer from './customers.mjs';
-import Employee from './employees.mjs';
 
-const User = sequelize.define(
+export const UserFunc = sequelize => sequelize.define(
   'User',
   {
     id: {
@@ -17,8 +14,8 @@ const User = sequelize.define(
         len: [3, 20],
         min: {
           args: 3,
-          msg: 'Password must have more than 3 characters',
-        },
+          msg: 'Username must have more than 3 characters'
+        }
       },
       allowNull: false,
     },
@@ -42,31 +39,22 @@ const User = sequelize.define(
         },
       },
     },
-    employeeNumber: {
-      type: DataTypes.INTEGER,
-    },
-    customerNumber: {
-      type: DataTypes.INTEGER,
-    },
     createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       defaultValue: 'admin',
       validate: {
         len: [2, 50],
       },
     },
     updatedBy: {
-      type: DataTypes.STRING(50),
-      defaultValue: 'admin',
-      validate: {
-        len: [2, 50],
-      },
+        type: DataTypes.STRING(20),
+        defaultValue: 'admin',
+        validate: {
+            len: [2, 50],
+        },
     },
   },
   {
     tableName: 'users',
   }
 );
-User.belongsTo(Employee, { foreignKey: 'employeeNumber' });
-User.belongsTo(Customer, { foreignKey: 'customerNumber' });
-export default User;

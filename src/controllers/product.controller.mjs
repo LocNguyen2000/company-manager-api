@@ -1,6 +1,7 @@
 import createError from 'http-errors';
+import  sequelize  from '../config/database.mjs';
 
-import Product from '../models/products.mjs';
+const {Product} = sequelize.models
 
 export const getProduct = async (req, res, next) => {
   try {

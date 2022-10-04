@@ -1,12 +1,13 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
 
-const Order = sequelize.define(
+
+export const OrderFunc = sequelize => sequelize.define(
   'Order',
   {
     orderNumber: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
       validate: {
         min: 0,
       },
@@ -29,22 +30,29 @@ const Order = sequelize.define(
     },
     comments: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
     createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
     updatedBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
   },
@@ -52,4 +60,4 @@ const Order = sequelize.define(
     tableName: 'orders',
   }
 );
-export default Order;
+

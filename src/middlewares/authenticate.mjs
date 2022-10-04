@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/config.mjs';
-
 export function verifyToken(req, res, next) {
   const token = req.cookies.access_token;
   if (!token) {
-    return res.status(401).json({ success: false, message: 'Please Login' });
+    return res.status(400).json({ success: false, message: 'Please Login' });
   } else {
     try {
       const { data } = jwt.verify(token, config.secretKey);
@@ -25,7 +24,10 @@ export function verifyToken(req, res, next) {
 export function isAccess(...roles) {
   return (req, res, next) => {
     if (!roles.includes(req.role)) {
-      res.status(403).json({ success: false, message: 'You do not have permission to access' });
+      res.json({
+        success: false,
+        message: 'You do not have permission to access',
+      });
     } else {
       next();
     }

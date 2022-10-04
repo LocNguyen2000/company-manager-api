@@ -1,11 +1,11 @@
 import { Op } from 'sequelize';
-import User from '../models/users.mjs';
-import Employee from '../models/employees.mjs';
-import Customer from '../models/customers.mjs';
+import  sequelize  from '../config/database.mjs';
 import { ROLE, TIME_TO_LIVE } from '../config/variables.mjs';
 import { encryptPassword, comparePassword, jwtGenerate } from '../utils/security.mjs';
 
-export const register = async (req, res, next) => {
+const {User, Employee, Customer} = sequelize.models;
+
+export const register = async (req, res) => {
   const { username, password, customerNumber, employeeNumber, isEmployee } = req.body;
   let result;
   try {

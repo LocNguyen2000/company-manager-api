@@ -1,13 +1,13 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
-import Employee from './employees.mjs';
 
-const Customer = sequelize.define(
+
+export const CustomerFunc = sequelize => sequelize.define(
   'Customer',
   {
     customerNumber: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
       validate: {
         min: { args: 1, msg: 'Must be a positive number' },
       },
@@ -124,31 +124,28 @@ const Customer = sequelize.define(
         },
       },
     },
-    salesRepEmployeeNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        min: 0,
-      },
-      references: {
-        model: Employee,
-        key: 'employeeNumber',
-      },
-    },
     creditLimit: {
       type: DataTypes.FLOAT(10, 2),
       allowNull: true,
     },
     createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
     updatedBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
   },
@@ -157,4 +154,3 @@ const Customer = sequelize.define(
   }
 );
 
-export default Customer;

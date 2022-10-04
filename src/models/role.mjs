@@ -1,7 +1,6 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
 
-const Role = sequelize.define(
+export const RoleFunc = sequelize => sequelize.define(
   'Role',
   {
     id: {
@@ -19,15 +18,23 @@ const Role = sequelize.define(
       },
     },
     createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
     updatedBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
   },
@@ -36,4 +43,3 @@ const Role = sequelize.define(
   }
 );
 
-export default Role;

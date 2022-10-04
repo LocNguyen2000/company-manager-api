@@ -1,7 +1,6 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database.mjs';
 
-const ProductLine = sequelize.define(
+export const ProductLineFunc = sequelize => sequelize.define(
   'ProductLine',
   {
     productLine: {
@@ -18,15 +17,23 @@ const ProductLine = sequelize.define(
       type: DataTypes.BLOB('medium'),
     },
     createdBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
     updatedBy: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       validate: {
-        len: [2, 50],
+        len: [3, 20],
+        min: {
+          args: 3,
+          msg: 'Username must have more than 3 characters'
+        }
       },
     },
   },
@@ -35,4 +42,3 @@ const ProductLine = sequelize.define(
   }
 );
 
-export default ProductLine;
