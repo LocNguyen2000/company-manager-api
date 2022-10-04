@@ -13,8 +13,6 @@ export const mockCustomer = {
     "creditLimit": "92700.00",
 }
 export const mockCustomersQuery = {
-    count: 1,
-    rows: [
-        mockCustomer
-    ]
+    count: 0,
+    rows: []
 }

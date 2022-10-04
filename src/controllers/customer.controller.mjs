@@ -7,7 +7,7 @@ const { Customer } = sequelize.models;
 
 export const getCustomer = async (req, res, next) => {
   try {
-    const queryFilter = req.query;
+    let queryFilter = req.query;
     let { p: page } = req.query;
 
     page = page ? ((page <= 0) ? 1 : page) : 1
