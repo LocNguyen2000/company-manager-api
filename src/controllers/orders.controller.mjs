@@ -16,9 +16,13 @@ export const getOrder = async (req, res, next) => {
 
         // role = customer > chỉ check được order của bản thân
         if (req.role == ROLE.CUSTOMER) {
-            if (!queryFilter.customerNumber || queryFilter.customerNumber != req.customerNumber) {
+            if (queryFilter.customerNumber && queryFilter.customerNumber != req.customerNumber) {
                 return next(createError(401, 'Customer can only check their own order'))
             }
+
+            queryFilter = Object.assign(queryFilter, {
+                customerNumber: req.customerNumber
+            })
         }
         // role = staff > xem được order của customer của họ
         else if (req.role == ROLE.STAFF) {
