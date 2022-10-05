@@ -105,6 +105,7 @@ export const deleteEmployee = async (req, res, next) => {
       where: { lastName: '9999', officeCode: officeCode },
       transaction: t,
     });
+    
     const currentCustomers = await Customer.findAll({
       where: { salesRepEmployeeNumber: id },
       transaction: t,

@@ -21,7 +21,7 @@ export default function addRelations(sequelize, DataTypes) {
     foreignKey: {
       name: 'role',
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       validate: {
         min: 0,
       },
@@ -32,7 +32,7 @@ export default function addRelations(sequelize, DataTypes) {
     foreignKey: {
       name: 'reportsTo',
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       validate: {
         min: 0,
       },
@@ -74,6 +74,8 @@ export default function addRelations(sequelize, DataTypes) {
   Customer.hasMany(Order, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
 
   Employee.belongsTo(Office, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'CASCADE',
     foreignKey: {
       name: 'officeCode',
       type: DataTypes.STRING(10),
@@ -90,6 +92,8 @@ export default function addRelations(sequelize, DataTypes) {
   });
   
   Office.hasMany(Employee, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'CASCADE',
     foreignKey: {
       name: 'officeCode',
       type: DataTypes.STRING(10),

@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import swaggerUI from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
-
 import config from './config/config.mjs';
 import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -17,6 +16,7 @@ import sequelize from './config/database.mjs';
 import orderRouter from './routes/order.route.mjs';
 import logRouter from './routes/logger.route.mjs'
 import productLineRouter from './routes/product-line.route.mjs'
+import Logger from './models/logger.mjs';
 
 const app = express();
 const port = config.port || process.env.PORT;
@@ -56,13 +56,14 @@ app.use((req, res, next) => {
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-  // check lại code
-  // if (!err.status ||  err.status === 500) {
-  //   logger.write('Error', err.messag, req.username || '');
-  // } else if (err.status === 400 ) {
-  //   logger.write('Warning', err.message, req.username || '');
-  // } 
+app.use(async (err, req, res, next) => {
+  if (!err.status) {
+    await Logger.create({logLevel: 'Error', message: err.message, user: req.username || ''});
+  } else if (err.status === 404) {
+    await Logger.create({logLevel: 'Error', message: err.message, user: req.username || ''});
+  } else {
+    await Logger.create({logLevel: 'Warning', message: err.message, user: req.username || ''});
+  }
 
   return res.status(err.status || 500).json({ status: err.status || 500, message: err.message });
 });

@@ -1,0 +1,823 @@
+{
+	"info": {
+		"_postman_id": "af80e71d-843d-4b63-9341-6ecde03516fd",
+		"name": "Mock Project - G2 Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17006080"
+	},
+	"item": [
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Get customer by filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/customers",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new cus",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"customerNumber\": 102,\r\n        \"customerName\": \"Australian Collectors, Co.\",\r\n        \"contactLastName\": \"Ferguson\",\r\n        \"contactFirstName\": \"Peter\",\r\n        \"phone\": \"03 9520 4555\",\r\n        \"addressLine1\": \"636 St Kilda Road\",\r\n        \"addressLine2\": \"Level 34567\",\r\n        \"city\": \"Melbourne\",\r\n        \"state\": \"Victoria\",\r\n        \"postalCode\": \"30041\",\r\n        \"country\": \"Australia\",\r\n        \"salesRepEmployeeNumber\": 1002 ,\r\n        \"creditLimit\": 117300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/customers",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"contactLastName\": \"Ferguson\",\r\n        \"contactFirstName\": \"Peter\",\r\n        \"phone\": \"03 9520 4555\",\r\n        \"addressLine1\": \"636 St Kilda Road\",\r\n        \"addressLine2\": \"Level 34567\",\r\n        \"city\": \"Melbourne\",\r\n        \"state\": \"Victoria\",\r\n        \"postalCode\": \"30041\",\r\n        \"country\": \"Australia\",\r\n        \"creditLimit\": 117300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/customers/102",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"customers",
+								"102"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/customers/105",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"customers",
+								"105"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "Get employee by filter",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/employees",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"employees"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "lastName",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "jobTitle",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new employee",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"employeeNumber\": 2006,\r\n    \"firstName\": \"Pham\",\r\n    \"lastName\": \"Cuong\",\r\n    \"extension\": \"X2000\",\r\n    \"email\": \"abc@gmail.com\",\r\n    \"officeCode\": \"2\",\r\n    \"reportsTo\": 1002,\r\n    \"role\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/employees",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/employees/1188",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"employees",
+								"1188"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Pham\",\r\n    \"lastName\": \"Cuong\",\r\n    \"reportsTo\": 1002,\r\n    \"role\": 1\r\n}"
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/employees/1216",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"employees",
+								"1216"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"newcus\",\r\n    \"password\": \"123\",\r\n    \"isEmployee\": false,\r\n    \"customerNumber\": 103,\r\n    \"employeeNumber\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/users/register",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"newEm\",\r\n    \"password\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/users/login",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Log",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"xuannam\",\r\n    \"logLevel\": \"Info\",\r\n    \"message\": \"chuan phet\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/logs",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"logLevel\": \"Error\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/logs/633cfad1ca1afbe74255c254",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"logs",
+								"633cfad1ca1afbe74255c254"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/logs?startAt=2022-9-22&endAt=2022-10-3&p=1",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"logs"
+							],
+							"query": [
+								{
+									"key": "startAt",
+									"value": "2022-9-22"
+								},
+								{
+									"key": "endAt",
+									"value": "2022-10-3"
+								},
+								{
+									"key": "p",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productCode\": \"S10_9752\" ,\r\n    \"productName\": \"1981 Harley Davidson Ultimate Chopper\" ,\r\n    \"productLine\": \"Motorcycles\" ,\r\n    \"productScale\": \"1:10\",\r\n    \"productVendor\": \"Min Lin Diecast\",\r\n    \"productDescription\": \"Super Motorcycles\",\r\n    \"quantityInStock\": 733,\r\n    \"buyPrice\": 48.81,\r\n    \"MSRP\": 95.70\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/products",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/products",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "productCode",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "productName",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "productScale",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "productVendor",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "quantityInStock",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "buyPrice",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "MSRP",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "createdBy",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "updatedBy",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/products/1020",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"products",
+								"1020"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productCode\": \"S10_9854\" ,\r\n    \"productName\": \"1981 Harley Davidson Ultimate Chopper\" ,\r\n    \"productLine\": \"Motorcycles\" ,\r\n    \"productScale\": \"1:10\",\r\n    \"productVendor\": \"Min Lin Diecast\",\r\n    \"productDescription\": \"Super Motorcycles,\r\n    \"quantityInStock\": 733,\r\n    \"buyPrice\": \"48.81\",\r\n    \"MSRP\": \"95.70\",\r\n}\r\n\r\n"
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/products/S10_9854",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"products",
+								"S10_9854"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ProductLines",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/product-lines",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"product-lines"
+							],
+							"query": [
+								{
+									"key": "productLine",
+									"value": "1245",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"textDescription\": \"slow and expensive\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/product-lines/Classic%20Dogs",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"product-lines",
+								"Classic%20Dogs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/product-lines/classic%20dogs",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"product-lines",
+								"classic%20dogs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productLine\": \"Classic Dog\",\r\n    \"textDescription\": \"super fasr and cheap\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/product-lines",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"product-lines"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Offices",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/offices?city&phone&country",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"offices"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": null
+								},
+								{
+									"key": "phone",
+									"value": null
+								},
+								{
+									"key": "country",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"officeCode\": \"90\",\r\n    \"city\": \"Hanoicity\",\r\n    \"phone\": \"+8377 0825\",\r\n    \"addressLine1\": \"1550 Court Place\",\r\n    \"addressLine2\": \"Suite 102\",\r\n    \"state\": \"nghe an que\",\r\n    \"country\": \"UKing\",\r\n    \"postalCode\": \"021076\",\r\n    \"territory\": \"NAcity\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/offices",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"offices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/offices/90",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"offices",
+								"90"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"officeCode\": \"90\",\r\n    \"city\": \"Hanoicity\",\r\n    \"phone\": \"+8377 0825\",\r\n    \"addressLine1\": \"1550 Court Place\",\r\n    \"addressLine2\": \"Suite 102\",\r\n    \"state\": \"nghe an que\",\r\n    \"country\": \"UKing\",\r\n    \"postalCode\": \"021076\",\r\n    \"territory\": \"NAcity\"\r\n}"
+						},
+						"url": {
+							"raw": "{{LOCAL_API}}/offices/90",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"offices",
+								"90"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/orders",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/orders",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/orders",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_API}}/orders",
+							"host": [
+								"{{LOCAL_API}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "LOCAL_API",
+			"value": "http://localhost:4000"
+		}
+	]
+}

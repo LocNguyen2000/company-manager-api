@@ -54,7 +54,7 @@ export const updateProductLine = async (req, res) => {
       { id } = req.params;
 
     // Customer trở lên được vào route
-    let productLineInstance = await ProductLine.update(
+    let row = await ProductLine.update(
       Object.assign(productLine, {
         updatedBy: username,
       }),
@@ -65,7 +65,7 @@ export const updateProductLine = async (req, res) => {
       }
     );
 
-    return res.status(200).json({ data: productLineInstance });
+    return res.status(200).json({message: `Update ${row} row successfully`});
   } catch (error) {
     next(error);
   }
@@ -76,9 +76,9 @@ export const deleteProductLine = async (req, res) => {
     const { id } = req.params;
 
     // Customer trở lên được vào route
-    let productLineInstance = await ProductLine.destroy({ where: { productLine: id } });
+    let rowAffected = await ProductLine.destroy({ where: { productLine: id } });
 
-    return res.status(200).json({ data: productLineInstance.productLine });
+    return res.status(200).json({ message: `Delete successfully ${rowAffected} row` });
   } catch (error) {
     next(error);
   }

@@ -14,7 +14,7 @@ export const getProduct = async (req, res, next) => {
     // Customer trở lên được quyền vs product
     const products = await Product.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10 });
 
-    if (products.length == 0) {
+    if (products.rows.length == 0) {
       return res.status(204).json({ message: 'Products not found' });
     }
 
@@ -60,6 +60,7 @@ export const updateProduct = async (req, res, next) => {
     next(createError(400, error.message));
   }
 };
+
 export const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -67,9 +68,9 @@ export const deleteProduct = async (req, res, next) => {
     // Customer trở lên được quyền vs product
     const queryFilter = { productCode: id };
 
-    await Product.destroy({ where: queryFilter });
+    const row = await Product.destroy({ where: queryFilter });
 
-    return res.status(200).json({ message: 'Delete product successfully' });
+    return res.status(200).json({ message: `Delete ${row} product successfully` });
   } catch (error) {
     next(error);
   }
