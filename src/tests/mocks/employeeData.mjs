@@ -9,3 +9,8 @@ export const mockEmployee = {
         "reportsTo": 1002,
         "role": 1
 }
+
+export const mockEmployeesQuery = {
+        count: 0,
+        rows: []
+}

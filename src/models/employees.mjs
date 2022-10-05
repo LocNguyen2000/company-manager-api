@@ -1,4 +1,5 @@
 import { DataTypes } from 'sequelize';
+import { ROLE } from '../config/variables.mjs';
 
 export const EmployeeFunc = (sequelize) =>
   sequelize.define(
@@ -67,10 +68,10 @@ export const EmployeeFunc = (sequelize) =>
       jobTitle: {
         type: DataTypes.STRING(50),
         allowNull: false,
-        values: ['President', 'Leader', 'Manager', 'Staff'],
+        values: [ROLE.PRESIDENT, ROLE.LEADER, ROLE.MANAGER, ROLE.STAFF],
         validate: {
           isIn: {
-            args: [['President', 'Leader', 'Manager', 'Staff']],
+            args: [[ROLE.PRESIDENT, ROLE.LEADER, ROLE.MANAGER, ROLE.STAFF]],
             msg: 'Must have one of these role',
           },
         },

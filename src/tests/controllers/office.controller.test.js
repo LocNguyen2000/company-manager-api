@@ -111,7 +111,7 @@ describe('Office controller', () => {
             await addOffice(mockRequest, mockResponse, mockNext);
 
             expect(mockTransaction.rollback).toHaveBeenCalled();
-            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, error));
         })
 
         test('error: server fail with status 500', async () => {
@@ -167,7 +167,7 @@ describe('Office controller', () => {
 
             await updateOffice(mockRequest, mockResponse, mockNext);
 
-            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, error));
         })
         test('error: server fail with status 500', async () => {
             mockRequest.body = mockOffice;
@@ -194,6 +194,7 @@ describe('Office controller', () => {
             mockNext = jest.fn()
 
             Office.destroy = jest.fn()
+            Employee.findAll = jest.fn()
         })
         afterEach(() => {
             jest.clearAllMocks();
@@ -202,16 +203,25 @@ describe('Office controller', () => {
             // fake ket qua tra ve
             let rowAffected = 1;
             Office.destroy.mockResolvedValue(rowAffected);
+            Employee.findAll.mockResolvedValue([])
 
             let result = await deleteOffice(mockRequest, mockResponse, mockNext);
 
             expect(result.status.mock.calls[0][0]).toEqual(200)
             expect(result.json.mock.calls[0][0]).toEqual({ message: `Delete successfully ${rowAffected} row` })
         })
+        test('error: status 400 - delete office with employees', async () => {
+            // fake ket qua tra ve
+            Employee.findAll.mockResolvedValue([mockEmployee])
+
+            await deleteOffice(mockRequest, mockResponse, mockNext);
+
+            expect(mockNext).toHaveBeenCalledWith(createError(400, 'Cannot delete office that contains employees'))
+        })
         test('error: server fail', async () => {
              // fake ket qua tra ve
              let error = new Error('Server error fail')
-             Office.destroy.mockRejectedValue(error);
+             Employee.findAll.mockRejectedValue(error)
  
              await deleteOffice(mockRequest, mockResponse, mockNext);
  

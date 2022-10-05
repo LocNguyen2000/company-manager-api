@@ -29,6 +29,10 @@ export const getEmployee = async (req, res, next) => {
       limit: 10,
     });
 
+    if (employeeList.rows.length == 0) {
+      return res.status(204).json({ message: 'Employee not found' });
+    }
+
     return res.status(200).json({ data: employeeList });
   } catch (error) {
     next(error);
@@ -50,7 +54,7 @@ export const addEmployee = async (req, res, next) => {
     return res.status(201).json({ data: employeeInstance, message: 'Create employee successfully' });
   } catch (error) {
     if (error instanceof ValidationError) {
-      return next(createError(400, 'Wrong data!'));
+      return next(createError(400, error.message));
     }
     return next(error);
   }
@@ -81,6 +85,9 @@ export const updateEmployee = async (req, res, next) => {
 
     return res.status(200).json({ message: `Update successfully ${rowAffected} record` });
   } catch (error) {
+    if (error instanceof ValidationError) {
+      return next(createError(400, error.message));
+    }
     next(error);
   }
 };

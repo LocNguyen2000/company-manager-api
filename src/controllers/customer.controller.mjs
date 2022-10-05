@@ -50,7 +50,7 @@ export const addCustomer = async (req, res, next) => {
     return res.status(201).json({ data: customer });
   } catch (error) {
     if (error instanceof ValidationError) {
-      return next(createError(400, 'Wrong data'));
+      return next(createError(400, error.message));
     }
     return next(error);
   }
@@ -80,7 +80,7 @@ export const updateCustomer = async (req, res, next) => {
     return res.status(200).json({ message: `Update successfully ${rowAffected} row` });
   } catch (error) {
     if (error instanceof ValidationError) {
-      return next(createError(400, 'Wrong data!'));
+      return next(createError(400, error.message));
     }
     return next(error);
   }

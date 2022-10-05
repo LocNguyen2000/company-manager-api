@@ -30,8 +30,9 @@ const options = {
     explorer: true,
   },
 };
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 
+// 3rd-party middleware
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

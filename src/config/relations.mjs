@@ -126,6 +126,9 @@ export default function addRelations(sequelize, DataTypes) {
     },
   });
 
+  Order.hasMany(OrderDetail, { foreignKey: { name: 'orderNumber'}})
+  Product.hasMany(OrderDetail, { foreignKey: { name: 'productCode'}})
+
   ProductLine.hasMany(Product, {
     foreignKey: {
       name: 'productLine',
