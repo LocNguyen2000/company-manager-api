@@ -58,7 +58,7 @@ export const addOffice = async (req, res, next) => {
     await t.rollback();
 
     if (error instanceof ValidationError) {
-      return next(createError(400, 'Wrong data!'));
+      return next(createError(400, error.message));
     }
     return next(error);
   }
@@ -79,7 +79,7 @@ export const updateOffice = async (req, res, next) => {
     return res.status(200).json({  message: `Update successfully ${rowAffected} row` });
   } catch (error) {
     if (error instanceof ValidationError) {
-      return next(createError(400, 'Wrong data!'));
+      return next(createError(400, error.message));
     }
     next(error);
   }

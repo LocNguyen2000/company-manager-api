@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import  sequelize  from '../config/database.mjs';
 import { ROLE, TIME_TO_LIVE } from '../config/variables.mjs';
 import { encryptPassword, comparePassword, jwtGenerate } from '../utils/security.mjs';
+import createError from 'http-errors';
 
 const {User, Employee, Customer} = sequelize.models;
 
@@ -25,7 +26,7 @@ export const register = async (req, res, next) => {
     });
 
     if (result.length > 0) {
-      return res.status(400).json({ message: 'this username or userId already exist' });
+      return res.status(400).json({ message: 'this username or userId already used' });
     }
 
     result = isEmployee ? await Employee.findByPk(employeeNumber) : await Customer.findByPk(customerNumber);
@@ -66,12 +67,12 @@ export const login = async (req, res, next) => {
     });
 
     if (!result) {
-      return res.status(400).json({ message: 'Username or Password is invalid' });
+      return next(createError(400,'Username or Password is invalid'))
     }
     let comparePass = await comparePassword(password, result.password);
 
     if (!comparePass) {
-      return res.status(400).json({ message: 'Username or Password is invalid' });
+      return next(createError(400,'Username or Password is invalid'))
     }
 
     userRole = result.isEmployee ? result.Employee.Role.role : ROLE.CUSTOMER;

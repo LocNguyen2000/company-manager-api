@@ -30,8 +30,7 @@
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.20",
     "sequelize": "^6.23.2",
-    "swagger-ui-express": "^4.5.0",
-    "winston": "^3.8.2"
+    "swagger-ui-express": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
