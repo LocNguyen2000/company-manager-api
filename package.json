@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cd src && nodemon main.mjs",
-    "test": "jest --coverage",
+    "test": "jest --coverage --verbose",
     "format": "npx prettier --write ."
   },
   "repository": {

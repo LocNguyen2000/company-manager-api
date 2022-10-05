@@ -6,7 +6,7 @@ import createError from 'http-errors';
 
 const {User, Employee, Customer} = sequelize.models;
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   const { username, password, customerNumber, employeeNumber, isEmployee } = req.body;
   let result;
   try {
@@ -25,7 +25,6 @@ export const register = async (req, res) => {
       },
     });
 
-    console.log(result);
     if (result.length > 0) {
       return res.status(400).json({ message: 'this username or userId already exist' });
     }
