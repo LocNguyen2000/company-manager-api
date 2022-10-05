@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import swaggerUI from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
-import logger from './config/logger.mjs';
 import config from './config/config.mjs';
 import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -16,6 +15,7 @@ import productRouter from './routes/product.route.mjs';
 import sequelize from './config/database.mjs';
 import orderRouter from './routes/order.route.mjs';
 import logRouter from './routes/logger.route.mjs'
+import productLineRouter from './routes/product-line.route.mjs'
 
 const app = express();
 const port = config.port || process.env.PORT;
@@ -45,6 +45,7 @@ app.use('/logger', loggerRouter);
 app.use('/products', productRouter);
 app.use('/orders', orderRouter);
 app.use('/logs', logRouter)
+app.use('/product-lines', productLineRouter);
 
 
 // Not found method
