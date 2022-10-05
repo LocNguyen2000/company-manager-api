@@ -45,7 +45,7 @@ export const addOffice = async (req, res, next) => {
           role: 4,
           jobTitle: 'Staff',
           officeCode: officeInstance.officeCode,
-          email: '9999@9999.com',
+          email: '9999@mail.com',
           extension: '9999',
           employeeNumber: +officeInstance.officeCode + 9999,
           reportsTo: null

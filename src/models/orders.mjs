@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { ORDER_STATUS, ROLE } from '../config/variables.mjs';
+import { ORDER_STATUS } from '../config/variables.mjs';
 
 
 export const OrderFunc = sequelize => sequelize.define(
