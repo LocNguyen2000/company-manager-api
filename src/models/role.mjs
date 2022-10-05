@@ -1,4 +1,5 @@
 import { DataTypes } from 'sequelize';
+import { ROLE } from '../config/variables.mjs';
 
 export const RoleFunc = sequelize => sequelize.define(
   'Role',
@@ -10,11 +11,15 @@ export const RoleFunc = sequelize => sequelize.define(
     },
     role: {
       type: DataTypes.ENUM,
-      values: ['President', 'Manager', 'Leader', 'Staff', 'Customer'],
+      values: [ROLE.PRESIDENT, ROLE.LEADER, ROLE.MANAGER, ROLE.STAFF, ROLE.CUSTOMER],
       allowNull: false,
       unique: true,
       validate: {
         len: [2, 50],
+        isIn: {
+          args: [[ROLE.PRESIDENT, ROLE.LEADER, ROLE.MANAGER, ROLE.STAFF, ROLE.CUSTOMER]],
+          msg: 'Must have one of these role',
+        },
       },
     },
     createdBy: {
