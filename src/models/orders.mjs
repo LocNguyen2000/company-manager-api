@@ -1,4 +1,5 @@
 import { DataTypes } from 'sequelize';
+import { ORDER_STATUS, ROLE } from '../config/variables.mjs';
 
 
 export const OrderFunc = sequelize => sequelize.define(
@@ -9,31 +10,50 @@ export const OrderFunc = sequelize => sequelize.define(
       primaryKey: true,
       autoIncrement: true,
       validate: {
-        min: 0,
+        min: {
+          args: 1,
+          msg: 'Order number must be at least 1'
+        }
       },
     },
     orderDate: {
       type: DataTypes.DATE,
+      validate: {
+        isDate: {
+          msg: 'Must be date string'
+        }
+      }
     },
     requiredDate: {
       type: DataTypes.DATE,
+      validate: {
+        isDate: {
+          msg: 'Must be date string'
+        }
+      }
     },
-    shipperedDate: {
+    shippedDate: {
       type: DataTypes.DATE,
+      validate: {
+        isDate: {
+          msg: 'Must be date string'
+        }
+      }
     },
     status: {
       type: DataTypes.STRING(15),
       allowNull: false,
+      enum: [ORDER_STATUS.IN_PROCESS, ORDER_STATUS.CANCELLED, ORDER_STATUS.COD, ORDER_STATUS.DISPUTED, ORDER_STATUS.ON_HOLD, ORDER_STATUS.RESOLVED, ORDER_STATUS.SHIPPED],
       validate: {
         len: [5, 15],
+        isIn: {
+          args: [[ORDER_STATUS.IN_PROCESS, ORDER_STATUS.CANCELLED, ORDER_STATUS.COD, ORDER_STATUS.DISPUTED, ORDER_STATUS.ON_HOLD, ORDER_STATUS.RESOLVED, ORDER_STATUS.SHIPPED]],
+          msg: 'Must have one of these order status',
+        },
       },
     },
     comments: {
       type: DataTypes.STRING,
-    },
-    deleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
     },
     createdBy: {
       type: DataTypes.STRING(20),
@@ -58,6 +78,8 @@ export const OrderFunc = sequelize => sequelize.define(
   },
   {
     tableName: 'orders',
+    paranoid: true,
+    deletedAt: 'deleted'
   }
 );
 

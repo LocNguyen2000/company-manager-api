@@ -88,8 +88,15 @@ export const updateOffice = async (req, res, next) => {
 export const deleteOffice = async (req, res, next) => {
   try {
     const { id } = req.params;
+    
+    // Check employees in office
+    let employeeInOffice = await Employee.findAll({where: {officeCode: id}});
+    
+    if (employeeInOffice.length > 0){
+      return next(createError(400, 'Cannot delete office that contains employees'))
+    }
 
-    let rowAffected = await Office.destroy({ where: { officeCode: id } });
+    let rowAffected = await Office.destroy({ where: { officeCode: id }});
 
     return res.status(200).json({  message: `Delete successfully ${rowAffected} row` });
   } catch (error) {

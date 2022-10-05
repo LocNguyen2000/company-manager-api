@@ -46,10 +46,6 @@ export const OrderDetailFunc = (sequelize) =>
           min: 0,
         },
       },
-      deleted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
       createdBy: {
         type: DataTypes.STRING(20),
         validate: {
@@ -73,5 +69,7 @@ export const OrderDetailFunc = (sequelize) =>
     },
     {
       tableName: 'orderdetails',
+      paranoid: true,
+      deletedAt: 'deleted'
     }
   );
