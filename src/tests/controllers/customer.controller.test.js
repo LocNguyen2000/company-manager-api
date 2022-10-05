@@ -70,7 +70,7 @@ describe('Customer controller', () => {
             mockRequest.role = ROLE.CUSTOMER;
             mockRequest.customerNumber = 1;
 
-            let error = new Error('customer not exist')
+            let error = new Error('Server error fail')
 
             Customer.findAndCountAll.mockRejectedValue(error);
 

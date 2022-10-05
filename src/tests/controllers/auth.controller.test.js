@@ -1,6 +1,3 @@
-import createError from 'http-errors';
-import { ValidationError } from 'sequelize';
-
 import { SECRET_KEY } from '../env/env.mjs';
 import config from '../../config/config.mjs';
 import sequelize from '../../config/database.mjs';
@@ -78,7 +75,7 @@ describe('Auth controller', () => {
     });
     test('error: Server error fail', async () => {
       mockRequest.body.username = mockUser.username;
-
+      mockRequest.body.password = '1234';
       let error = new Error('Server error fail');
       User.findOne.mockRejectedValue(error);
 
@@ -105,7 +102,7 @@ describe('Auth controller', () => {
       User.findAll = jest.fn();
       User.create = jest.fn();
       Employee.findByPk = jest.fn();
-      
+      Customer.findByPk = jest.fn();
     });
     afterEach(() => {
       jest.clearAllMocks();
@@ -115,10 +112,10 @@ describe('Auth controller', () => {
         username: mockUser.username,
         password: mockUser.password,
         customerNumber: mockUser.customerNumber,
-        employeeNumber: mockUser.employee,
+        employeeNumber: mockUser.employeeNumber,
         isEmployee: mockUser.isEmployee
      }
-        User.findAll.mockResolvedValue({})
+        User.findAll.mockResolvedValue([])
         Employee.findByPk.mockResolvedValue(mockEmployee)
         User.create.mockResolvedValue(mockUser)
 
@@ -132,6 +129,49 @@ describe('Auth controller', () => {
       let result = await register(mockRequest, mockResponse, mockNext);
       expect(result.status.mock.calls[0][0]).toEqual(400);
       expect(result.json.mock.calls[0][0]).toEqual({ message: 'not be empty' });
+    });
+    test('error: Username or userId already used', async () => {
+      mockRequest.body = {
+        username: mockUser.username,
+        password: mockUser.password,
+        customerNumber: mockUser.customerNumber,
+        employeeNumber: mockUser.employeeNumber,
+        isEmployee: mockUser.isEmployee
+     }
+     User.findAll.mockResolvedValue([mockUser])
+     let result = await register(mockRequest, mockResponse, mockNext);
+     expect(result.status.mock.calls[0][0]).toEqual(400);
+     expect(result.json.mock.calls[0][0]).toEqual({ message: 'this username or userId already used'});
+    })
+    test('error: customer or employee does not exist', async () => {
+      mockRequest.body = {
+        username: mockUser.username,
+        password: mockUser.password,
+        customerNumber: 123,
+        employeeNumber: null,
+        isEmployee: false
+     }
+     User.findAll.mockResolvedValue([])
+     Customer.findByPk.mockResolvedValue(null)
+
+     let result = await register(mockRequest, mockResponse, mockNext);
+     expect(result.status.mock.calls[0][0]).toEqual(400);
+     expect(result.json.mock.calls[0][0]).toEqual({ message: 'this customer or employee does not exist'});
+    })
+    test('error: Server error fail', async () => {
+      mockRequest.body = {
+        username: mockUser.username,
+        password: mockUser.password,
+        customerNumber: mockUser.customerNumber,
+        employeeNumber: mockUser.employeeNumber,
+        isEmployee: mockUser.isEmployee
+     }
+
+      let error = new Error('Server error fail');
+      User.findAll.mockRejectedValue(error);
+
+      await register(mockRequest, mockResponse, mockNext);
+      expect(mockNext.mock.calls[0][0]).toEqual(error);
     });
   });
 });

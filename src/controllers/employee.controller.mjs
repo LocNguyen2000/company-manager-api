@@ -29,6 +29,10 @@ export const getEmployee = async (req, res, next) => {
       limit: 10,
     });
 
+    if (employeeList.rows.length == 0) {
+      return res.status(204).json({ message: 'Employee not found' });
+    }
+
     return res.status(200).json({ data: employeeList });
   } catch (error) {
     next(error);
@@ -56,7 +60,7 @@ export const addEmployee = async (req, res, next) => {
   }
 };
 
-export const updateEmployee = async (req, res) => {
+export const updateEmployee = async (req, res, next) => {
   try {
     const role = req.role,
       officeCode = req.officeCode,
