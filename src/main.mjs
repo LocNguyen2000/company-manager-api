@@ -58,8 +58,8 @@ app.use((req, res, next) => {
 app.use(async (err, req, res, next) => {
   if (!err.status) {
     await Logger.create({logLevel: 'Error', message: err.message, user: req.username || ''});
-  } else if (err.status === 400) {
-    await Logger.create({logLevel: 'Info', message: err.message, user: req.username || ''});
+  } else if (err.status === 404) {
+    await Logger.create({logLevel: 'Error', message: err.message, user: req.username || ''});
   } else {
     await Logger.create({logLevel: 'Warning', message: err.message, user: req.username || ''});
   }
