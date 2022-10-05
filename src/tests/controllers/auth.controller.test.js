@@ -1,5 +1,9 @@
 import { SECRET_KEY } from '../env/env.mjs';
 import config from '../../config/config.mjs';
+
+import createError from 'http-errors';
+import { ValidationError } from 'sequelize';
+
 import sequelize from '../../config/database.mjs';
 import { TIME_TO_LIVE } from '../../config/variables.mjs';
 import { mockUser } from '../mocks/userData.mjs';
@@ -54,11 +58,10 @@ describe('Auth controller', () => {
       mockUser.password = await encryptPassword(mockUser.password);
 
       User.findOne.mockResolvedValue(null);
+      let error =  createError(400,'Username or Password is invalid')
+      await login(mockRequest, mockResponse, mockNext);
 
-      let result = await login(mockRequest, mockResponse, mockNext);
-
-      expect(result.status.mock.calls[0][0]).toEqual(400);
-      expect(result.json.mock.calls[0][0]).toEqual({ message: 'Username or Password is invalid' });
+      expect(mockNext.mock.calls[0][0]).toEqual(error);
     });
     test('error: password does not match', async () => {
       mockRequest.body.username = 'president';
@@ -67,11 +70,10 @@ describe('Auth controller', () => {
       mockUser.password = await encryptPassword(mockUser.password);
 
       User.findOne.mockResolvedValue(mockUser);
+      let error =  createError(400,'Username or Password is invalid')
+      await login(mockRequest, mockResponse, mockNext);
 
-      let result = await login(mockRequest, mockResponse, mockNext);
-
-      expect(result.status.mock.calls[0][0]).toEqual(400);
-      expect(result.json.mock.calls[0][0]).toEqual({ message: 'Username or Password is invalid' });
+      expect(mockNext.mock.calls[0][0]).toEqual(error);
     });
     test('error: Server error fail', async () => {
       mockRequest.body.username = mockUser.username;

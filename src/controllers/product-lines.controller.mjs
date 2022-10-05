@@ -41,7 +41,7 @@ export const addProductLine = async (req, res, next) => {
     return res.status(200).json({ data: productLineInstance });
   } catch (error) {
     if (error instanceof ValidationError) {
-      return next(createError(400, 'Wrong data!'));
+      return next(createError(400, error.message));
     }
     return next(error);
   }

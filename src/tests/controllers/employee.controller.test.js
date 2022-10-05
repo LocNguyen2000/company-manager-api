@@ -119,7 +119,7 @@ describe('Employee controller', () => {
             Employee.create.mockResolvedValue(mockEmployee)
             let result = await addEmployee(mockRequest, mockResponse, mockNext);
 
-            expect(result.status.mock.calls[0][0]).toEqual(200);
+            expect(result.status.mock.calls[0][0]).toEqual(201);
             expect(result.json.mock.calls[0][0]).toEqual({data: mockEmployee, message: 'Create employee successfully'});
         })
         test('error: with status 400', async () => {
@@ -203,14 +203,14 @@ describe('Employee controller', () => {
             expect(mockNext.mock.calls[0][0]).toEqual(error);
         })
     })
-    describe('delete', () => {
-        beforeEach(() => {
-            mockRequest = {
-                officeCode: null,
-                params: {
-                    id: null
-                }
-            }
-        })
-    })
+    // describe('delete', () => {
+    //     beforeEach(() => {
+    //         mockRequest = {
+    //             officeCode: null,
+    //             params: {
+    //                 id: null
+    //             }
+    //         }
+    //     })
+    // })
 })
