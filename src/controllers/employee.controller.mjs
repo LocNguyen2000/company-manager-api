@@ -56,7 +56,7 @@ export const addEmployee = async (req, res, next) => {
   }
 };
 
-export const updateEmployee = async (req, res) => {
+export const updateEmployee = async (req, res, next) => {
   try {
     const role = req.role,
       officeCode = req.officeCode,
@@ -85,7 +85,7 @@ export const updateEmployee = async (req, res) => {
   }
 };
 
-export const deleteEmployee = async (req, res) => {
+export const deleteEmployee = async (req, res, next) => {
   const officeCode = req.officeCode;
   const { id } = req.params;
 
@@ -98,6 +98,7 @@ export const deleteEmployee = async (req, res) => {
       where: { lastName: '9999', officeCode: officeCode },
       transaction: t,
     });
+    
     const currentCustomers = await Customer.findAll({
       where: { salesRepEmployeeNumber: id },
       transaction: t,

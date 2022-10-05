@@ -12,7 +12,7 @@ export const RoleFunc = sequelize => sequelize.define(
       type: DataTypes.ENUM,
       values: ['President', 'Manager', 'Leader', 'Staff', 'Customer'],
       allowNull: false,
-      unique: true,
+      //unique: true,
       validate: {
         len: [2, 50],
       },

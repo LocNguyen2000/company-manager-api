@@ -38,15 +38,17 @@ export const addOffice = async (req, res, next) => {
 
       await Employee.create(
         {
-          lastname: '9999',
+          lastName: '9999',
+          firstName: '9999',
           createdBy: username,
           updatedBy: username,
           role: 4,
           jobTitle: 'Staff',
           officeCode: officeInstance.officeCode,
-          email: '',
-          extension: '',
-          firstname: '',
+          email: '9999@9999.com',
+          extension: '9999',
+          employeeNumber: +officeInstance.officeCode + 9999,
+          reportsTo: null
         },
         { transaction: t }
       );

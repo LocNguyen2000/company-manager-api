@@ -16,6 +16,7 @@ import sequelize from './config/database.mjs';
 import orderRouter from './routes/order.route.mjs';
 import logRouter from './routes/logger.route.mjs'
 import productLineRouter from './routes/product-line.route.mjs'
+import Logger from './models/logger.mjs';
 
 const app = express();
 const port = config.port || process.env.PORT;
@@ -54,13 +55,13 @@ app.use((req, res, next) => {
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use(async (err, req, res, next) => {
   if (!err.status) {
-    logger.write('Error', err.messag, req.username || '');
+    await Logger.create({logLevel: 'Error', message: err.message, user: req.username || ''});
   } else if (err.status === 400) {
-    logger.write('Info', err.message, req.username || '');
+    await Logger.create({logLevel: 'Info', message: err.message, user: req.username || ''});
   } else {
-    logger.write('Warning', err.message, req.username || '');
+    await Logger.create({logLevel: 'Warning', message: err.message, user: req.username || ''});
   }
 
   return res.status(err.status || 500).json({ status: err.status || 500, message: err.message });

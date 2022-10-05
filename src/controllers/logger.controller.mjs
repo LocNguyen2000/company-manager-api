@@ -58,7 +58,7 @@ export const getLog = async (req, res, next) => {
       .skip((page - 1) * LIMIT);
     return res.status(200).json({
       data: {
-        logs: data,
+        rows: data,
         count,
       },
     });
