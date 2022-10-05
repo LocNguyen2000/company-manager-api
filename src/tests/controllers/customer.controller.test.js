@@ -118,7 +118,7 @@ describe('Customer controller', () => {
 
             await addCustomer(mockRequest, mockResponse, mockNext);
 
-            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data'));
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, error));
         })
         test('error: server fail with status 500', async () => {
             mockRequest.body = mockCustomer;
@@ -197,7 +197,7 @@ describe('Customer controller', () => {
 
             await updateCustomer(mockRequest, mockResponse, mockNext);
 
-            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, error));
         })
 
         test('error: server fail with status 500', async () => {

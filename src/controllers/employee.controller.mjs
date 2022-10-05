@@ -92,7 +92,7 @@ export const updateEmployee = async (req, res, next) => {
   }
 };
 
-export const deleteEmployee = async (req, res) => {
+export const deleteEmployee = async (req, res, next) => {
   const officeCode = req.officeCode;
   const { id } = req.params;
 
