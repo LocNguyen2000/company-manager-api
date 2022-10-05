@@ -15,13 +15,13 @@ import userRouter from './routes/auth.router.mjs';
 import productRouter from './routes/product.route.mjs';
 import sequelize from './config/database.mjs';
 import orderRouter from './routes/order.route.mjs';
-import morgan, { token } from 'morgan';
+import config from './config/config.mjs';
+
 
 const app = express();
 const port = config.port || process.env.PORT;
 
-connectToDb(sequelize);
-logger.connect();
+connectToDb(sequelize, config.MONGO_CONNECTION_STRING);
 
 const swaggerDoc = JSON.parse(await readFile(new URL('./docs/swagger.json', import.meta.url)));
 
@@ -36,7 +36,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(morgan('dev'));
 
 // application middleware
 app.use('/users', userRouter);
@@ -55,11 +54,11 @@ app.use((req, res, next) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   if (!err.status) {
-    logger.write('Error', err.message, req.ip, req.username || '');
+    logger.write('Error', err.messag, req.username || '');
   } else if (err.status === 400) {
-    logger.write('Info', err.message, req.ip, req.username || '');
+    logger.write('Info', err.message, req.username || '');
   } else {
-    logger.write('Warning', err.message, req.ip, req.username || '');
+    logger.write('Warning', err.message, req.username || '');
   }
 
   return res.status(err.status || 500).json({ status: err.status || 500, message: err.message });
