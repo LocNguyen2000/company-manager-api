@@ -25,10 +25,6 @@ export const PaymentFunc = sequelize => sequelize.define(
       type: DataTypes.FLOAT(10, 2),
       allowNull: false,
     },
-    deleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
     createdBy: {
       type: DataTypes.STRING(20),
       validate: {
@@ -52,6 +48,8 @@ export const PaymentFunc = sequelize => sequelize.define(
   },
   {
     tableName: 'payments',
+    paranoid: true,
+    deletedAt: 'deleted'
   }
 );
 

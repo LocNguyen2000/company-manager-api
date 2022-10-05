@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import swaggerUI from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
+
 import config from './config/config.mjs';
 import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -29,8 +30,9 @@ const options = {
     explorer: true,
   },
 };
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 
+// 3rd-party middleware
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, options));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -55,13 +57,12 @@ app.use((req, res, next) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  if (!err.status) {
-    logger.write('Error', err.messag, req.username || '');
-  } else if (err.status === 400) {
-    logger.write('Info', err.message, req.username || '');
-  } else {
-    logger.write('Warning', err.message, req.username || '');
-  }
+  // check lại code
+  // if (!err.status ||  err.status === 500) {
+  //   logger.write('Error', err.messag, req.username || '');
+  // } else if (err.status === 400 ) {
+  //   logger.write('Warning', err.message, req.username || '');
+  // } 
 
   return res.status(err.status || 500).json({ status: err.status || 500, message: err.message });
 });
