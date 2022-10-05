@@ -9,4 +9,5 @@ export default {
   password: process.env.PASSWORD,
   databaseName: process.env.DB_NAME,
   secretKey: process.env.SECRET_KEY,
+  mongodb: process.env.MONGO_CONNECTION_STRING
 };

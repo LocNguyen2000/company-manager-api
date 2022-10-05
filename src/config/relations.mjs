@@ -88,6 +88,7 @@ export default function addRelations(sequelize, DataTypes) {
       },
     },
   });
+  
   Office.hasMany(Employee, {
     foreignKey: {
       name: 'officeCode',
@@ -103,6 +104,9 @@ export default function addRelations(sequelize, DataTypes) {
       },
     },
   });
+
+  Order.hasMany(OrderDetail, {foreignKey: 'orderNumber'})
+  Product.hasMany(OrderDetail, {foreignKey: 'productCode'})
 
   Order.belongsToMany(Product, {
     through: OrderDetail,

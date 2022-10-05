@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { ROLE } from '../config/variables.mjs';
 
 import { addProductLine, deleteProductLine, getProductLine, updateProductLine } from '../controllers/product-lines.controller.mjs';
 import { verifyToken, isAccess } from '../middlewares/authenticate.mjs';
