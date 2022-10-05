@@ -15,13 +15,12 @@ import userRouter from './routes/auth.router.mjs';
 import productRouter from './routes/product.route.mjs';
 import sequelize from './config/database.mjs';
 import orderRouter from './routes/order.route.mjs';
-import config from './config/config.mjs';
-
+import logRouter from './routes/logger.route.mjs'
 
 const app = express();
 const port = config.port || process.env.PORT;
 
-connectToDb(sequelize, config.MONGO_CONNECTION_STRING);
+connectToDb(sequelize, config.mongodb);
 
 const swaggerDoc = JSON.parse(await readFile(new URL('./docs/swagger.json', import.meta.url)));
 
@@ -45,6 +44,8 @@ app.use('/offices', officeRouter);
 app.use('/logger', loggerRouter);
 app.use('/products', productRouter);
 app.use('/orders', orderRouter);
+app.use('/logs', logRouter)
+
 
 // Not found method
 app.use((req, res, next) => {

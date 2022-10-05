@@ -14,13 +14,11 @@ export const addLog = async (req, res, next) => {
 
 export const updateLog = async (req, res, next) => {
   try {
-    const id = req.params,
-      upData = req.body;
-    let returnedData = await Logger.updateData(upData, {
-      _id: id,
-    });
+    const id = req.params, upData = req.body;
 
-    return res.status(200).json({ data: returnedData });
+    let returnedData = await Logger.findOneAndUpdate(id, upData);
+
+    return res.status(200).json({ data: Object.assign(returnedData, upData) });
   } catch (error) {
     next(error);
   }
@@ -28,8 +26,14 @@ export const updateLog = async (req, res, next) => {
 
 export const getLog = async (req, res, next) => {
   try {
-    const queryFilters = req.query,
+    const LIMIT = 10;
+    let queryFilters = req.query,
+      { p: page } = req.query,
       { startAt, endAt } = req.query;
+
+    if(page) delete queryFilters.p
+    page = page ? (page <= 0 ? 1 : page) : 1;
+
 
     if (startAt || endAt) {
       queryFilters['createdAt'] = {};
@@ -47,9 +51,17 @@ export const getLog = async (req, res, next) => {
       }
     }
 
-    let data = await Logger.findData(queryFilters);
-    return res.status(200).json({ data });
-    
+    const count = await Logger.countDocuments(queryFilters);
+
+    let data = await Logger.find(queryFilters)
+      .limit(LIMIT)
+      .skip((page - 1) * LIMIT);
+    return res.status(200).json({
+      data: {
+        logs: data,
+        count,
+      },
+    });
   } catch (error) {
     next(error);
   }

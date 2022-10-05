@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const connectToDb = async (sequelize, mongodbString) => {
   try {
     await sequelize.authenticate();
