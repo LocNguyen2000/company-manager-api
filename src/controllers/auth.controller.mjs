@@ -26,7 +26,7 @@ export const register = async (req, res, next) => {
     });
 
     if (result.length > 0) {
-      return res.status(400).json({ message: 'this username or userId already exist' });
+      return res.status(400).json({ message: 'this username or userId already used' });
     }
 
     result = isEmployee ? await Employee.findByPk(employeeNumber) : await Customer.findByPk(customerNumber);
@@ -68,13 +68,11 @@ export const login = async (req, res, next) => {
 
     if (!result) {
       return next(createError(400,'Username or Password is invalid'))
-      //return res.status(400).json({ message: 'Username or Password is invalid' });
     }
     let comparePass = await comparePassword(password, result.password);
 
     if (!comparePass) {
       return next(createError(400,'Username or Password is invalid'))
-      //return res.status(400).json({ message: 'Username or Password is invalid' });
     }
 
     userRole = result.isEmployee ? result.Employee.Role.role : ROLE.CUSTOMER;

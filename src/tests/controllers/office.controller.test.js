@@ -111,7 +111,7 @@ describe('Office controller', () => {
             await addOffice(mockRequest, mockResponse, mockNext);
 
             expect(mockTransaction.rollback).toHaveBeenCalled();
-            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, error));
         })
 
         test('error: server fail with status 500', async () => {
@@ -167,7 +167,7 @@ describe('Office controller', () => {
 
             await updateOffice(mockRequest, mockResponse, mockNext);
 
-            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, 'Wrong data!'));
+            expect(mockNext.mock.calls[0][0]).toEqual(createError(400, error));
         })
         test('error: server fail with status 500', async () => {
             mockRequest.body = mockOffice;

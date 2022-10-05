@@ -38,7 +38,10 @@ export const addProduct = async (req, res, next) => {
 
     return res.status(200).json({ data: productInstance, message: 'Create employee successfully' });
   } catch (error) {
-    next(createError(400, error));
+    if (error instanceof ValidationError) {
+      return next(createError(400, error.message));
+    }
+    next(error);
   }
 };
 export const updateProduct = async (req, res, next) => {
@@ -54,7 +57,7 @@ export const updateProduct = async (req, res, next) => {
 
     return res.status(200).json({ message: 'Update product successfully' });
   } catch (error) {
-    next(createError(400, error));
+    next(createError(400, error.message));
   }
 };
 export const deleteProduct = async (req, res, next) => {
@@ -68,6 +71,6 @@ export const deleteProduct = async (req, res, next) => {
 
     return res.status(200).json({ message: 'Delete product successfully' });
   } catch (error) {
-    next(createError(400, error));
+    next(error);
   }
 };
