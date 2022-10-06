@@ -5,8 +5,8 @@ const connectToDb = async (sequelize, mongodbString) => {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
 
-    await sequelize.sync({ alter: true });
-    console.log('All models were synchronized successfully.');
+    // await sequelize.sync({ alter: true });
+    // console.log('All models were synchronized successfully.');
 
     await mongoose.connect(mongodbString);
     console.log('Connect MongoDB Successfully!');
