@@ -153,8 +153,13 @@ export const addOrder = async (req, res, next) => {
     }
 };
 export const updateOrder = async (req, res, next) => {
+    const { id } = req.params;
+    let orderBody = req.body;
+    
     try {
+        var t = await sequelize.transaction();
 
+        
     } catch (error) {
         next(error);
     }
