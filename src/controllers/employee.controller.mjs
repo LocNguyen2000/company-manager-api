@@ -2,8 +2,9 @@ import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
 import  sequelize  from '../config/database.mjs';
 import { ROLE } from '../config/variables.mjs';
+import employeeService from '../services/employee.service.mjs';
 
-const {Customer, Employee} = sequelize.models
+const {Employee} = sequelize.models
 
 export const getEmployee = async (req, res, next) => {
   try {
@@ -96,37 +97,11 @@ export const deleteEmployee = async (req, res, next) => {
   const officeCode = req.officeCode;
   const { id } = req.params;
 
-  // add transaction
-  const t = await sequelize.transaction();
-
   try {
-    // Find all customer from deleted employee
-    const defaultEmployee = await Employee.findOne({
-      where: { lastName: '9999', officeCode: officeCode },
-      transaction: t,
-    });
-    
-    const currentCustomers = await Customer.findAll({
-      where: { salesRepEmployeeNumber: id },
-      transaction: t,
-    });
+    let result = await employeeService.delete(id, officeCode);
 
-    // change current employee's customer > default employee's customer
-    for (const customer of currentCustomers) {
-      await customer.update({
-        salesRepEmployeeNumber: defaultEmployee.employeeNumber,
-        transaction: t,
-      });
-    }
-
-    // delete employeee successfully
-    let rowAffected = await Employee.destroy({ where: { employeeNumber: id }, transaction: t });
-
-    await t.commit();
-
-    return res.status(200).json({ message: `Delete successfully ${rowAffected} record` });
+    return res.status(200).json({ message: `Delete successfully ${result} record` });
   } catch (error) {
-    await t.rollback();
     next(error);
   }
 };

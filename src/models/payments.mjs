@@ -11,10 +11,10 @@ export const PaymentFunc = sequelize => sequelize.define(
       },
     },
     checkNumber: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.INTEGER,
       primaryKey: true,
       validate: {
-        len: [5, 50],
+        min: 0,
       },
     },
     paymentDate: {

@@ -1,12 +1,14 @@
 export default function addRelations(sequelize, DataTypes) {
-  const { Product, Office, Employee, OrderDetail, ProductLine, User, Order, Customer, Role } = sequelize.models;
-
+  const { Product, Office, Employee, OrderDetail, ProductLine, User, Order, Customer, Role, Payment } = sequelize.models;
+  
+  // CUSTOMER - USER - EMPLOYEE CONSTRAINTS
   Customer.hasOne(User, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
   User.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER } });
 
   Employee.hasOne(User, { foreignKey: { name: 'employeeNumber', type: DataTypes.INTEGER } });
   User.belongsTo(Employee, { foreignKey: { name: 'employeeNumber', type: DataTypes.INTEGER } });
 
+  // CUSTOMER - EMPLOYEE - ROLE CONSTRAINTS
   Employee.belongsTo(Role, {
     foreignKey: {
       name: 'role',
@@ -27,7 +29,7 @@ export default function addRelations(sequelize, DataTypes) {
       },
     },
   });
-
+  
   Employee.belongsTo(Employee, {
     foreignKey: {
       name: 'reportsTo',
@@ -70,9 +72,7 @@ export default function addRelations(sequelize, DataTypes) {
     },
   });
 
-  Order.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
-  Customer.hasMany(Order, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
-
+  // OFFICE - EMPLOYEE CONSTRAINTS
   Employee.belongsTo(Office, {
     onDelete: 'RESTRICT',
     onUpdate: 'CASCADE',
@@ -109,9 +109,18 @@ export default function addRelations(sequelize, DataTypes) {
     },
   });
 
-  Order.hasMany(OrderDetail, {foreignKey: 'orderNumber'})
-  Product.hasMany(OrderDetail, {foreignKey: 'productCode'})
 
+  // PAYMENT - ORDER - CUSTOMER CONSTRAINTS
+  Order.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
+  Order.hasOne(Payment, { foreignKey: { name: 'checkNumber', type: DataTypes.INTEGER, allowNull: false}})
+  
+  Customer.hasMany(Payment, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false }} )
+  Customer.hasMany(Order, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false } });
+
+  Payment.belongsTo(Order, { foreignKey: { name: 'checkNumber', type: DataTypes.INTEGER, allowNull: false}})
+  Payment.belongsTo(Customer, { foreignKey: { name: 'customerNumber', type: DataTypes.INTEGER, allowNull: false }})
+
+  // PRODUCTS - DETAILS - ORDERS CONSTRAINTS
   Order.belongsToMany(Product, {
     through: OrderDetail,
     foreignKey: {
@@ -129,6 +138,7 @@ export default function addRelations(sequelize, DataTypes) {
   Order.hasMany(OrderDetail, { foreignKey: { name: 'orderNumber'}})
   Product.hasMany(OrderDetail, { foreignKey: { name: 'productCode'}})
 
+  // PRODUCT - PRODUCT LINE CONSTRAINTS
   ProductLine.hasMany(Product, {
     foreignKey: {
       name: 'productLine',
