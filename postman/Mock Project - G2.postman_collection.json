@@ -42,7 +42,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"newEm\",\r\n    \"password\": \"123\"\r\n}",
+							"raw": "{\r\n    \"username\": \"LocNH12\",\r\n    \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -806,13 +806,23 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comments\": \"change to status Shipped\",\r\n    \"status\": \"Shipped\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{LOCAL_API}}/orders",
+							"raw": "{{LOCAL_API}}/orders/10426",
 							"host": [
 								"{{LOCAL_API}}"
 							],
 							"path": [
-								"orders"
+								"orders",
+								"10426"
 							]
 						}
 					},

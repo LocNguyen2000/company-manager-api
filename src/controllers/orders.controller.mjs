@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import { Op, ValidationError } from 'sequelize';
+import { Op, or, ValidationError } from 'sequelize';
 
 import sequelize from "../config/database.mjs";
 import { ORDER_STATUS, ROLE } from "../config/variables.mjs";
@@ -129,7 +129,6 @@ export const addOrder = async (req, res, next) => {
                 createdBy: username,
             })
 
-            console.log(detail);
             let instance = await OrderDetail.create( detail, {transaction: t});
 
             detailInstances.push(instance);
@@ -153,32 +152,66 @@ export const addOrder = async (req, res, next) => {
     }
 };
 export const updateOrder = async (req, res, next) => {
+    const username = req.username;
     const { id } = req.params;
-    let orderBody = req.body;
+    let { comments, status } = req.body;
     
     try {
         var t = await sequelize.transaction();
-
         
+        if (!status){
+            return res.status(400).json({ message: 'Request body must have status field' })
+        }
+
+        let orderInstance = await Order.findByPk(id, {transaction: t});
+
+        if (!orderInstance){
+            return res.status(400).json({ message: 'Order not found' })
+        }
+
+        if ((orderInstance.status != ORDER_STATUS.IN_PROCESS || (status != ORDER_STATUS.DISPUTED && 
+                                                                status != ORDER_STATUS.SHIPPED && 
+                                                                status != ORDER_STATUS.ON_HOLD))
+            && ( (orderInstance.status != ORDER_STATUS.ON_HOLD) || (status != ORDER_STATUS.SHIPPED))
+            && ((orderInstance.status != ORDER_STATUS.DISPUTED) || (status != ORDER_STATUS.RESOLVED))
+            && ( (orderInstance.status != ORDER_STATUS.RESOLVED) || (status != ORDER_STATUS.SHIPPED))
+        ){
+            throw new Error(`Cannot update order from status ${orderInstance.status} to ${status}`)
+        }
+
+        orderInstance = Object.assign(orderInstance, { 
+            status,
+            updatedBy: username
+        })
+        orderInstance.comments = comments ? comments : orderInstance.comments;
+
+        let rowAffected = await Order.update(orderInstance.toJSON(), {where: { orderNumber: orderInstance.orderNumber, }, transaction: t})
+        
+        await t.commit()
+        return res.status(200).json({ message: `Update ${rowAffected} order successfully` })
+
     } catch (error) {
+        await t.rollback();
         next(error);
     }
 };
 export const deleteOrder = async (req, res, next) => {
+    const username = req.username;
     const { id } = req.params;
+    const { comments } = req.query;
 
     try {
         var t = await sequelize.transaction();
 
         // find order and order details
-        let order = await Order.findByPk(id, { include: { model: OrderDetail }, transaction: t });
+        let orderInstance = await Order.findByPk(id, { include: { model: OrderDetail }, transaction: t });
 
-        if (!order) {
+        if (!orderInstance) {
             return res.status(400).json({ message: 'Order not found' })
         }
 
         // check status RESOLVE - ONHOLD - INPROCESS > được xóa
-        if ((order.status != ORDER_STATUS.RESOLVED) && (order.status != ORDER_STATUS.ON_HOLD) && (order.status != ORDER_STATUS.IN_PROCESS)) {
+        if ((orderInstance.status != ORDER_STATUS.RESOLVED) && (orderInstance.status != ORDER_STATUS.ON_HOLD) && (orderInstance.status != ORDER_STATUS.IN_PROCESS)) {
             return next(createError(400, 'Cannot delete in current order status'))
         }
 
@@ -187,8 +220,16 @@ export const deleteOrder = async (req, res, next) => {
         // let paymentOrder = await Payment.findOne({where: {customerNumber: order.customerNumber}, transaction: t});
         // await paymentOrder.destroy({transaction: t})
 
-        let orderRowAffected = await Order.destroy({ where: { orderNumber: order.orderNumber }, transaction: t })
-        let detailRowsAffected = await OrderDetail.destroy({ where: { orderNumber: order.orderNumber }, transaction: t })
+        orderInstance = Object.assign(orderInstance, {
+            updatedBy: username,
+            status: ORDER_STATUS.CANCELLED,
+        })
+        orderInstance.comments = comments ? comments : orderInstance.comments;
+
+        await Order.update(orderInstance,{ where: { orderNumber: orderInstance.orderNumber },transaction: t})
+
+        let orderRowAffected = await Order.destroy({ where: { orderNumber: orderInstance.orderNumber }, transaction: t })
+        let detailRowsAffected = await OrderDetail.destroy({ where: { orderNumber: orderInstance.orderNumber }, transaction: t })
 
         await t.commit();
 
