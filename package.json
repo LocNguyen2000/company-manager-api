@@ -6,8 +6,7 @@
   "scripts": {
     "start": "cd src && nodemon main.mjs",
     "test": "jest --coverage",
-    "format": "npx prettier --write .",
-    "jest-file": "jest"
+    "format": "npx prettier --write ."
   },
   "repository": {
     "type": "git",
