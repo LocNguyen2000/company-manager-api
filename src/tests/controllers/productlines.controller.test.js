@@ -31,9 +31,7 @@ describe('ProductLine controller', () => {
         test('success: productlines with status 200', async () => {
             mockProductLinesQuery.rows.push(mockProductLine);
             mockProductLinesQuery.count = mockProductLinesQuery.rows.length;
-
             
-
             ProductLine.findAndCountAll.mockResolvedValue(mockProductLinesQuery);
 
             let result = await getProductLine(mockRequest, mockResponse, mockNext);
