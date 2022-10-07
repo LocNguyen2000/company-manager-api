@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import swaggerUI from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
+
+import task from './utils/cron.mjs';
 import config from './config/config.mjs';
 import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -69,3 +71,6 @@ app.use(async (err, req, res, next) => {
 app.listen(port, () => {
   console.log(`App connected successfully on port ${port}`);
 });
+
+// Task run every minute
+task.start();

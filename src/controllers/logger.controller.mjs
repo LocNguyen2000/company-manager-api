@@ -6,7 +6,7 @@ export const addLog = async (req, res, next) => {
 
     let data = await Logger.create({ level, message, user: res.username });
 
-    return res.status(200).json({ data });
+    return res.status(201).json({ data });
   } catch (error) {
     next(error);
   }
