@@ -68,10 +68,10 @@ export const updateEmployee = async (req, res, next) => {
 
     let employee = req.body;
 
-    let queryObj = Object.assign({}, { employeeNumber: id });
+    let queryFilter = Object.assign({}, { employeeNumber: id });
 
     if (role === ROLE.MANAGER) {
-      queryObj = Object.assign(queryObj, { officeCode });
+      queryFilter = Object.assign(queryFilter, { officeCode });
     }
 
     employee = Object.assign(employee, {
