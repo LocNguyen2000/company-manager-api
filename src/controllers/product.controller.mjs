@@ -1,7 +1,7 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
 import  sequelize  from '../config/database.mjs';
-import { ValidationError } from 'sequelize';
+
 
 const {Product} = sequelize.models
 
