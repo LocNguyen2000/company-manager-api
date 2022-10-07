@@ -121,7 +121,7 @@ describe('Logger controller', () => {
             Logger.create.mockResolvedValue(mockLogger)
 
             let result = await addLog(mockRequest, mockResponse, mockNext)
-            expect(result.status.mock.calls[0][0]).toEqual(200);
+            expect(result.status.mock.calls[0][0]).toEqual(201);
             expect(result.json.mock.calls[0][0]).toEqual({ data: mockLogger });
         })
         test('error: server fail with status 500', async () => {
