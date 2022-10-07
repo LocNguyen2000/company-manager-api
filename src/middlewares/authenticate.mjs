@@ -7,7 +7,6 @@ export function verifyToken(req, res, next) {
   } else {
     try {
       const { data } = jwt.verify(token, config.secretKey);
-      console.log(data);
 
       req.username = data.username;
       req.employeeNumber = data.employeeNumber;

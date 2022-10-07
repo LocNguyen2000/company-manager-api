@@ -2,7 +2,6 @@ import { SECRET_KEY } from '../env/env.mjs';
 import config from '../../config/config.mjs';
 
 import createError from 'http-errors';
-import { ValidationError } from 'sequelize';
 
 import sequelize from '../../config/database.mjs';
 import { TIME_TO_LIVE } from '../../config/variables.mjs';

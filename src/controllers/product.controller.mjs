@@ -1,6 +1,7 @@
 import createError from 'http-errors';
-import  sequelize  from '../config/database.mjs';
 import { ValidationError } from 'sequelize';
+import  sequelize  from '../config/database.mjs';
+
 
 const {Product} = sequelize.models
 
@@ -37,7 +38,7 @@ export const addProduct = async (req, res, next) => {
       })
     );
 
-    return res.status(200).json({ data: productInstance, message: 'Create employee successfully' });
+    return res.status(200).json({ data: productInstance, message: 'Create product successfully' });
   } catch (error) {
     if (error instanceof ValidationError) {
       return next(createError(400, error.message));
