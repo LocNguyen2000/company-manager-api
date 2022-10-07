@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import { Op, ValidationError } from 'sequelize';
+import { Op, or, ValidationError } from 'sequelize';
 
 import sequelize from "../config/database.mjs";
 import { ORDER_STATUS, ROLE } from "../config/variables.mjs";
@@ -52,7 +52,12 @@ export const addOrder = async (req, res, next) => {
     var t = await sequelize.transaction();
 
     try {
-        // CHƯA CHECK ORDER TỒN TẠI
+        // CHECK ORDER NUMBER ĐÃ TỒN TẠI (gồm cả soft delete)
+        let isExistRecord = await Order.findByPk(order.orderNumber, { paranoid: false, transaction: t })
+
+        if (!!isExistRecord){
+            throw new ValidationError('This order number already exist')
+        }
 
         // Order
         let orderInstance = await Order.create(
@@ -93,18 +98,24 @@ export const addOrder = async (req, res, next) => {
                 [
                     'quantityOrdered',
                     'priceEach',
-                    sequelize.literal('(Quantity * priceEach)'), 'TotalDetailPayment'] 
+                    [sequelize.literal('(quantityOrdered * priceEach)'), "TotalDetailPayment"],
+                ] 
             }] ,transaction: t})
 
             // calculate total payment
             let totalPayment = 0;
-            for (const order of orderWithDetails) {
-                
-                totalPayment += order.OrderDetail.reduce((prevValue, currentValue)=> {
+            for (let order of orderWithDetails) {
+                order = order.toJSON()
+
+                let payment = order.OrderDetails.reduce((prevValue, currentValue)=> {
                     prevValue = currentValue.TotalDetailPayment + prevValue;
+
                     return prevValue;
                 }, 0)
+
+                totalPayment += payment;
             }
+
             // check payment amount customer > credit limit
             if (totalPayment > customerInstance.creditLimit ){
                 throw new ValidationError('Customer total payment are higher than creditLimit')
@@ -219,11 +230,11 @@ export const deleteOrder = async (req, res, next) => {
         }
 
         // // find payment of order
-        // ERROR: ko biet tim payment cua order nao
-        let paymentInstance = await Payment.findOne({where: {customerNumber: orderInstance.customerNumber}, transaction: t});
-        let paymentRowAffected = await Payment.destroy({ where: { checkNumber: paymentInstance.checkNumber, customerNumber: paymentInstance.customerNumber } });
+        let queryFilter = { checkNumber: orderInstance.orderNumber, customerNumber: orderInstance.customerNumber }
 
-        orderInstance = Object.assign(orderInstance, {
+        let paymentRowAffected = await Payment.destroy({ where: queryFilter, transaction: t });
+
+        orderInstance = Object.assign(orderInstance.toJSON(), {
             updatedBy: username,
             status: ORDER_STATUS.CANCELLED,
         })

@@ -2,7 +2,6 @@ import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
 import  sequelize from '../config/database.mjs';
 import { ROLE } from '../config/variables.mjs';
-import customerService from '../services/customer.service.mjs';
 
 const { Customer } = sequelize.models;
 
@@ -23,7 +22,11 @@ export const getCustomer = async (req, res, next) => {
     }
 
     // Leader, Manager, President trở lên được xem mọi dữ liệu khách hàng
-    let customers = await customerService.get(queryFilter, page)
+    let customers = await Customer.findAndCountAll({
+      where: queryFilter,
+      offset: (page - 1) * 10,
+      limit: 10,
+  });
 
     if (customers.rows.length == 0) {
       return res.status(204).json({ message: 'Customer not found' });
@@ -41,7 +44,7 @@ export const addCustomer = async (req, res, next) => {
     const username = req.username;
 
     // Staff trở lên được tạo mọi dữ liệu khách hàng
-    let customer = await customerService.create(
+    let customer = await Customer.create(
       Object.assign(customerRequest, {
         updatedBy: username,
         createdBy: username,
@@ -71,7 +74,7 @@ export const updateCustomer = async (req, res, next) => {
     }
     // Staff trở lên được update mọi dữ liệu khách hàng
     let queryObj = { customerNumber: id };
-    let rowAffected = await customerService.update(Object.assign(customerRequest, { updatedBy: username }), queryObj);
+    let rowAffected = await Customer.update(Object.assign(customerRequest, { updatedBy: username }), queryObj);
 
     return res.status(200).json({ message: `Update successfully ${rowAffected} row` });
   } catch (error) {
@@ -88,7 +91,7 @@ export const deleteCustomer = async (req, res, next) => {
 
     // Staff trở lên được xóa mọi dữ liệu khách hàng
     let queryObj = { customerNumber: id };
-    let rowAffected = await customerService.delete(queryObj);
+    let rowAffected = await Customer.destroy({ where: queryObj });
 
     return res.status(200).json({ message: `Delete successfully ${rowAffected} row` });
   } catch (error) {
