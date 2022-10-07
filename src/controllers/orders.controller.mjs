@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import { Op, or, ValidationError } from 'sequelize';
+import { Op, ValidationError } from 'sequelize';
 
 import sequelize from "../config/database.mjs";
 import { ORDER_STATUS, ROLE } from "../config/variables.mjs";
@@ -49,8 +49,10 @@ export const addOrder = async (req, res, next) => {
     const username = req.username
     let { order, details, payment } = req.body;
 
+    var t = await sequelize.transaction();
+
     try {
-        var t = await sequelize.transaction();
+        // CHƯA CHECK ORDER TỒN TẠI
 
         // Order
         let orderInstance = await Order.create(
@@ -72,6 +74,7 @@ export const addOrder = async (req, res, next) => {
         }
 
         payment = Object.assign(payment, {
+            checkNumber: orderInstance.orderNumber,
             customerNumber: customerInstance.customerNumber,
             paymentDate: new Date().toDateString(),
             updatedBy: username,
@@ -156,9 +159,9 @@ export const updateOrder = async (req, res, next) => {
     const { id } = req.params;
     let { comments, status } = req.body;
     
-    try {
-        var t = await sequelize.transaction();
-        
+    var t = await sequelize.transaction();
+
+    try {        
         if (!status){
             return res.status(400).json({ message: 'Request body must have status field' })
         }
@@ -200,9 +203,9 @@ export const deleteOrder = async (req, res, next) => {
     const { id } = req.params;
     const { comments } = req.query;
 
-    try {
-        var t = await sequelize.transaction();
+    var t = await sequelize.transaction();
 
+    try {
         // find order and order details
         let orderInstance = await Order.findByPk(id, { include: { model: OrderDetail }, transaction: t });
 
@@ -217,8 +220,8 @@ export const deleteOrder = async (req, res, next) => {
 
         // // find payment of order
         // ERROR: ko biet tim payment cua order nao
-        // let paymentOrder = await Payment.findOne({where: {customerNumber: order.customerNumber}, transaction: t});
-        // await paymentOrder.destroy({transaction: t})
+        let paymentInstance = await Payment.findOne({where: {customerNumber: orderInstance.customerNumber}, transaction: t});
+        let paymentRowAffected = await Payment.destroy({ where: { checkNumber: paymentInstance.checkNumber, customerNumber: paymentInstance.customerNumber } });
 
         orderInstance = Object.assign(orderInstance, {
             updatedBy: username,
@@ -233,7 +236,7 @@ export const deleteOrder = async (req, res, next) => {
 
         await t.commit();
 
-        return res.status(200).json({ message: `Delete ${orderRowAffected} order and ${detailRowsAffected} details successfully` })
+        return res.status(200).json({ message: `Delete ${orderRowAffected} order, ${paymentRowAffected} payment, ${detailRowsAffected} details successfully` })
     } catch (error) {
         await t.rollback()
         next(error);
