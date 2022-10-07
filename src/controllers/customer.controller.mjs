@@ -88,7 +88,7 @@ export const deleteCustomer = async (req, res, next) => {
 
     // Staff trở lên được xóa mọi dữ liệu khách hàng
     let queryObj = { customerNumber: id };
-    let rowAffected = await customerService.destroy(queryObj);
+    let rowAffected = await customerService.delete(queryObj);
 
     return res.status(200).json({ message: `Delete successfully ${rowAffected} row` });
   } catch (error) {
