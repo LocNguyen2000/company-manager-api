@@ -45,7 +45,6 @@ export const OrderFunc = sequelize => sequelize.define(
       allowNull: false,
       enum: [ORDER_STATUS.IN_PROCESS, ORDER_STATUS.CANCELLED, ORDER_STATUS.COD, ORDER_STATUS.DISPUTED, ORDER_STATUS.ON_HOLD, ORDER_STATUS.RESOLVED, ORDER_STATUS.SHIPPED],
       validate: {
-        len: [5, 15],
         isIn: {
           args: [[ORDER_STATUS.IN_PROCESS, ORDER_STATUS.CANCELLED, ORDER_STATUS.COD, ORDER_STATUS.DISPUTED, ORDER_STATUS.ON_HOLD, ORDER_STATUS.RESOLVED, ORDER_STATUS.SHIPPED]],
           msg: 'Must have one of these order status',

@@ -22,7 +22,11 @@ export const getCustomer = async (req, res, next) => {
     }
 
     // Leader, Manager, President trở lên được xem mọi dữ liệu khách hàng
-    let customers = await Customer.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10 });
+    let customers = await Customer.findAndCountAll({
+      where: queryFilter,
+      offset: (page - 1) * 10,
+      limit: 10,
+  });
 
     if (customers.rows.length == 0) {
       return res.status(204).json({ message: 'Customer not found' });
@@ -45,7 +49,7 @@ export const addCustomer = async (req, res, next) => {
         updatedBy: username,
         createdBy: username,
       })
-    );
+    )
 
     return res.status(201).json({ data: customer });
   } catch (error) {
@@ -70,12 +74,7 @@ export const updateCustomer = async (req, res, next) => {
     }
     // Staff trở lên được update mọi dữ liệu khách hàng
     let queryObj = { customerNumber: id };
-    let rowAffected = await Customer.update(
-      Object.assign(customerRequest, {
-        updatedBy: username,
-      }),
-      { where: queryObj }
-    );
+    let rowAffected = await Customer.update(Object.assign(customerRequest, { updatedBy: username }), queryObj);
 
     return res.status(200).json({ message: `Update successfully ${rowAffected} row` });
   } catch (error) {

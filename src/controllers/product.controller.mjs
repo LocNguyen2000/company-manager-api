@@ -1,6 +1,7 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
 import  sequelize  from '../config/database.mjs';
+import { ValidationError } from 'sequelize';
 
 const {Product} = sequelize.models
 
@@ -45,6 +46,7 @@ export const addProduct = async (req, res, next) => {
     next(error);
   }
 };
+
 export const updateProduct = async (req, res, next) => {
   try {
     const username = req.username;
@@ -61,7 +63,7 @@ export const updateProduct = async (req, res, next) => {
     if (error instanceof ValidationError) {
       return next(createError(400, error.message));
     }
-    next(error);
+    return next(error);
   }
 };
 

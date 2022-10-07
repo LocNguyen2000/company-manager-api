@@ -1,18 +1,18 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
-import  sequelize  from '../config/database.mjs';
 import { ROLE } from '../config/variables.mjs';
+import sequelize from '../config/database.mjs';
 
-const {Customer, Employee} = sequelize.models
+const { Customer, Employee } = sequelize.models
 
 export const getEmployee = async (req, res, next) => {
   try {
     const id = req.employeeNumber,
       role = req.role,
       officeCode = req.officeCode;
-      
+
     let queryFilter = req.query;
-    let{ p: page } = req.query;
+    let { p: page } = req.query;
 
     page = page ? ((page <= 0) ? 1 : page) : 1
     delete queryFilter.p
@@ -27,7 +27,7 @@ export const getEmployee = async (req, res, next) => {
       where: queryFilter,
       offset: (page - 1) * 10,
       limit: 10,
-    });
+  });
 
     if (employeeList.rows.length == 0) {
       return res.status(204).json({ message: 'Employee not found' });
@@ -41,15 +41,14 @@ export const getEmployee = async (req, res, next) => {
 
 export const addEmployee = async (req, res, next) => {
   try {
-    const employee = req.body,
+    let employee = req.body,
       username = req.username;
 
     let employeeInstance = await Employee.create(
       Object.assign(employee, {
         updatedBy: username,
         createdBy: username,
-      })
-    );
+      }))
 
     return res.status(201).json({ data: employeeInstance, message: 'Create employee successfully' });
   } catch (error) {
@@ -65,23 +64,21 @@ export const updateEmployee = async (req, res, next) => {
     const role = req.role,
       officeCode = req.officeCode,
       username = req.username,
-      employee = req.body,
       { id } = req.params;
 
-    let queryObj = Object.assign({}, { employeeNumber: id });
+    let employee = req.body;
+
+    let queryFilter = Object.assign({}, { employeeNumber: id });
 
     if (role === ROLE.MANAGER) {
-      queryObj = Object.assign(queryObj, { officeCode });
+      queryFilter = Object.assign(queryFilter, { officeCode });
     }
 
-    let rowAffected = await Employee.update(
-      Object.assign(employee, {
-        updatedBy: username,
-      }),
-      {
-        where: queryObj,
-      }
-    );
+    employee = Object.assign(employee, {
+      updatedBy: username,
+    });
+
+    let rowAffected = await Employee.update(employee, { where: queryFilter });
 
     return res.status(200).json({ message: `Update successfully ${rowAffected} record` });
   } catch (error) {
@@ -100,12 +97,13 @@ export const deleteEmployee = async (req, res, next) => {
   const t = await sequelize.transaction();
 
   try {
-    // Find all customer from deleted employee
+    // find default employee in officeCode
     const defaultEmployee = await Employee.findOne({
       where: { lastName: '9999', officeCode: officeCode },
       transaction: t,
     });
-    
+
+    // Find all customer from deleted employee
     const currentCustomers = await Customer.findAll({
       where: { salesRepEmployeeNumber: id },
       transaction: t,
@@ -124,9 +122,11 @@ export const deleteEmployee = async (req, res, next) => {
 
     await t.commit();
 
+
     return res.status(200).json({ message: `Delete successfully ${rowAffected} record` });
   } catch (error) {
     await t.rollback();
+
     next(error);
   }
 };
