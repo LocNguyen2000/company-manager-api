@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import { Op, or, ValidationError } from 'sequelize';
+import { Op, ValidationError } from 'sequelize';
 
 import sequelize from "../config/database.mjs";
 import { ORDER_STATUS, ROLE } from "../config/variables.mjs";
@@ -26,16 +26,26 @@ export const getOrder = async (req, res, next) => {
         }
         // role = staff > xem được order của customer của họ
         else if (req.role == ROLE.STAFF) {
-            let customersEmployee = await Customer.findAll({ where: { salesRepEmployeeNumber: req.employeeNumber } });
-            if (customersEmployee.length == 0) {
-                return req.status(204).json({ message: `You have no related customer's orders to check` })
+            let staffCustomerNumbers = await Customer.findAll({ where: { salesRepEmployeeNumber: req.employeeNumber }, attributes: ['customerNumber'], raw: true });
+            if (staffCustomerNumbers.length == 0) {
+                return res.status(204).json({ message: `You have no related customer's orders to check` })
             }
 
-            let customerNumbers = customersEmployee.map(customer => { return customer.customerNumber });
+            staffCustomerNumbers = staffCustomerNumbers.map(customer => {
+                return customer.customerNumber;
+            })
 
-            if (!queryFilter.customerNumber || !customerNumbers.includes(queryFilter.customerNumber)) {
-                return next(createError(401, 'Staff can only check their own customers orders'))
+            if (queryFilter.customerNumber) {
+                if (!staffCustomerNumbers.includes(parseInt(queryFilter.customerNumber))){
+                    return next(createError(401, 'Staff can only check their own customers orders'))
+                }
+
+                staffCustomerNumbers = [queryFilter.customerNumber];
             }
+
+            queryFilter = Object.assign(queryFilter, {
+                customerNumber: {[Op.or]: staffCustomerNumbers }
+            })
         }
         // role = leader, manager, president > xem mọi
         let orders = await Order.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10, include: { model: OrderDetail } });
@@ -197,6 +207,7 @@ export const updateOrder = async (req, res, next) => {
             status,
             updatedBy: username
         })
+        orderInstance.shippedDate = status == ORDER_STATUS.SHIPPED ? new Date().toDateString() : orderInstance.shippedDate;
         orderInstance.comments = comments ? comments : orderInstance.comments;
 
         let rowAffected = await Order.update(orderInstance.toJSON(), {where: { orderNumber: orderInstance.orderNumber, }, transaction: t})
