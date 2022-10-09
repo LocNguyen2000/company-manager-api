@@ -91,13 +91,11 @@
                                 }
                             },
                             "example": {
-                                "user": {
-                                    "value": {
-                                        "username": "LocNH12",
-                                        "password": "1234a@",
-                                        "employeeNumber": 1
-                                    }
-                                }
+                                "username": "newcus123",
+                                "password": 123,
+                                "isEmployee": false,
+                                "customerNumber": 103,
+                                "employeeNumber": null
                             }
                         }
                     }
@@ -133,17 +131,7 @@
                         }
                     },
                     "400": {
-                        "description": "User account not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Account or password are incorrect",
+                        "description": "Username or Password is invalid",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -199,13 +187,49 @@
                 "summary": "Add a new customer into system",
                 "responses": {
                     "201": {
-                        "description": "Create new customer succesfully"
+                        "description": "ADD customers successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Customers"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request error"
+                        "description": "Wrong data!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -245,6 +269,16 @@
                     }
                 ],
                 "summary": "Get a user by id",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "p",
+                        "schema": {
+                            "type": "integer",
+                            "description": "Numeric ID of page"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Get customers successfully.",
@@ -317,11 +351,50 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Update user successfully"
+                    "201": {
+                        "description": "Update products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "400": {
+                        "description": "Wrong data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -360,11 +433,40 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Delete user successfully"
+                    "201": {
+                        "description": "Update products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -382,13 +484,49 @@
                 "summary": "Add a new employee into system",
                 "responses": {
                     "201": {
-                        "description": "Create new employee succesfully"
+                        "description": "ADD employee successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Employees"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request error"
+                        "description": "Wrong data!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -421,6 +559,16 @@
                 "security": [
                     {
                         "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "p",
+                        "schema": {
+                            "type": "integer",
+                            "description": "Numeric ID of page"
+                        }
                     }
                 ],
                 "summary": "Get a user by id",
@@ -491,16 +639,55 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "description": "Object Id of the user to get"
+                            "description": "Id of the user to get"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Update user successfully"
+                    "201": {
+                        "description": "Update employee successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "400": {
+                        "description": "Wrong data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -548,11 +735,40 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Delete user successfully"
+                    "201": {
+                        "description": "Delete employee successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -714,13 +930,13 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "description": "Object Id of the user to get"
+                            "description": "Id of the user to get"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "Get products successfully.",
+                        "description": "Update products successfully.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1788,16 +2004,11 @@
                 "description": "",
                 "type": "object",
                 "required": [
-                    "id",
                     "username",
                     "password",
-                    "employeeNumber"
+                    "isEmployee"
                 ],
                 "properties": {
-                    "id": {
-                        "type": "string",
-                        "description": "Primary Key of the table"
-                    },
                     "username": {
                         "type": "string",
                         "minLength": 3,
@@ -1813,8 +2024,14 @@
                     },
                     "employeeNumber": {
                         "type": "number",
-                        "minimum": 1,
-                        "nullable": false
+                        "minimum": 1
+                    },
+                    "customerNumber": {
+                        "type": "number",
+                        "minimum": 1
+                    },
+                    "isEmployee": {
+                        "type": "boolean"
                     }
                 }
             },

@@ -54,11 +54,11 @@ paths:
                             items:
                                 "$ref": "#/components/schemas/Users"
                         example:
-                            user:
-                                value:
-                                    username: LocNH12
-                                    password: 1234a@
-                                    employeeNumber: 1
+                            username: newcus123
+                            password: 123
+                            isEmployee: false
+                            customerNumber: 103
+                            employeeNumber: null
     "/users/login":
         post:
             tags:
@@ -79,13 +79,7 @@ paths:
                                     token:
                                         type: string
                 "400":
-                    description: User account not found
-                    content:
-                        application/json:
-                            schema:
-                                "$ref": "#/components/schemas/Error"
-                "401":
-                    description: Account or password are incorrect
+                    description: 'Username or Password is invalid'
                     content:
                         application/json:
                             schema:
@@ -117,12 +111,33 @@ paths:
                 - bearerAuth: []
             summary: Add a new customer into system
             responses:
-                "201":
-                    description: Create new customer succesfully
-                "400":
-                    description: Bad request error
-                "403":
-                    description: User authorization privileges issues
+                201:
+                    description: ADD customers successfully.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: 
+                                        $ref: '#/components/schemas/Customers'
+                401:
+                    description: Not authorired
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                400:
+                    description: Wrong data!
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                500:
+                    description: Failed
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
             requestBody:
                 content:
                     application/json:
@@ -149,6 +164,12 @@ paths:
             security:
                 - bearerAuth: []
             summary: Get a user by id
+            parameters:
+                - in: query
+                  name: p
+                  schema:
+                      type: integer
+                      description: Numeric ID of page
             responses:
                 200:
                     description: Get customers successfully.
@@ -192,10 +213,33 @@ paths:
                       type: string
                       description: Object Id of the user to get
             responses:
-                "200":
-                    description: Update user successfully
-                "403":
-                    description: User authorization privileges issues
+                201:
+                    description: Update products successfully.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: 
+                                        type: string
+                401:
+                    description: Not authorired
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                400:
+                    description: Wrong data
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                500:
+                    description: Failed
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'      
             requestBody:
                 content:
                     application/json:
@@ -218,10 +262,27 @@ paths:
                       type: string
                       description: Object Id of the user to get
             responses:
-                "200":
-                    description: Delete user successfully
-                "403":
-                    description: User authorization privileges issues
+                201:
+                    description: Update products successfully.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: 
+                                        type: string
+                401:
+                    description: Not authorired
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                500:
+                    description: Failed
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'   
     "/employees":
         post:
             tags:
@@ -230,12 +291,33 @@ paths:
                 - bearerAuth: []
             summary: Add a new employee into system
             responses:
-                "201":
-                    description: Create new employee succesfully
-                "400":
-                    description: Bad request error
-                "403":
-                    description: User authorization privileges issues
+                201:
+                    description: ADD employee successfully.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: 
+                                        $ref: '#/components/schemas/Employees'
+                401:
+                    description: Not authorired
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                400:
+                    description: Wrong data!
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                500:
+                    description: Failed
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
             requestBody:
                 content:
                     application/json:
@@ -257,6 +339,12 @@ paths:
                 - Employees
             security:
                 - bearerAuth: []
+            parameters:
+                - in: query
+                  name: p
+                  schema:
+                      type: integer
+                      description: Numeric ID of page
             summary: Get a user by id
             responses:
                 200:
@@ -299,12 +387,35 @@ paths:
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the user to get
+                      description: Id of the user to get
             responses:
-                "200":
-                    description: Update user successfully
-                "403":
-                    description: User authorization privileges issues
+                201:
+                    description: Update employee successfully.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: 
+                                        type: string
+                401:
+                    description: Not authorired
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                400:
+                    description: Wrong data
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                500:
+                    description: Failed
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'   
             requestBody:
                 content:
                     application/json:
@@ -335,10 +446,27 @@ paths:
                       type: string
                       description: Object Id of the user to get
             responses:
-                "200":
-                    description: Delete user successfully
-                "403":
-                    description: User authorization privileges issues
+                201:
+                    description: Delete employee successfully.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: 
+                                        type: string
+                401:
+                    description: Not authorired
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                500:
+                    description: Failed
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'   
     "/product-lines":
         post:
             tags:
@@ -435,10 +563,10 @@ paths:
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the user to get
+                      description: Id of the user to get
             responses:
                 201:
-                    description: Get products successfully.
+                    description: Update products successfully.
                     content:
                         application/json:
                             schema:
@@ -1074,14 +1202,10 @@ components:
             description: ""
             type: object
             required:
-                - id
                 - username
                 - password
-                - employeeNumber
+                - isEmployee
             properties:
-                id:
-                    type: string
-                    description: Primary Key of the table
                 username:
                     type: string
                     minLength: 3
@@ -1096,7 +1220,11 @@ components:
                 employeeNumber:
                     type: number
                     minimum: 1
-                    nullable: false
+                customerNumber:
+                    type: number
+                    minimum: 1
+                isEmployee:
+                    type: boolean
         Customers:
             description: ""
             type: object
