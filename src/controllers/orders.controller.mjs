@@ -104,7 +104,7 @@ export const addOrder = async (req, res, next) => {
             let queryFilter = { customerNumber: customerInstance.customerNumber, status: { [Op.not]: [ORDER_STATUS.SHIPPED, ORDER_STATUS.CANCELLED] }}
             
             // Find orders status != (CANCELLED & SHIPPED) 
-            let orderWithDetails = await Order.findAll({ where: queryFilter, include: [{model: OrderDetail, required: true, attributes: 
+            let orderWithDetails = await Order.findAll({ raw: true, where: queryFilter, include: [{model: OrderDetail, required: true, attributes: 
                 [
                     'quantityOrdered',
                     'priceEach',
@@ -115,8 +115,6 @@ export const addOrder = async (req, res, next) => {
             // calculate total payment
             let totalPayment = 0;
             for (let order of orderWithDetails) {
-                order = order.toJSON()
-
                 let payment = order.OrderDetails.reduce((prevValue, currentValue)=> {
                     prevValue = currentValue.TotalDetailPayment + prevValue;
 
@@ -187,7 +185,7 @@ export const updateOrder = async (req, res, next) => {
             return res.status(400).json({ message: 'Request body must have status field' })
         }
 
-        let orderInstance = await Order.findByPk(id, {transaction: t});
+        let orderInstance = await Order.findByPk(id, {transaction: t, raw: true});
 
         if (!orderInstance){
             return res.status(400).json({ message: 'Order not found' })
@@ -210,7 +208,7 @@ export const updateOrder = async (req, res, next) => {
         orderInstance.shippedDate = status == ORDER_STATUS.SHIPPED ? new Date().toDateString() : orderInstance.shippedDate;
         orderInstance.comments = comments ? comments : orderInstance.comments;
 
-        let rowAffected = await Order.update(orderInstance.toJSON(), {where: { orderNumber: orderInstance.orderNumber, }, transaction: t})
+        let rowAffected = await Order.update(orderInstance, {where: { orderNumber: orderInstance.orderNumber, }, transaction: t})
         
         await t.commit()
         return res.status(200).json({ message: `Update ${rowAffected} order successfully` })

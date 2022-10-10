@@ -7,45 +7,51 @@ const { Order } = sequelize.models;
 
 // schedule jobs every 5 minute > all orders which have status not canceled or shipped >
 // updated date is over 30 days, system automatically change status to ‘on-hold’
-const task = cron.schedule('*/5 * * * *', async () =>  {
-    console.log('Start task every minute');
+const checkOrderStatusScheduler = cron.schedule('*/5 * * * *', async () =>  {
+    console.log('----Check order cancelled or shipped every 5 minute---');
 
     try {
-        // Chưa xong code
+        let queryFilter = { status: { [Op.not]: [ORDER_STATUS.SHIPPED, ORDER_STATUS.CANCELLED]} };
+
+        let currentOrders =  await Order.findAll({where: queryFilter, raw: true, attributes: ['updatedAt', 'orderNumber']});
         
-        // let queryFilter = { status: { [Op.not]: [ORDER_STATUS.SHIPPED, ORDER_STATUS.CANCELLED]} };
-
-        // let currentOrders =  await Order.findAll({where: queryFilter});
+        const currentDate = new Date();
         
-        // const currentDate = new Date();
+        let updatedOrders = []
+        for (let order of currentOrders) {
+            const orderDate = new Date(order.updatedAt)
 
-        // for (let order of currentOrders) {
-        //     order = order.toJSON();
+            const timeDifference = Math.abs(currentDate - orderDate);
+            const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
-        //     const orderDate = new Date(order.updateAt)
+            if (dayDifference > 30){
+                console.log('1 order is oudated');
+                updatedOrders.push(order.orderNumber)
+            }
+        }
 
-        //     const timeDifference = Math.abs(currentDate - orderDate);
-        //     const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        let rowAffected = await Order.update({
+            status: ORDER_STATUS.ON_HOLD
+        }, {where: {
+            orderNumber: updatedOrders
+        }})
 
-        //     if (dayDifference > 30){
-        //         console.log('1 order is oudated');
-        //         order = Object.assign(order, {
-        //             status: ORDER_STATUS.ON_HOLD,
-        //         })
-        //     }
-        // }
-        
-
-        // console.log(currentOrders);
+        if (rowAffected != 0){
+            console.log(`Updated successfully ${rowAffected} records`);
+            console.log(updatedOrders);
+        }
+        else {
+            console.log('No order is over due');
+        }
+        console.log('---Task end---');
 
     } catch (error) {
         console.log(error);
     }
-
   }, {
     scheduled: false
 });
 
-export default task;
+export default checkOrderStatusScheduler;
 
 
