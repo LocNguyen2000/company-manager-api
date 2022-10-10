@@ -1326,10 +1326,7 @@
                                             "type": "string"
                                         },
                                         "orders": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Orders"
-                                            }
+                                            "$ref": "#/components/schemas/Orders"
                                         },
                                         "details": {
                                             "type": "array",

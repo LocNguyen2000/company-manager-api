@@ -801,15 +801,13 @@ paths:
                                     message: 
                                         type: string
                                     orders:
-                                        type: array
-                                        items:
-                                            $ref: '#/components/schemas/Orders'
+                                        $ref: '#/components/schemas/Orders'
                                     details:
                                         type: array
                                         items:
                                             $ref: '#/components/schemas/OrderDetails'
                                     payment:
-                                            $ref: '#/components/schemas/Payments'
+                                        $ref: '#/components/schemas/Payments'
                 401:
                     description: Not authorired
                     content:
