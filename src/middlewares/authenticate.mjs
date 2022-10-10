@@ -23,7 +23,7 @@ export function verifyToken(req, res, next) {
 export function isAccess(...roles) {
   return (req, res, next) => {
     if (!roles.includes(req.role)) {
-      res.json({
+      res.status(401).json({
         success: false,
         message: 'You do not have permission to access',
       });

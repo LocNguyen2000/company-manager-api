@@ -1,7 +1,6 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
 import sequelize from '../../config/database.mjs';
-import { ROLE } from '../../config/variables.mjs';
 import { mockProduct, mockProductQuery } from '../mocks/productData.mjs';
 import { getProduct, addProduct, updateProduct, deleteProduct } from '../../controllers/product.controller.mjs'
 let mockRequest, mockResponse, mockNext;
