@@ -285,7 +285,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CustomersObj"
+                                    "$ref": "#/components/schemas/CustomersQuery"
                                 }
                             }
                         }
@@ -589,7 +589,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/EmployeesObj"
+                                    "$ref": "#/components/schemas/EmployeesQuery"
                                 }
                             }
                         }
@@ -880,7 +880,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ProductLinesObj"
+                                    "$ref": "#/components/schemas/ProductLinesQuery"
                                 }
                             }
                         }
@@ -1171,7 +1171,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ProductsObj"
+                                    "$ref": "#/components/schemas/ProductsQuery"
                                 }
                             }
                         }
@@ -1495,7 +1495,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/components/schemas/OrdersObj"
+                                            "$ref": "#/components/schemas/OrdersQuery"
                                         }
                                     }
                                 }
@@ -1638,7 +1638,7 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "description": "Object Id of the user to get"
+                            "description": "Queryect Id of the user to get"
                         }
                     }
                 ],
@@ -1783,7 +1783,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/LogsObj"
+                                    "$ref": "#/components/schemas/LogsQuery"
                                 }
                             }
                         }
@@ -1839,7 +1839,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/LogsObj"
+                                    "$ref": "#/components/schemas/LogsQuery"
                                 }
                             }
                         }
@@ -1984,7 +1984,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/OfficesObj"
+                                    "$ref": "#/components/schemas/OfficesQuery"
                                 }
                             }
                         }
@@ -2595,101 +2595,6 @@
                     }
                 }
             },
-            "ProductLinesObj": {
-                "description": "",
-                "type": "object",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "properties": {
-                            "count": {
-                                "type": "integer",
-                                "format": "int32"
-                            },
-                            "rows": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/ProductLines"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "ProductsObj": {
-                "description": "",
-                "type": "object",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "properties": {
-                            "count": {
-                                "type": "integer",
-                                "format": "int32"
-                            },
-                            "rows": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/Products"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "EmployeesObj": {
-                "description": "",
-                "type": "object",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "properties": {
-                            "count": {
-                                "type": "integer",
-                                "format": "int32"
-                            },
-                            "rows": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/Employees"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "Error": {
-                "type": "object",
-                "required": [
-                    "status",
-                    "message"
-                ],
-                "properties": {
-                    "status": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "LogsObj": {
-                "type": "object",
-                "description": "",
-                "properties": {
-                    "count": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "rows": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Logs"
-                        }
-                    }
-                }
-            },
             "Orders": {
                 "description": "",
                 "type": "object",
@@ -2725,7 +2630,86 @@
                     }
                 }
             },
-            "OrdersObj": {
+            "ProductLinesQuery": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProductLines"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ProductsQuery": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Products"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "EmployeesQuery": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Employees"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "LogsQuery": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "rows": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Logs"
+                        }
+                    }
+                }
+            },
+            "OrdersQuery": {
                 "description": "",
                 "type": "object",
                 "properties": {
@@ -2746,7 +2730,7 @@
                     }
                 }
             },
-            "CustomersObj": {
+            "CustomersQuery": {
                 "description": "",
                 "type": "object",
                 "properties": {
@@ -2767,7 +2751,7 @@
                     }
                 }
             },
-            "OfficesObj": {
+            "OfficesQuery": {
                 "description": "",
                 "type": "object",
                 "properties": {
@@ -2785,6 +2769,22 @@
                                 }
                             }
                         }
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "required": [
+                    "status",
+                    "message"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
                     }
                 }
             }
