@@ -183,27 +183,27 @@
 							"query": [
 								{
 									"key": "firstName",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "lastName",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "email",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "jobTitle",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "role",
-									"value": null,
+									"value": "",
 									"disabled": true
 								}
 							]
@@ -658,15 +658,15 @@
 							"query": [
 								{
 									"key": "city",
-									"value": null
+									"value": ""
 								},
 								{
 									"key": "phone",
-									"value": null
+									"value": ""
 								},
 								{
 									"key": "country",
-									"value": null
+									"value": ""
 								}
 							]
 						}
@@ -757,7 +757,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{LOCAL_API}}/orders?customerNumber=103",
+							"raw": "{{LOCAL_API}}/orders?orderNumber=10434",
 							"host": [
 								"{{LOCAL_API}}"
 							],
@@ -766,8 +766,8 @@
 							],
 							"query": [
 								{
-									"key": "customerNumber",
-									"value": "103"
+									"key": "orderNumber",
+									"value": "10434"
 								}
 							]
 						}
@@ -781,7 +781,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"order\": {\r\n        \"orderNumber\": 10426,\r\n        \"orderDate\": \"2004-09-27T00:00:00.000Z\",\r\n        \"requiredDate\": \"2004-10-05T00:00:00.000Z\",\r\n        \"shippedDate\": null,\r\n        \"status\": \"In Process\",\r\n        \"comments\": \"Nguyen Huu Loc order\",\r\n        \"customerNumber\": 103\r\n    },\r\n    \"details\": [\r\n        {\r\n            \"productCode\": \"S24_2022\",\r\n            \"quantityOrdered\": 43,\r\n            \"priceEach\": 38.98,\r\n            \"orderLineNumber\": 1\r\n        }\r\n    ],\r\n    \"payment\": {\r\n        \"customerNumber\": 103,\r\n        \"checkNumber\": \"HQ336338\",\r\n        \"amount\": 123.01\r\n    }\r\n}",
+							"raw": "{\r\n    \"order\": {\r\n        \"orderNumber\": 10435,\r\n        \"orderDate\": \"2004-09-27T00:00:00.000Z\",\r\n        \"requiredDate\": \"2004-10-05T00:00:00.000Z\",\r\n        \"shippedDate\": null,\r\n        \"status\": \"In Process\",\r\n        \"comments\": \"Nguyen Huu Loc order\",\r\n        \"customerNumber\": 103\r\n    },\r\n    \"details\": [\r\n        {\r\n            \"productCode\": \"S24_2022\",\r\n            \"quantityOrdered\": 43,\r\n            \"priceEach\": 38.98,\r\n            \"orderLineNumber\": 1\r\n        }\r\n    ],\r\n    \"payment\": {\r\n        \"customerNumber\": 103,\r\n        \"amount\": 123.01\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -833,14 +833,24 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{LOCAL_API}}/orders/10123",
+							"raw": "{{LOCAL_API}}/orders/10434?comments=order error",
 							"host": [
 								"{{LOCAL_API}}"
 							],
 							"path": [
 								"orders",
-								"10123"
+								"10434"
+							],
+							"query": [
+								{
+									"key": "comments",
+									"value": "order error"
+								}
 							]
 						}
 					},
