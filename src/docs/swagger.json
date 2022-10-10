@@ -5,8 +5,11 @@
         "version": "0.0.1",
         "description": "NodeJS Express Sequelize API Documentation"
     },
-    "host": "http://localhost:4000",
-    "basePath": "/",
+    "servers": [
+        {
+            "url": "http://localhost:4000"
+        }
+    ],
     "tags": [
         {
             "name": "Users",
@@ -19,6 +22,26 @@
         {
             "name": "Employees",
             "description": "CRUD for employees in the system"
+        },
+        {
+            "name": "ProductLines",
+            "description": "CRUD for productlines in the system"
+        },
+        {
+            "name": "Products",
+            "description": "CRUD for products in the system"
+        },
+        {
+            "name": "Orders",
+            "description": "CRUD for orders in the system"
+        },
+        {
+            "name": "Offices",
+            "description": "CRUD for offices in the system"
+        },
+        {
+            "name": "Logs",
+            "description": "CRUD for logs in the system"
         }
     ],
     "paths": {
@@ -30,10 +53,32 @@
                 "summary": "Add a new user in the system",
                 "responses": {
                     "200": {
-                        "description": "Register successfully"
+                        "description": "Register successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Users"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Server error. Contact developers to resolve issues"
+                        "description": "Server error. Contact developers to resolve issues",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -41,18 +86,16 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "item": {
+                                "items": {
                                     "$ref": "#/components/schemas/Users"
                                 }
                             },
-                            "examples": {
-                                "user": {
-                                    "value": {
-                                        "username": "LocNH12",
-                                        "password": "1234a@",
-                                        "employeeNumber": 1
-                                    }
-                                }
+                            "example": {
+                                "username": "newcus123",
+                                "password": 123,
+                                "isEmployee": false,
+                                "customerNumber": 103,
+                                "employeeNumber": null
                             }
                         }
                     }
@@ -67,16 +110,45 @@
                 "summary": "Authenticate and authorize a user into system",
                 "responses": {
                     "200": {
-                        "description": "Login successfully. Return a token"
+                        "description": "Login successfully. Return a token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "User account not found"
-                    },
-                    "401": {
-                        "description": "Account or password are incorrect"
+                        "description": "Username or Password is invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Server error. Contact developers to resolve issues"
+                        "description": "Server error. Contact developers to resolve issues",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -84,17 +156,17 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "item": {
-                                    "$ref": "#/components/schemas/Users"
-                                }
-                            },
-                            "examples": {
-                                "user": {
-                                    "value": {
-                                        "username": "LocNH12",
-                                        "password": "123456",
-                                        "employeeNumber": 1
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
                                     }
+                                },
+                                "example": {
+                                    "username": "newEm",
+                                    "password": "123"
                                 }
                             }
                         }
@@ -109,19 +181,55 @@
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
                 "summary": "Add a new customer into system",
                 "responses": {
                     "201": {
-                        "description": "Create new customer succesfully"
-                    },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                        "description": "ADD customers successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Customers"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request error"
+                        "description": "Wrong data!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -129,11 +237,11 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "item": {
+                                "items": {
                                     "$ref": "#/components/schemas/Customers"
                                 }
                             },
-                            "example":{
+                            "example": {
                                 "customerNumber": 1,
                                 "customerName": "Nguyen Van A",
                                 "contactLastName": "Nguyen",
@@ -146,71 +254,147 @@
                                 "postalCode": "12345",
                                 "country": "Viet Nam",
                                 "salesRepEmployeeNumber": 1
-                              }
+                            }
                         }
                     }
                 }
-            }
-        },
-        "/customers/{id}": {
+            },
             "get": {
                 "tags": [
                     "Customers"
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
                 "summary": "Get a user by id",
                 "parameters": [
-                    {   
-                        "in": "path",
-                        "name": "id",
+                    {
+                        "in": "query",
+                        "name": "p",
                         "schema": {
-                            "type": "string",
-                            "required": true,
-                            "description": "Object Id of the user to get"
+                            "type": "integer",
+                            "description": "Numeric ID of page"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Get user successfully. Return customer data"
+                        "description": "Get customers successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomersObj"
+                                }
+                            }
+                        }
                     },
                     "204": {
-                        "description": "Customer not found"
+                        "description": "Not found products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
-            },
+            }
+        },
+        "/customers/{id}": {
             "put": {
                 "tags": [
                     "Customers"
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
                 "summary": "Update a user by id",
-                "parameters": [{
-                    "in": "path",
-                    "name": "id",
-                    "schema": {
-                        "type": "ObjectId",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
                         "required": true,
-                        "description": "Object Id of the user to get"
+                        "schema": {
+                            "type": "string",
+                            "description": "Object Id of the user to get"
+                        }
                     }
-                }],
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Update user successfully"
+                    "201": {
+                        "description": "Update products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "400": {
+                        "description": "Wrong data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -218,13 +402,11 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "item": {
+                                "items": {
                                     "$ref": "#/components/schemas/Customers"
                                 }
                             },
-                            "example":{
-
-                            }
+                            "example": {}
                         }
                     }
                 }
@@ -235,25 +417,56 @@
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
                 "summary": "Delete a user by id",
-                "parameters": [{
-                    "in": "path",
-                    "name": "id",
-                    "schema": {
-                        "type": "ObjectId",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
                         "required": true,
-                        "description": "Object Id of the user to get"
+                        "schema": {
+                            "type": "string",
+                            "description": "Object Id of the user to get"
+                        }
                     }
-                }],
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Delete user successfully"
+                    "201": {
+                        "description": "Update products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -265,19 +478,55 @@
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
                 "summary": "Add a new employee into system",
                 "responses": {
                     "201": {
-                        "description": "Create new employee succesfully"
-                    },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                        "description": "ADD employee successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Employees"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad request error"
+                        "description": "Wrong data!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -285,11 +534,11 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "item": {
+                                "items": {
                                     "$ref": "#/components/schemas/Employees"
                                 }
                             },
-                            "example":{
+                            "example": {
                                 "employeeNumber": 6,
                                 "lastName": "Nguyen",
                                 "firstName": "Loc",
@@ -302,67 +551,143 @@
                         }
                     }
                 }
-            }
-        },
-        "/employees/{id}": {
+            },
             "get": {
                 "tags": [
                     "Employees"
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
-                "summary": "Get a user by id",
                 "parameters": [
                     {
-                        "in": "path",
-                        "name": "id",
+                        "in": "query",
+                        "name": "p",
                         "schema": {
-                            "type": "string",
-                            "required": true,
-                            "description": "Object Id of the user to get"
+                            "type": "integer",
+                            "description": "Numeric ID of page"
                         }
                     }
                 ],
+                "summary": "Get a user by id",
                 "responses": {
                     "200": {
-                        "description": "Get user successfully. Return customer data"
+                        "description": "Get employees successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmployeesObj"
+                                }
+                            }
+                        }
                     },
                     "204": {
-                        "description": "Customer not found"
+                        "description": "Not found products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
-            },
+            }
+        },
+        "/employees/{id}": {
             "put": {
                 "tags": [
                     "Employees"
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
                 "summary": "Update a user by id",
-                "parameters": [{
-                    "in": "path",
-                    "name": "id",
-                    "schema": {
-                        "type": "string",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
                         "required": true,
-                        "description": "Object Id of the user to get"
+                        "schema": {
+                            "type": "string",
+                            "description": "Id of the user to get"
+                        }
                     }
-                }],
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Update user successfully"
+                    "201": {
+                        "description": "Update employee successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "400": {
+                        "description": "Wrong data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
@@ -370,11 +695,11 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "item": {
+                                "items": {
                                     "$ref": "#/components/schemas/Employees"
                                 }
                             },
-                            "example":{
+                            "example": {
                                 "employeeNumber": 1,
                                 "lastName": "Nguyen",
                                 "firstName": "Loc",
@@ -394,31 +719,1298 @@
                 ],
                 "security": [
                     {
-                      "bearerAuth": []
+                        "bearerAuth": []
                     }
                 ],
                 "summary": "Delete a user by id",
                 "parameters": [
                     {
-                    "in": "path",
-                    "name": "id",
-                    "schema": {
-                        "type": "string",
+                        "in": "path",
+                        "name": "id",
                         "required": true,
-                        "description": "Object Id of the user to get"
+                        "schema": {
+                            "type": "string",
+                            "description": "Object Id of the user to get"
+                        }
                     }
-                }],
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Delete employee successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product-lines": {
+            "post": {
+                "tags": [
+                    "ProductLines"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Add a new productslines into system",
+                "responses": {
+                    "201": {
+                        "description": "ADD productslines successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductLines"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong data!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProductLines"
+                                }
+                            },
+                            "example": {
+                                "productLine": 123,
+                                "textDescription": "super fasr and cheap"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "ProductLines"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Get productslines from system",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "p",
+                        "schema": {
+                            "type": "integer",
+                            "description": "Numeric ID of page"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Delete user successfully"
+                        "description": "Get productslines successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductLinesObj"
+                                }
+                            }
+                        }
                     },
-                    "403": {
-                        "description": "User authorization privileges issues"
+                    "204": {
+                        "description": "Not found productslines",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product-lines/{id}": {
+            "put": {
+                "tags": [
+                    "ProductLines"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Update productslines on system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id of the user to get"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Update products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ProductLines"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Delete productslines on system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id of the productlines to delete"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete productlines successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Add a new products into system",
+                "responses": {
+                    "201": {
+                        "description": "ADD productslines successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Products"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong data!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#/components/schemas/Products"
+                                }
+                            },
+                            "example": {}
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Get products from system",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "p",
+                        "schema": {
+                            "type": "integer",
+                            "description": "Numeric ID of page"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductsObj"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Not found products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Update a new products in system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Object Id of the user to get"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Products"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Delete a new products into system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id of the user to get"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Add a new productslines into system",
+                "responses": {
+                    "201": {
+                        "description": "Orders Information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "orders": {
+                                            "$ref": "#/components/schemas/Orders"
+                                        },
+                                        "details": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/OrderDetails"
+                                            }
+                                        },
+                                        "payment": {
+                                            "$ref": "#/components/schemas/Payments"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "order": {
+                                        "$ref": "#/components/schemas/Orders"
+                                    },
+                                    "details": {
+                                        "$ref": "#/components/schemas/OrderDetails"
+                                    },
+                                    "payment": {
+                                        "$ref": "#/components/schemas/Payments"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Get orders from system",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "p",
+                        "schema": {
+                            "type": "integer",
+                            "description": "Numeric ID of page"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get orders successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrdersObj"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Not found productslines",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}": {
+            "put": {
+                "tags": [
+                    "Orders"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Update a new productslines into system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id of the orders to update"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Orders"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Delete a new productslines into system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Object Id of the user to get"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/logs": {
+            "post": {
+                "tags": [
+                    "Logs"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Add a new logs into system",
+                "responses": {
+                    "201": {
+                        "description": "Create successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Logs"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Logs"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Get logs from system",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "p",
+                        "schema": {
+                            "type": "integer",
+                            "description": "Numeric ID of page"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "startAt",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "start date"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "endAt",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "end date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get productslines successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogsObj"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/logs/{id}": {
+            "put": {
+                "tags": [
+                    "Logs"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Update a logs in system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Object Id of the logs to update"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogsObj"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/offices": {
+            "post": {
+                "tags": [
+                    "Office"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Add a new offices into system",
+                "responses": {
+                    "201": {
+                        "description": "ADD office successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Products"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong data!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#/components/schemas/Offices"
+                                }
+                            },
+                            "example": {}
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Offices"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Get offices from system",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "p",
+                        "schema": {
+                            "type": "integer",
+                            "description": "Numeric ID of page"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get products successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OfficesObj"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Not found products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/offices/{id}": {
+            "put": {
+                "tags": [
+                    "Offices"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Update a offices in system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Object Id of the user to get"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update offices successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Offices"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Offices"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "summary": "Delete a offices in system",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Id of the user to get"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete office successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-
     },
     "components": {
         "schemas": {
@@ -426,16 +2018,11 @@
                 "description": "",
                 "type": "object",
                 "required": [
-                    "_id",
                     "username",
                     "password",
-                    "employeeNumber"
+                    "isEmployee"
                 ],
                 "properties": {
-                    "_id": {
-                        "type": "string",
-                        "description": "Primary Key of the table"
-                    },
                     "username": {
                         "type": "string",
                         "minLength": 3,
@@ -451,8 +2038,14 @@
                     },
                     "employeeNumber": {
                         "type": "number",
-                        "minimum": 1,
-                        "nullable": false
+                        "minimum": 1
+                    },
+                    "customerNumber": {
+                        "type": "number",
+                        "minimum": 1
+                    },
+                    "isEmployee": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -460,7 +2053,7 @@
                 "description": "",
                 "type": "object",
                 "required": [
-                    "_id",
+                    "-id",
                     "customerNumber",
                     "customerName",
                     "contactLastName",
@@ -472,7 +2065,7 @@
                     "saleRepEmployeeNumber"
                 ],
                 "properties": {
-                    "_id": {
+                    "id": {
                         "type": "string",
                         "description": "Primary Key of the table"
                     },
@@ -573,30 +2166,461 @@
                         "type": "string",
                         "description": "Primary Key of the table"
                     },
-                    "employeeNumber":{
+                    "employeeNumber": {
                         "type": "number"
                     },
-                    "lastName":{
+                    "lastName": {
                         "type": "string"
                     },
-                    "firstName":{
-                        "type": "string"
-                    } ,
-                    "extension":{
+                    "firstName": {
                         "type": "string"
                     },
-                    "email":{
+                    "extension": {
                         "type": "string"
                     },
-                    "officeCode":{
+                    "email": {
                         "type": "string"
                     },
-                    "reportsTo":{
+                    "officeCode": {
+                        "type": "string"
+                    },
+                    "reportsTo": {
                         "type": "number"
                     },
                     "jobTitle": {
                         "type": "string",
-                        "enum":[ "President", "Manager", "Leader", "Staff"]
+                        "enum": [
+                            "President",
+                            "Manager",
+                            "Leader",
+                            "Staff"
+                        ]
+                    }
+                }
+            },
+            "ProductLines": {
+                "description": "",
+                "type": "object",
+                "required": [
+                    "productLine"
+                ],
+                "properties": {
+                    "productLine": {
+                        "type": "string"
+                    },
+                    "textDescription": {
+                        "type": "string"
+                    },
+                    "htmlDescription": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Offices": {
+                "description": "",
+                "type": "object",
+                "required": [
+                    "officeCode",
+                    "city",
+                    "phone",
+                    "addressLine1",
+                    "state",
+                    "postalCode",
+                    "country",
+                    "territory"
+                ],
+                "properties": {
+                    "officeCode": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                    },
+                    "city": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 50
+                    },
+                    "phone": {
+                        "type": "string",
+                        "minLength": 8,
+                        "maxLength": 20
+                    },
+                    "addressLine1": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 50
+                    },
+                    "addressLine2": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 50
+                    },
+                    "state": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 50
+                    },
+                    "postalCode": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 15
+                    },
+                    "country": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 50
+                    },
+                    "territory": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 50
+                    }
+                }
+            },
+            "Logs": {
+                "description": "",
+                "type": "object",
+                "required": [
+                    "logLevel",
+                    "message"
+                ],
+                "properties": {
+                    "logLevel": {
+                        "type": "string",
+                        "enum": [
+                            "Error",
+                            "Warning",
+                            "Info"
+                        ]
+                    },
+                    "user": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Products": {
+                "description": "",
+                "type": "object",
+                "required": [
+                    "productCode",
+                    "productName",
+                    "productScale",
+                    "productVendor",
+                    "productDescription",
+                    "quantityInStock",
+                    "buyPrice",
+                    "MSRP"
+                ],
+                "properties": {
+                    "productCode": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 15,
+                        "nullable": false
+                    },
+                    "productName": {
+                        "type": "string",
+                        "minLength": 0,
+                        "maxLength": 70,
+                        "nullable": false
+                    },
+                    "productScale": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10,
+                        "nullable": false
+                    },
+                    "productVendor": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 50,
+                        "nullable": false
+                    },
+                    "productDescription": {
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "quantityInStock": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": false
+                    },
+                    "buyPrice": {
+                        "type": "number",
+                        "minimum": 0,
+                        "nullable": false
+                    }
+                }
+            },
+            "OrderDetails": {
+                "description": "",
+                "type": "object",
+                "required": [
+                    "orderNumber",
+                    "productCode",
+                    "quantityOrdered",
+                    "priceEach",
+                    "orderLineNumber"
+                ],
+                "properties": {
+                    "orderNumber": {
+                        "type": "integer",
+                        "format": "int32",
+                        "minimum": 0,
+                        "nullable": false
+                    },
+                    "productCode": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 15,
+                        "nullable": false
+                    },
+                    "quantityOrdered": {
+                        "type": "integer",
+                        "format": "int32",
+                        "minimum": 0,
+                        "nullable": false
+                    },
+                    "priceEach": {
+                        "type": "number",
+                        "minimum": 0,
+                        "nullable": false
+                    },
+                    "orderLineNumber": {
+                        "type": "integer",
+                        "format": "int32",
+                        "minimum": 0,
+                        "nullable": false
+                    }
+                }
+            },
+            "Payments": {
+                "description": "",
+                "type": "object",
+                "required": [
+                    "customerNumber",
+                    "checkNumber",
+                    "paymentDate",
+                    "amount"
+                ],
+                "properties": {
+                    "customerNumber": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": false
+                    },
+                    "checkNumber": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "nullable": false
+                    },
+                    "paymentDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "amount": {
+                        "type": "number",
+                        "nullable": false
+                    }
+                }
+            },
+            "ProductLinesObj": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ProductLines"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ProductsObj": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Products"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "EmployeesObj": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Employees"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "required": [
+                    "status",
+                    "message"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LogsObj": {
+                "type": "object",
+                "description": "",
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "rows": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Logs"
+                        }
+                    }
+                }
+            },
+            "Orders": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "orderNumber": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": false,
+                        "minimum": 1
+                    },
+                    "orderDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "requiredDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "shippedDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "status": {
+                        "type": "string",
+                        "format": "enum",
+                        "nullable": false,
+                        "minLength": 5,
+                        "maxLength": 15
+                    },
+                    "comments": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OrdersObj": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Orders"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "CustomersObj": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Customers"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "OfficesObj": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "rows": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Offices"
+                                }
+                            }
+                        }
                     }
                 }
             }
