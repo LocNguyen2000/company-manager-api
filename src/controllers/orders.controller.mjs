@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import { Op, or, ValidationError } from 'sequelize';
+import { Op, ValidationError } from 'sequelize';
 
 import sequelize from "../config/database.mjs";
 import { ORDER_STATUS, ROLE } from "../config/variables.mjs";
@@ -26,16 +26,26 @@ export const getOrder = async (req, res, next) => {
         }
         // role = staff > xem được order của customer của họ
         else if (req.role == ROLE.STAFF) {
-            let customersEmployee = await Customer.findAll({ where: { salesRepEmployeeNumber: req.employeeNumber } });
-            if (customersEmployee.length == 0) {
-                return req.status(204).json({ message: `You have no related customer's orders to check` })
+            let staffCustomerNumbers = await Customer.findAll({ where: { salesRepEmployeeNumber: req.employeeNumber }, attributes: ['customerNumber'], raw: true });
+            if (staffCustomerNumbers.length == 0) {
+                return res.status(204).json({ message: `You have no related customer's orders to check` })
             }
 
-            let customerNumbers = customersEmployee.map(customer => { return customer.customerNumber });
+            staffCustomerNumbers = staffCustomerNumbers.map(customer => {
+                return customer.customerNumber;
+            })
 
-            if (!queryFilter.customerNumber || !customerNumbers.includes(queryFilter.customerNumber)) {
-                return next(createError(401, 'Staff can only check their own customers orders'))
+            if (queryFilter.customerNumber) {
+                if (!staffCustomerNumbers.includes(parseInt(queryFilter.customerNumber))){
+                    return next(createError(401, 'Staff can only check their own customers orders'))
+                }
+
+                staffCustomerNumbers = [queryFilter.customerNumber];
             }
+
+            queryFilter = Object.assign(queryFilter, {
+                customerNumber: {[Op.or]: staffCustomerNumbers }
+            })
         }
         // role = leader, manager, president > xem mọi
         let orders = await Order.findAndCountAll({ where: queryFilter, offset: (page - 1) * 10, limit: 10, include: { model: OrderDetail } });
@@ -49,8 +59,15 @@ export const addOrder = async (req, res, next) => {
     const username = req.username
     let { order, details, payment } = req.body;
 
+    var t = await sequelize.transaction();
+
     try {
-        var t = await sequelize.transaction();
+        // CHECK ORDER NUMBER ĐÃ TỒN TẠI (gồm cả soft delete)
+        let isExistRecord = await Order.findByPk(order.orderNumber, { paranoid: false, transaction: t })
+
+        if (!!isExistRecord){
+            throw new ValidationError('This order number already exist')
+        }
 
         // Order
         let orderInstance = await Order.create(
@@ -72,6 +89,7 @@ export const addOrder = async (req, res, next) => {
         }
 
         payment = Object.assign(payment, {
+            checkNumber: orderInstance.orderNumber,
             customerNumber: customerInstance.customerNumber,
             paymentDate: new Date().toDateString(),
             updatedBy: username,
@@ -90,18 +108,24 @@ export const addOrder = async (req, res, next) => {
                 [
                     'quantityOrdered',
                     'priceEach',
-                    sequelize.literal('(Quantity * priceEach)'), 'TotalDetailPayment'] 
+                    [sequelize.literal('(quantityOrdered * priceEach)'), "TotalDetailPayment"],
+                ] 
             }] ,transaction: t})
 
             // calculate total payment
             let totalPayment = 0;
-            for (const order of orderWithDetails) {
-                
-                totalPayment += order.OrderDetail.reduce((prevValue, currentValue)=> {
+            for (let order of orderWithDetails) {
+                order = order.toJSON()
+
+                let payment = order.OrderDetails.reduce((prevValue, currentValue)=> {
                     prevValue = currentValue.TotalDetailPayment + prevValue;
+
                     return prevValue;
                 }, 0)
+
+                totalPayment += payment;
             }
+
             // check payment amount customer > credit limit
             if (totalPayment > customerInstance.creditLimit ){
                 throw new ValidationError('Customer total payment are higher than creditLimit')
@@ -156,9 +180,9 @@ export const updateOrder = async (req, res, next) => {
     const { id } = req.params;
     let { comments, status } = req.body;
     
-    try {
-        var t = await sequelize.transaction();
-        
+    var t = await sequelize.transaction();
+
+    try {        
         if (!status){
             return res.status(400).json({ message: 'Request body must have status field' })
         }
@@ -183,6 +207,7 @@ export const updateOrder = async (req, res, next) => {
             status,
             updatedBy: username
         })
+        orderInstance.shippedDate = status == ORDER_STATUS.SHIPPED ? new Date().toDateString() : orderInstance.shippedDate;
         orderInstance.comments = comments ? comments : orderInstance.comments;
 
         let rowAffected = await Order.update(orderInstance.toJSON(), {where: { orderNumber: orderInstance.orderNumber, }, transaction: t})
@@ -200,14 +225,14 @@ export const deleteOrder = async (req, res, next) => {
     const { id } = req.params;
     const { comments } = req.query;
 
-    try {
-        var t = await sequelize.transaction();
+    var t = await sequelize.transaction();
 
+    try {
         // find order and order details
         let orderInstance = await Order.findByPk(id, { include: { model: OrderDetail }, transaction: t });
 
         if (!orderInstance) {
-            return res.status(400).json({ message: 'Order not found' })
+            return next(createError(400, 'Order not found'))
         }
 
         // check status RESOLVE - ONHOLD - INPROCESS > được xóa
@@ -216,24 +241,23 @@ export const deleteOrder = async (req, res, next) => {
         }
 
         // // find payment of order
-        // ERROR: ko biet tim payment cua order nao
-        // let paymentOrder = await Payment.findOne({where: {customerNumber: order.customerNumber}, transaction: t});
-        // await paymentOrder.destroy({transaction: t})
+        let queryFilter = { checkNumber: orderInstance.orderNumber, customerNumber: orderInstance.customerNumber }
 
-        orderInstance = Object.assign(orderInstance, {
+        let paymentRowAffected = await Payment.destroy({ where: queryFilter, transaction: t });
+
+        orderInstance = Object.assign(orderInstance.toJSON(), {
             updatedBy: username,
             status: ORDER_STATUS.CANCELLED,
         })
         orderInstance.comments = comments ? comments : orderInstance.comments;
-
+        
         await Order.update(orderInstance,{ where: { orderNumber: orderInstance.orderNumber },transaction: t})
-
+        
         let orderRowAffected = await Order.destroy({ where: { orderNumber: orderInstance.orderNumber }, transaction: t })
         let detailRowsAffected = await OrderDetail.destroy({ where: { orderNumber: orderInstance.orderNumber }, transaction: t })
-
         await t.commit();
-
-        return res.status(200).json({ message: `Delete ${orderRowAffected} order and ${detailRowsAffected} details successfully` })
+        
+        return res.status(200).json({ message: `Delete ${orderRowAffected} order, ${paymentRowAffected} payment, ${detailRowsAffected} details successfully` })
     } catch (error) {
         await t.rollback()
         next(error);

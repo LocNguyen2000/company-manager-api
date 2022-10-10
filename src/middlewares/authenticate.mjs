@@ -7,7 +7,6 @@ export function verifyToken(req, res, next) {
   } else {
     try {
       const { data } = jwt.verify(token, config.secretKey);
-      console.log(data);
 
       req.username = data.username;
       req.employeeNumber = data.employeeNumber;
@@ -24,7 +23,7 @@ export function verifyToken(req, res, next) {
 export function isAccess(...roles) {
   return (req, res, next) => {
     if (!roles.includes(req.role)) {
-      res.json({
+      res.status(401).json({
         success: false,
         message: 'You do not have permission to access',
       });

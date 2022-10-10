@@ -31,9 +31,8 @@ export const getLog = async (req, res, next) => {
       { p: page } = req.query,
       { startAt, endAt } = req.query;
 
-    if(page) delete queryFilters.p
     page = page ? (page <= 0 ? 1 : page) : 1;
-
+    delete queryFilters.p
 
     if (startAt || endAt) {
       queryFilters['createdAt'] = {};
