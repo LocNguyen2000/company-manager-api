@@ -194,13 +194,13 @@ export const updateOrder = async (req, res, next) => {
 
     try {
         if (!status) {
-            return res.status(400).json({ message: 'Request body must have status field' })
+            throw new ValidationError('Request body must have status field')
         }
 
         let orderInstance = await Order.findByPk(id, { transaction: t, raw: true });
 
         if (!orderInstance) {
-            return res.status(400).json({ message: 'Order not found' })
+            throw new ValidationError('Order not found')
         }
 
         if ((orderInstance.status != ORDER_STATUS.IN_PROCESS || (status != ORDER_STATUS.DISPUTED &&
@@ -210,7 +210,7 @@ export const updateOrder = async (req, res, next) => {
             && ((orderInstance.status != ORDER_STATUS.DISPUTED) || (status != ORDER_STATUS.RESOLVED))
             && ((orderInstance.status != ORDER_STATUS.RESOLVED) || (status != ORDER_STATUS.SHIPPED))
         ) {
-            throw new Error(`Cannot update order from status ${orderInstance.status} to ${status}`)
+            throw new ValidationError(`Cannot update order from status ${orderInstance.status} to ${status}`)
         }
 
         orderInstance = Object.assign(orderInstance, {
@@ -227,7 +227,11 @@ export const updateOrder = async (req, res, next) => {
 
     } catch (error) {
         await t.rollback();
-        next(error);
+
+        if (error instanceof ValidationError) {
+            return next(createError(400, error.message));
+        }
+        return next(error);
     }
 };
 export const deleteOrder = async (req, res, next) => {

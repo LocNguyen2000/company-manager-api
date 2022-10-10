@@ -10,7 +10,7 @@ export const mockCustomer = {
     "postalCode": "WX1 6LT",
     "country": "UK",
     "salesRepEmployeeNumber": 1501,
-    "creditLimit": "92700.00",
+    "creditLimit": 92700.00,
 }
 export const mockCustomersQuery = {
     count: 0,

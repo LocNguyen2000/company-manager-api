@@ -1,4 +1,4 @@
-export const mockOrder = {
+export const mockOrderQuery = {
     "orderNumber": 10298,
     "orderDate": "2004-09-27T00:00:00.000Z",
     "requiredDate": "2004-10-05T00:00:00.000Z",
@@ -54,6 +54,11 @@ export const mockOrderRequest = {
     ],
     "payment": {
         "customerNumber": 103,
-        "amount": 123.01
+        "amount": 123.01,
+        "paymentDate": "2022-10-09T17:00:00.000Z",
+        "updatedBy": "LocNH12",
+        "createdBy": "LocNH12",
+        "updatedAt": "2022-10-10T03:50:29.570Z",
+        "createdAt": "2022-10-10T03:50:29.570Z"
     }
 }
