@@ -4,7 +4,7 @@ import { Op, ValidationError } from 'sequelize';
 import { addOrder, getOrder, updateOrder, deleteOrder } from '../../controllers/orders.controller.mjs'
 import sequelize from '../../config/database.mjs';
 import { mockCustomer } from '../mocks/customerData.mjs';
-import { mockOrder } from '../mocks/orderData.mjs';
+import { mockOrder, mockOrderRequest } from '../mocks/orderData.mjs';
 import { ORDER_STATUS, ROLE } from '../../config/variables.mjs';
 
 
@@ -121,10 +121,12 @@ describe('Order controller', () => {
     });
   });
   describe('post', () => {
+    let mockOrderResponse = []
+
     beforeEach(() => {
       mockRequest = {
         body: null,
-        username: null,
+        username: 'tester',
       };
       mockResponse = {
         status: jest.fn().mockReturnThis(),
@@ -136,21 +138,53 @@ describe('Order controller', () => {
         commit: jest.fn().mockResolvedValue(),
         rollback: jest.fn().mockResolvedValue(),
       };
+      mockOrderResponse = []
+
       sequelize.transaction = jest.fn().mockResolvedValue(mockTransaction);
 
-      Order.findByPk = jest.fn()
-      Order.findAll = jest.fn()
+      Order.findOrCreate = jest.fn()
       Customer.findByPk = jest.fn()
       Payment.create = jest.fn()
       Order.create = jest.fn()
-      OrderDetail.create = jest.fn()
+      OrderDetail.bulkCreate = jest.fn()
     });
     afterEach(() => {
       jest.clearAllMocks();
     });
-    test('success: Create employee successfully', async () => {
+    test('success: Create COD order', async () => {
+      mockRequest.body = mockOrderRequest;
+      mockOrder.status = ORDER_STATUS.COD;
+      mockOrderResponse.push(mockOrder, true)
+
+      Order.findOrCreate.mockResolvedValue(mockOrderResponse);
+      Customer.findByPk.mockResolvedValue(mockCustomer);
 
     });
+    test('error: Exist record with this order number', async () => {
+      mockRequest.body = mockOrderRequest;
+      mockOrderResponse.push({}, false)
+
+      Order.findOrCreate.mockResolvedValue(mockOrderResponse);
+
+      await addOrder(mockRequest, mockResponse, mockNext);
+
+      let error = new ValidationError('This order number already exist')
+      expect(mockNext).toHaveBeenCalledWith(createError(400, error.message));
+    });
+
+    test('error: Order status flow error', async () => {
+      mockRequest.body = mockOrderRequest;
+      mockOrder.status = ORDER_STATUS.DISPUTED;
+      mockOrderResponse.push(mockOrder, true)
+
+      Order.findOrCreate.mockResolvedValue(mockOrderResponse);
+
+      await addOrder(mockRequest, mockResponse, mockNext);
+
+      let error = new ValidationError('New order status must be In-Process or COD')
+      expect(mockNext).toHaveBeenCalledWith(createError(400, error.message));
+    });
+
     // test('error: with status 400', async () => {
     // });
     // test('error: Server error fail', async () => {
@@ -257,9 +291,9 @@ describe('Order controller', () => {
       mockOrder.comments = "Change order status to disputed";
 
       Order.findByPk.mockResolvedValue(mockOrder);
-      
+
       await deleteOrder(mockRequest, mockResponse, mockNext);
-      
+
       let error = createError(400, 'Cannot delete in current order status')
       expect(mockNext).toHaveBeenCalledWith(error)
     });

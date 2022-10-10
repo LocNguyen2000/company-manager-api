@@ -1,5 +1,4 @@
 export const mockOrder = {
-    toJSON: () => {},
     "orderNumber": 10298,
     "orderDate": "2004-09-27T00:00:00.000Z",
     "requiredDate": "2004-10-05T00:00:00.000Z",
@@ -33,4 +32,28 @@ export const mockOrder = {
             "deleted": null
         }
     ]
+}
+
+export const mockOrderRequest = {
+    "order": {
+        "orderNumber": 10434,
+        "orderDate": "2004-09-27T00:00:00.000Z",
+        "requiredDate": "2004-10-05T00:00:00.000Z",
+        "shippedDate": null,
+        "status": "COD",
+        "comments": "Nguyen Huu Loc order",
+        "customerNumber": 103
+    },
+    "details": [
+        {
+            "productCode": "S24_2022",
+            "quantityOrdered": 43,
+            "priceEach": 38.98,
+            "orderLineNumber": 1
+        }
+    ],
+    "payment": {
+        "customerNumber": 103,
+        "amount": 123.01
+    }
 }

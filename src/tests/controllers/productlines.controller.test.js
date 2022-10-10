@@ -14,7 +14,7 @@ describe('ProductLine controller', () => {
         beforeEach(() => {
             mockRequest = {
                 query: {
-                    p: 1
+                    p: null
                 }
             }
             mockResponse = {
@@ -29,6 +29,7 @@ describe('ProductLine controller', () => {
             jest.clearAllMocks()
         })
         test('success: productlines with status 200', async () => {
+            mockRequest.query.p = null
             mockProductLinesQuery.rows.push(mockProductLine);
             mockProductLinesQuery.count = mockProductLinesQuery.rows.length;
             
@@ -40,6 +41,7 @@ describe('ProductLine controller', () => {
             expect(result.json.mock.calls[0][0]).toEqual({data: mockProductLinesQuery})
         })
         test('error: not found productlines', async () => {
+            mockRequest.query.p = -1
             mockProductLinesQuery.rows = []
             mockProductLinesQuery.count = 0;
 
@@ -102,7 +104,7 @@ describe('ProductLine controller', () => {
         test('error: server fail with status 500', async () => {
             mockRequest.body = mockProductLine;
 
-            let error = new Error('Server Error')
+            let error = new Error('Server error fail')
             ProductLine.create.mockRejectedValue(error);
 
             await addProductLine(mockRequest, mockResponse, mockNext);
