@@ -5,12 +5,12 @@ import { addOrder, getOrder, updateOrder, deleteOrder } from '../../controllers/
 import sequelize from '../../config/database.mjs';
 import { mockCustomer } from '../mocks/customerData.mjs';
 import { mockOrder } from '../mocks/orderData.mjs';
-import { ROLE } from '../../config/variables.mjs';
+import { ORDER_STATUS, ROLE } from '../../config/variables.mjs';
 
 
 let mockRequest, mockResponse, mockNext, mockTransaction;
 
-const { Order, OrderDetail, Payment, Customer } = sequelize.models;
+const { Order, OrderDetail, Payment, Customer, Product } = sequelize.models;
 
 describe('Order controller', () => {
   describe('get', () => {
@@ -120,33 +120,46 @@ describe('Order controller', () => {
       expect(mockNext.mock.calls[0][0]).toEqual(error);
     });
   });
-  //    describe('post', () => {
-  //      beforeEach(() => {
-  //        mockRequest = {
-  //          body: null,
-  //          username: null,
-  //        };
-  //        mockResponse = {
-  //          status: jest.fn().mockReturnThis(),
-  //          json: jest.fn().mockReturnThis(),
-  //        };
-  //        mockNext = jest.fn();
-  //      });
-  //      afterEach(() => {
-  //        jest.clearAllMocks();
-  //      });
-  //      test('success: Create employee successfully', async () => {
+  describe('post', () => {
+    beforeEach(() => {
+      mockRequest = {
+        body: null,
+        username: null,
+      };
+      mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      };
+      mockNext = jest.fn();
 
-  //      });
-  //      test('error: with status 400', async () => {
-  //      });
-  //      test('error: Server error fail', async () => {
-  //        // trả về lỗi
-  //        let error = new Error('Server error fail');
+      mockTransaction = {
+        commit: jest.fn().mockResolvedValue(),
+        rollback: jest.fn().mockResolvedValue(),
+      };
+      sequelize.transaction = jest.fn().mockResolvedValue(mockTransaction);
 
-  //        expect(mockNext.mock.calls[0][0]).toEqual(error);
-  //      });
-  //    });
+      Order.findByPk = jest.fn()
+      Order.findAll = jest.fn()
+      Customer.findByPk = jest.fn()
+      Payment.create = jest.fn()
+      Order.create = jest.fn()
+      OrderDetail.create = jest.fn()
+    });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+    test('success: Create employee successfully', async () => {
+
+    });
+    // test('error: with status 400', async () => {
+    // });
+    // test('error: Server error fail', async () => {
+    //   // trả về lỗi
+    //   let error = new Error('Server error fail');
+
+    //   expect(mockNext.mock.calls[0][0]).toEqual(error);
+    // });
+  });
   //    describe('put', () => {
   //      beforeEach(() => {
   //        mockRequest = {
@@ -178,38 +191,89 @@ describe('Order controller', () => {
   //      test('error: create fail with status 400', async () => {
   //      });
   //    });
-  //    describe('delete', () => {
-  //      beforeEach(() => {
-  //        mockRequest = {
-  //          officeCode: null,
-  //          params: {
-  //            id: null,
-  //          },
-  //        };
-  //        mockResponse = {
-  //          status: jest.fn().mockReturnThis(),
-  //          json: jest.fn().mockReturnThis(),
-  //        };
-  //        mockNext = jest.fn();
+  describe('delete', () => {
+    beforeEach(() => {
+      mockRequest = {
+        username: 'tester',
+        query: {
+          comments: null,
+        },
+        params: {
+          id: null,
+        },
+      };
+      mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      };
+      mockNext = jest.fn();
 
-  //        mockTransaction = {
-  //          commit: jest.fn(),
-  //          rollback: jest.fn(),
-  //        };
-  //        sequelize.transaction = jest.fn().mockResolvedValue(mockTransaction);
+      mockTransaction = {
+        commit: jest.fn().mockResolvedValue(),
+        rollback: jest.fn().mockResolvedValue(),
+      };
+      sequelize.transaction = jest.fn().mockResolvedValue(mockTransaction);
 
-  //      });
-  //      afterEach(() => {
-  //        jest.clearAllMocks();
-  //      });
-  //      test('success: Delete successfully', async () => {
-  //      });
-  //      test('error: Server error fail', async () => {
-  //        let error = new Error('Server error fail')
+      Order.findByPk = jest.fn()
+      Order.update = jest.fn()
+      Payment.destroy = jest.fn()
+      Order.destroy = jest.fn()
+      OrderDetail.destroy = jest.fn()
 
-  //        expect(mockNext.mock.calls[0][0]).toEqual( error);
-  //      });
-  //    });
+    });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+    test('success: Delete successfully', async () => {
+      mockOrder.status = ORDER_STATUS.IN_PROCESS;
+      mockOrder.comments = "Change order status to cancelled";
+      mockOrder.toJSON = jest.fn().mockReturnValue(mockOrder)
+      let rowAffected = 1;
+
+      Order.findByPk.mockResolvedValue(mockOrder);
+      Order.update.mockResolvedValue()
+      Payment.destroy.mockResolvedValue(rowAffected);
+      Order.destroy.mockResolvedValue(rowAffected);
+      OrderDetail.destroy.mockResolvedValue(rowAffected);
+
+      let result = await deleteOrder(mockRequest, mockResponse, mockNext);
+
+      expect(result.status.mock.calls[0][0]).toEqual(200)
+      expect(result.json.mock.calls[0][0]).toEqual({ message: `Delete ${rowAffected} order, ${rowAffected} payment, ${rowAffected} details successfully` })
+    });
+    test('error: Order not found', async () => {
+      mockOrder.status = ORDER_STATUS.IN_PROCESS;
+      mockOrder.comments = "Change order status to cancelled";
+
+      Order.findByPk.mockResolvedValue(null);
+      let error = createError(400, 'Order not found')
+
+      await deleteOrder(mockRequest, mockResponse, mockNext);
+
+      expect(mockNext).toHaveBeenCalledWith(error)
+    });
+    test('error: Order not found', async () => {
+      mockOrder.status = ORDER_STATUS.DISPUTED;
+      mockOrder.comments = "Change order status to disputed";
+
+      Order.findByPk.mockResolvedValue(mockOrder);
+      
+      await deleteOrder(mockRequest, mockResponse, mockNext);
+      
+      let error = createError(400, 'Cannot delete in current order status')
+      expect(mockNext).toHaveBeenCalledWith(error)
+    });
+    test('error: Server error fail', async () => {
+      let error = new Error('Server error fail')
+
+      Order.findByPk.mockRejectedValue(error);
+
+      await deleteOrder(mockRequest, mockResponse, mockNext)
+
+      expect(mockTransaction.rollback).toHaveBeenCalled();
+      expect(mockNext.mock.calls[0][0]).toEqual(error);
+    });
+  });
 });
 
 

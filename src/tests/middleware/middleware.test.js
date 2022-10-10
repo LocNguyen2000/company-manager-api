@@ -64,29 +64,42 @@ describe('Middleware controller', () => {
         expect(mockNext.mock.calls[0][0]).toEqual(error);
       });
   });
-//chưa test được//
 
-//   describe('isAccess', () => {
-//     beforeEach(() => {
-//         mockRequest = {
-//             role: null,
-//         }
-//         mockResponse = {
-//             jest: jest.fn().mockReturnThis(),
-//         }
-//         mockNext = jest.fn()
-//         isAccess = jest.fn()
-//     })
-//     afterEach(() => {
-//         jest.clearAllMocks();
-//     })
-//     test('success', async () => {
-//         let roles = [ROLE.PRESIDENT, ROLE.LEADER, ROLE.MANAGER]
-//         mockRequest.role = ROLE.PRESIDENT
+  describe('isAccess', () => {
+    beforeEach(() => {
+        mockRequest = {
+            role: null,
+        }
+        mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn().mockReturnThis(),
+        }
+        mockNext = jest.fn()
+    })
+    afterEach(() => {
+        jest.clearAllMocks();
+    })
+    test('success: allow', async () => {
+        let roles = [ROLE.PRESIDENT, ROLE.LEADER, ROLE.MANAGER]
+        mockRequest.role = ROLE.PRESIDENT
 
-//         isAccess(roles).mockReturnValue()
+        let callback = isAccess(...roles);
+        callback(mockRequest, mockResponse, mockNext);
 
-//         expect(mockNext).toHaveBeenCalled()
-//     })
-//   })
+        expect(mockNext).toHaveBeenCalled()
+    })
+    test('error: not allow', async () => {
+      let roles = [ROLE.PRESIDENT, ROLE.LEADER, ROLE.MANAGER]
+      mockRequest.role = ROLE.CUSTOMER
+
+      let callback = isAccess(...roles);
+      callback(mockRequest, mockResponse, mockNext);
+      
+      expect(mockResponse.status).toHaveBeenCalledWith(401)
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'You do not have permission to access',
+      })
+  })
+  })
 });

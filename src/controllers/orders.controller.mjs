@@ -232,7 +232,7 @@ export const deleteOrder = async (req, res, next) => {
         let orderInstance = await Order.findByPk(id, { include: { model: OrderDetail }, transaction: t });
 
         if (!orderInstance) {
-            return res.status(400).json({ message: 'Order not found' })
+            return next(createError(400, 'Order not found'))
         }
 
         // check status RESOLVE - ONHOLD - INPROCESS > được xóa
@@ -250,14 +250,13 @@ export const deleteOrder = async (req, res, next) => {
             status: ORDER_STATUS.CANCELLED,
         })
         orderInstance.comments = comments ? comments : orderInstance.comments;
-
+        
         await Order.update(orderInstance,{ where: { orderNumber: orderInstance.orderNumber },transaction: t})
-
+        
         let orderRowAffected = await Order.destroy({ where: { orderNumber: orderInstance.orderNumber }, transaction: t })
         let detailRowsAffected = await OrderDetail.destroy({ where: { orderNumber: orderInstance.orderNumber }, transaction: t })
-
         await t.commit();
-
+        
         return res.status(200).json({ message: `Delete ${orderRowAffected} order, ${paymentRowAffected} payment, ${detailRowsAffected} details successfully` })
     } catch (error) {
         await t.rollback()
