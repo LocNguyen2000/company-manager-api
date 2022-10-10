@@ -16,7 +16,7 @@ describe('Office controller', () => {
             mockRequest = {
                 employeeNumber: null,
                 query: {
-                    p: 1
+                    p: null
                 }
             }
             mockResponse = {
@@ -42,6 +42,8 @@ describe('Office controller', () => {
             expect(result.json.mock.calls[0][0]).toEqual({data: mockOfficeQuery})
         })
         test('error: not found office', async () => {
+            mockRequest.query.p = -1
+
             mockOfficeQuery.rows = []
             mockOfficeQuery.count = 0;
 
@@ -54,7 +56,7 @@ describe('Office controller', () => {
             
         })
         test('error: server fail', async () => {
-            let error = new Error('Server')
+            let error = new Error('Server error fail')
             Office.findAndCountAll.mockRejectedValue(error);
 
             await getOffice(mockRequest, mockResponse, mockNext);

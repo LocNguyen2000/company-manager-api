@@ -5,7 +5,7 @@ import createError from 'http-errors';
 import swaggerUI from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
 
-import task from './utils/cron.mjs';
+import checkOrderStatusScheduler from './utils/cron.mjs';
 import config from './config/config.mjs';
 import connectToDb from './config/connect.mjs';
 import customerRouter from './routes/customer.route.mjs';
@@ -73,4 +73,4 @@ app.listen(port, () => {
 });
 
 // Task run every minute
-task.start();
+checkOrderStatusScheduler.start();
