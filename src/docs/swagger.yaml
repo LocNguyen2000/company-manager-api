@@ -21,7 +21,7 @@ tags:
     - name: Offices
       description: CRUD for offices in the system
     - name: Logs
-      description: CRUD for logs in the system
+      description: CRUD for logs in the system 
 paths:
     "/users/register":
         post:
@@ -163,7 +163,7 @@ paths:
                 - Customers
             security:
                 - bearerAuth: []
-            summary: Get a user by id
+            summary: Get customers
             parameters:
                 - in: query
                   name: p
@@ -190,7 +190,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
                 204:
-                    description: Not found products
+                    description: Not found customers
                     content:
                         application/json:
                             schema:
@@ -204,17 +204,17 @@ paths:
                 - Customers
             security:
                 - bearerAuth: []
-            summary: Update a user by id
+            summary: Update a customer
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the user to get
+                      description: customerNumber
             responses:
                 201:
-                    description: Update products successfully.
+                    description: Update customer successfully.
                     content:
                         application/json:
                             schema:
@@ -247,23 +247,33 @@ paths:
                             type: object
                             items:
                                 "$ref": "#/components/schemas/Customers"
-                        example: {}
+                        example:
+                            contactLastName: Ferguson
+                            contactFirstName: Peter
+                            phone: 03 9520 4555
+                            addressLine1: 636 St Kilda Road
+                            addressLine2: Level 34567
+                            city: Melbourne
+                            state: Victoria
+                            postalCode: '30041'
+                            country: Australia
+                            creditLimit: 117300
         delete:
             tags:
                 - Customers
             security:
                 - bearerAuth: []
-            summary: Delete a user by id
+            summary: Delete a customer
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the user to get
+                      description: customerNumber
             responses:
                 201:
-                    description: Update products successfully.
+                    description: Delete customer successfully.
                     content:
                         application/json:
                             schema:
@@ -345,7 +355,7 @@ paths:
                   schema:
                       type: integer
                       description: Numeric ID of page
-            summary: Get a user by id
+            summary: Get employees
             responses:
                 200:
                     description: Get employees successfully.
@@ -380,14 +390,14 @@ paths:
                 - Employees
             security:
                 - bearerAuth: []
-            summary: Update a user by id
+            summary: Update employee by id
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Id of the user to get
+                      description: employeeNumber
             responses:
                 201:
                     description: Update employee successfully.
@@ -437,14 +447,14 @@ paths:
                 - Employees
             security:
                 - bearerAuth: []
-            summary: Delete a user by id
+            summary: Delete a employee
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the user to get
+                      description: employeeNumber
             responses:
                 201:
                     description: Delete employee successfully.
@@ -473,7 +483,7 @@ paths:
                 - ProductLines
             security:
                 - bearerAuth: []
-            summary: Add a new productslines into system
+            summary: Add a new product-line into system
             responses:
                 201:
                     description: ADD productslines successfully.
@@ -515,7 +525,7 @@ paths:
                 - ProductLines
             security:
                 - bearerAuth: []
-            summary: Get productslines from system
+            summary: Get product-lines from system
             parameters:
                 - in: query
                   name: p
@@ -556,14 +566,14 @@ paths:
                 - ProductLines
             security:
                 - bearerAuth: []
-            summary: Update productslines on system
+            summary: Update a product-lines
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Id of the user to get
+                      description: productLine
             responses:
                 201:
                     description: Update products successfully.
@@ -592,12 +602,21 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'       
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            items:
+                                "$ref": "#/components/schemas/ProductLines"
+                        example:
+                            textDescription: slow and expensive
         delete:
             tags:
                 - ProductLines
             security:
                 - bearerAuth: []
-            summary: Delete productslines on system
+            summary: Delete a product-line
             parameters:
                 - in: path
                   name: id
@@ -636,7 +655,7 @@ paths:
             summary: Add a new products into system
             responses:
                 201:
-                    description: ADD productslines successfully.
+                    description: ADD products successfully.
                     content:
                         application/json:
                             schema:
@@ -666,9 +685,17 @@ paths:
                             type: object
                             items:
                                 "$ref": "#/components/schemas/Products"
-                        example: {
+                        example:
+                            productCode: S10_9752
+                            productName: 1981 Harley Davidson Ultimate Chopper
+                            productLine: Plane
+                            productScale: '1:10'
+                            productVendor: Min Lin Diecast
+                            productDescription: Super Motorcycles
+                            quantityInStock: 733
+                            buyPrice: 48.81
+                            MSRP: 95.7
 
-                        }
         get:
             tags:
                 - Products
@@ -715,17 +742,17 @@ paths:
                 - Products
             security:
                 - bearerAuth: []
-            summary: Update a new products in system
+            summary: Update a product
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the user to get
+                      description: product ID
             responses:
                 200:
-                    description: Update products successfully.
+                    description: Update a product successfully.
                     content:
                         application/json:
                             schema:
@@ -748,19 +775,36 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            items:
+                                "$ref": "#/components/schemas/Products"
+                        example:
+                            productCode: S10_9752
+                            productName: 1981 Harley Davidson Ultimate Chopper
+                            productLine: Voiture
+                            productScale: '1:10'
+                            productVendor: Min Lin Diecast
+                            productDescription: Super Motorcycles
+                            quantityInStock: 733
+                            buyPrice: 48.81
+                            MSRP: 95.7
         delete:
             tags:
                 - Products
             security:
                 - bearerAuth: []
-            summary: Delete a new products into system
+            summary: Delete a product
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Id of the user to get
+                      description: product ID
             responses:
                 200:
                     description: Get products successfully.
@@ -789,7 +833,7 @@ paths:
                 - Orders
             security:
                 - bearerAuth: []
-            summary: Add a new productslines into system
+            summary: Add a new orders into system
             responses:
                 201:
                     description: Orders Information
@@ -831,7 +875,24 @@ paths:
                                     details:
                                         $ref: '#/components/schemas/OrderDetails'
                                     payment:
-                                        $ref: '#/components/schemas/Payments'    
+                                        $ref: '#/components/schemas/Payments'
+                            example:
+                                order:
+                                    orderNumber: 10435
+                                    orderDate: '2004-09-27T00:00:00.000Z'
+                                    requiredDate: '2004-10-05T00:00:00.000Z'
+                                    shippedDate:
+                                    status: In Process
+                                    comments: Nguyen Huu Loc order
+                                    customerNumber: 103
+                                details:
+                                    -   productCode: S24_2022
+                                        quantityOrdered: 43
+                                        priceEach: 38.98
+                                        orderLineNumber: 1
+                                payment:
+                                    customerNumber: 103
+                                    amount: 123.01
         get:
             tags:
                 - Orders
@@ -881,7 +942,7 @@ paths:
                 - Orders
             security:
                 - bearerAuth: []
-            summary: Update a new productslines into system
+            summary: Update a order in system
             parameters:
                 - in: path
                   name: id
@@ -891,7 +952,7 @@ paths:
                       description: Id of the orders to update
             responses:
                 200:
-                    description: Get products successfully.
+                    description: Update order successfully.
                     content:
                         application/json:
                             schema:
@@ -911,12 +972,26 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                comments: 
+                                    type: string
+                                status:
+                                    type: string
+                        example:
+                          comments: change to status Shipped
+                          status: Shipped
+
         delete:
             tags:
                 - Orders
             security:
                 - bearerAuth: []
-            summary: Delete a new productslines into system
+            summary: Delete a order
             parameters:
                 - in: path
                   name: id
@@ -926,7 +1001,7 @@ paths:
                       description: Object Id of the user to get
             responses:
                 200:
-                    description: Get products successfully.
+                    description: Get orders successfully.
                     content:
                         application/json:
                             schema:
@@ -972,6 +1047,15 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Logs'
+                        example:
+                            user: xuannam
+                            logLevel: Info
+                            message: chuan phet
         get:
             tags:
                 - Logs
@@ -998,7 +1082,7 @@ paths:
                       description: end date
             responses:
                 200:
-                    description: Get productslines successfully.
+                    description: Get logs successfully.
                     content:
                         application/json:
                             schema:
@@ -1021,17 +1105,17 @@ paths:
                 - Logs
             security:
                 - bearerAuth: []
-            summary: Update a logs in system
+            summary: Update a log 
             parameters:
                 - in: path
                   name: id
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the logs to update
+                      description: Id of the logs to update
             responses:
                 200:
-                    description: Get products successfully.
+                    description: Update log successfully.
                     content:
                         application/json:
                             schema:
@@ -1048,10 +1132,19 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Logs'
+                        example:
+                            user: xuannam123
+                            logLevel: Info
+                            message: chuan phet
     "/offices":
         post:
             tags:
-                - Office
+                - Offices
             security:
                 - bearerAuth: []
             summary: Add a new offices into system
@@ -1061,7 +1154,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Products'
+                                $ref: '#/components/schemas/Offices'
                 401:
                     description: Not authorired
                     content:
@@ -1087,9 +1180,16 @@ paths:
                             type: object
                             items:
                                 "$ref": "#/components/schemas/Offices"
-                        example: {
-
-                        }
+                        example:
+                          officeCode: '90'
+                          city: Hanoicity
+                          phone: "+8377 0825"
+                          addressLine1: 1550 Court Place
+                          addressLine2: Suite 102
+                          state: nghe an que
+                          country: UKing
+                          postalCode: '021076'
+                          territory: NAcity
         get:
             tags:
                 - Offices
@@ -1104,7 +1204,7 @@ paths:
                       description: Numeric ID of page
             responses:
                 200:
-                    description: Get products successfully.
+                    description: Get office successfully.
                     content:
                         application/json:
                             schema:
@@ -1122,7 +1222,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Error'
                 204:
-                    description: Not found products
+                    description: Not found office
                     content:
                         application/json:
                             schema:
@@ -1143,7 +1243,7 @@ paths:
                   required: true
                   schema:
                       type: string
-                      description: Object Id of the user to get
+                      description: officeCode
             responses:
                 200:
                     description: Update offices successfully.
@@ -1169,6 +1269,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            items:
+                                "$ref": "#/components/schemas/Offices"
+                        example:
+                          officeCode: '90'
+                          city: Hanoicity
+                          phone: "+8377 0825"
+                          addressLine1: 1550 Court Place
+                          addressLine2: Suite 102
+                          state: thanh hoa que lua
+                          country: UKing
+                          postalCode: '021076'
+                          territory: NAcity
+            
         delete:
             tags:
                 - Offices
@@ -1181,7 +1299,7 @@ paths:
                   required: true
                   schema:
                       type: string
-                      description: Id of the user to get
+                      description: officeCode
             responses:
                 200:
                     description: Delete office successfully.
