@@ -64,7 +64,7 @@ export const updateCustomer = async (req, res, next) => {
   try {
     const { id } = req.params;
     const username = req.username;
-    const customerRequest = req.body;
+    let customerRequest = req.body;
 
     if (req.role === ROLE.CUSTOMER) {
       // Customer chỉ được sửa dữ liệu bản thân
@@ -73,8 +73,21 @@ export const updateCustomer = async (req, res, next) => {
       }
     }
     // Staff trở lên được update mọi dữ liệu khách hàng
+    let customerInstance = await Customer.findByPk(id, {raw: true});
+
+    if (!customerInstance){
+      return next(createError(400, 'Customer does not exist'));
+    }
+
+    customerRequest.updatedBy = username;
+
+    customerInstance = Object.assign(
+      customerInstance,
+      customerRequest
+    )
+
     let queryObj = { customerNumber: id };
-    let rowAffected = await Customer.update(Object.assign(customerRequest, { updatedBy: username }), queryObj);
+    let rowAffected = await Customer.update(customerInstance, {where: queryObj});
 
     return res.status(200).json({ message: `Update successfully ${rowAffected} row` });
   } catch (error) {
