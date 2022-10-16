@@ -1,9 +1,6 @@
-# HN22 FR NodeJS 03 G2 - Mock Final Project
+# Company Management API 
 - A RESTful API for managing employees, customers, products, orders.
-- Team members: 
-    + Nguyen Huu Loc (Leader)
-    + Nguyen Duc Hung
-    + Pham Quoc Cuong.
+
 ## Getting started
 
 Prerequisites: 
