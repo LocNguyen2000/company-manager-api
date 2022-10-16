@@ -44,11 +44,15 @@ export const addEmployee = async (req, res, next) => {
     let employee = req.body,
       username = req.username;
 
-    let employeeInstance = await Employee.create(
+    let [employeeInstance, created] = await Employee.findOrCreate(
       Object.assign(employee, {
         updatedBy: username,
         createdBy: username,
       }))
+
+    if (!created){
+      throw new ValidationError('Employee already exist')
+    }
 
     return res.status(201).json({ data: employeeInstance, message: 'Create employee successfully' });
   } catch (error) {

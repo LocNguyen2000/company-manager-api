@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import { ValidationError } from 'sequelize';
-import  sequelize from '../config/database.mjs';
+import sequelize from '../config/database.mjs';
 import { ROLE } from '../config/variables.mjs';
 
 const { Customer } = sequelize.models;
@@ -26,7 +26,7 @@ export const getCustomer = async (req, res, next) => {
       where: queryFilter,
       offset: (page - 1) * 10,
       limit: 10,
-  });
+    });
 
     if (customers.rows.length == 0) {
       return res.status(204).json({ message: 'Customer not found' });
@@ -44,12 +44,16 @@ export const addCustomer = async (req, res, next) => {
     const username = req.username;
 
     // Staff trở lên được tạo mọi dữ liệu khách hàng
-    let customer = await Customer.create(
+    let [customerInstance, created] = await Customer.findOrCreate(
       Object.assign(customerRequest, {
         updatedBy: username,
         createdBy: username,
       })
     )
+
+    if (!created) {
+      throw new ValidationError('Employee already exist')
+    }
 
     return res.status(201).json({ data: customer });
   } catch (error) {
@@ -64,7 +68,7 @@ export const updateCustomer = async (req, res, next) => {
   try {
     const { id } = req.params;
     const username = req.username;
-    const customerRequest = req.body;
+    let customerRequest = req.body;
 
     if (req.role === ROLE.CUSTOMER) {
       // Customer chỉ được sửa dữ liệu bản thân
@@ -73,8 +77,21 @@ export const updateCustomer = async (req, res, next) => {
       }
     }
     // Staff trở lên được update mọi dữ liệu khách hàng
+    let customerInstance = await Customer.findByPk(id, { raw: true });
+
+    if (!customerInstance) {
+      return next(createError(400, 'Customer does not exist'));
+    }
+
+    customerRequest.updatedBy = username;
+
+    customerInstance = Object.assign(
+      customerInstance,
+      customerRequest
+    )
+
     let queryObj = { customerNumber: id };
-    let rowAffected = await Customer.update(Object.assign(customerRequest, { updatedBy: username }), queryObj);
+    let rowAffected = await Customer.update(customerInstance, { where: queryObj });
 
     return res.status(200).json({ message: `Update successfully ${rowAffected} row` });
   } catch (error) {
