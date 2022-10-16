@@ -10,7 +10,7 @@ NodeJS 16.14.2 - MongoDB 5.0.4 - MySQL - VSCode Community (or any other IDE is g
 
 Installation steps:
 ```
-git clone https://gitlab.com/LocNguyen2000/HN22_FR_NodeJS_03_G2.git
+git clone https://github.com/LocNguyen2000/company-manager-api.git
 
 npm install 
 npm start
